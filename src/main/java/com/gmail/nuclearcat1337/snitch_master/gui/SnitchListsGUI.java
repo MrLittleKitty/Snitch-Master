@@ -1,7 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -9,16 +8,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Created by Mr_Little_Kitty on 9/16/2016.
  */
-public class SnitchListsGUI extends GuiListExtended
+public class SnitchListsGui extends GuiListExtended
 {
-    private final EditSnitchListsGUI guiSnitches;
+    private final EditSnitchListsGui guiSnitches;
     private final Minecraft mc;
     private final ListEntry[] iGuiList;
 
@@ -38,7 +36,7 @@ public class SnitchListsGUI extends GuiListExtended
     private static final int editQualifierButtonWidth = 60;
     private static final int viewSnitchesButtonWidth = 60;
 
-    public SnitchListsGUI(EditSnitchListsGUI guiSnitches, SnitchLists lists)
+    public SnitchListsGui(EditSnitchListsGui guiSnitches, SnitchLists lists)
     {
         super(Minecraft.getMinecraft(),
                 guiSnitches.width,		// width
@@ -62,7 +60,7 @@ public class SnitchListsGUI extends GuiListExtended
             this.iGuiList[k] = new ListEntry(snitchList,k);
         }
 
-        this.setHasListHeader(true, (int) ( (float) SnitchListsGUI.this.mc.fontRendererObj.FONT_HEIGHT * 1.5));
+        this.setHasListHeader(true, (int) ( (float) SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT * 1.5));
     }
 
     private void swapItems(int index, int nextIndex)
@@ -173,15 +171,15 @@ public class SnitchListsGUI extends GuiListExtended
             this.snitchList = snitchList;
             this.index = index;
 
-            this.upButton = new GuiButton(10, SnitchListsGUI.this.width - 60, 0, arrowButtonWidth, buttonHeight, "↑");
-            this.downButton = new GuiButton(11, SnitchListsGUI.this.width - 60, 0, arrowButtonWidth, buttonHeight, "↓");
+            this.upButton = new GuiButton(10, SnitchListsGui.this.width - 60, 0, arrowButtonWidth, buttonHeight, "↑");
+            this.downButton = new GuiButton(11, SnitchListsGui.this.width - 60, 0, arrowButtonWidth, buttonHeight, "↓");
 
-            this.toggleRenderButton = new GuiButton(12, SnitchListsGUI.this.width - 60, 0, onOffButtonWidth, buttonHeight, snitchList.shouldRenderSnitches() ? "On" : "Off");
+            this.toggleRenderButton = new GuiButton(12, SnitchListsGui.this.width - 60, 0, onOffButtonWidth, buttonHeight, snitchList.shouldRenderSnitches() ? "On" : "Off");
 
-            this.editQualifierButton = new GuiButton(13, SnitchListsGUI.this.width - 60, 0, editQualifierButtonWidth, buttonHeight, "Edit");
-            this.editColorButton = new GuiButton(14, SnitchListsGUI.this.width - 60, 0, editColorButtonWidth, buttonHeight, "Edit");
+            this.editQualifierButton = new GuiButton(13, SnitchListsGui.this.width - 60, 0, editQualifierButtonWidth, buttonHeight, "Edit");
+            this.editColorButton = new GuiButton(14, SnitchListsGui.this.width - 60, 0, editColorButtonWidth, buttonHeight, "Edit");
 
-            this.viewSnitchesButton = new GuiButton(14, SnitchListsGUI.this.width - 60, 0, viewSnitchesButtonWidth, buttonHeight, "View");
+            this.viewSnitchesButton = new GuiButton(14, SnitchListsGui.this.width - 60, 0, viewSnitchesButtonWidth, buttonHeight, "View");
         }
 
         public void updateIndex(int index)
@@ -193,7 +191,7 @@ public class SnitchListsGUI extends GuiListExtended
                               int p_148279_7_, int p_148279_8_, boolean p_148279_9_)
         {
             //xPosition = xPosition - 1;
-            int yFinal = yPosition + (p_148279_5_ + SnitchListsGUI.this.mc.fontRendererObj.FONT_HEIGHT) / 2;
+            int yFinal = yPosition + (p_148279_5_ + SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT) / 2;
 
             int xPos = xPosition + leftBorderSeparation;
 
@@ -213,9 +211,9 @@ public class SnitchListsGUI extends GuiListExtended
 
             xPos += downButton.width + separationDistance*4;
 
-            this.upButton.drawButton(SnitchListsGUI.this.mc, p_148279_7_, p_148279_8_);
-            this.downButton.drawButton(SnitchListsGUI.this.mc, p_148279_7_, p_148279_8_);
-            this.toggleRenderButton.drawButton(SnitchListsGUI.this.mc, p_148279_7_, p_148279_8_);
+            this.upButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
+            this.downButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
+            this.toggleRenderButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
 
             int stringWidth = mc.fontRendererObj.getStringWidth(snitchList.getListName());
 
@@ -238,9 +236,9 @@ public class SnitchListsGUI extends GuiListExtended
             viewSnitchesButton.yPosition = yPosition +(buttonHeight/3);
             viewSnitchesButton.xPosition = xPos;
 
-            this.editColorButton.drawButton(SnitchListsGUI.this.mc, p_148279_7_, p_148279_8_);
-            this.editQualifierButton.drawButton(SnitchListsGUI.this.mc, p_148279_7_, p_148279_8_);
-            this.viewSnitchesButton.drawButton(SnitchListsGUI.this.mc, p_148279_7_, p_148279_8_);
+            this.editColorButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
+            this.editQualifierButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
+            this.viewSnitchesButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
         }
 
         /**
@@ -250,30 +248,30 @@ public class SnitchListsGUI extends GuiListExtended
 
             //LogManager.getLogger("SnitchVisualizer").info("MousePress on SnitchListItem Detected!");
 
-            if (this.upButton.mousePressed(SnitchListsGUI.this.mc, xPos, yPos))
+            if (this.upButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
                 swapItems(index,index-1); //The array is goes from bottom to top. so index 0 is at top of screen
                 return true;
             }
-            if (this.downButton.mousePressed(SnitchListsGUI.this.mc, xPos, yPos))
+            if (this.downButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
                 swapItems(index,index+1); //The array is goes from bottom to top. so index 0 is at top of screen
                 return true;
             }
-            if (this.toggleRenderButton.mousePressed(SnitchListsGUI.this.mc, xPos, yPos))
+            if (this.toggleRenderButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
                 snitchList.setShouldRenderSnitches(!snitchList.shouldRenderSnitches());
                 return true;
             }
-            if (this.editColorButton.mousePressed(SnitchListsGUI.this.mc, xPos, yPos))
+            if (this.editColorButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
                 return true;
             }
-            if (this.editQualifierButton.mousePressed(SnitchListsGUI.this.mc, xPos, yPos))
+            if (this.editQualifierButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
                 return true;
             }
-            if (this.viewSnitchesButton.mousePressed(SnitchListsGUI.this.mc, xPos, yPos))
+            if (this.viewSnitchesButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
                 return true;
             }

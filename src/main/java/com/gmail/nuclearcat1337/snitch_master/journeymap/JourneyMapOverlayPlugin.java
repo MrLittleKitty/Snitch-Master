@@ -1,21 +1,15 @@
 package com.gmail.nuclearcat1337.snitch_master.journeymap;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-import com.gmail.nuclearcat1337.snitch_master.gui.MainGUI;
-import com.gmail.nuclearcat1337.snitch_master.handlers.KeyHandler;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.IReadOnlyLocatableObjectList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import journeymap.client.api.IClientAPI;
 import journeymap.client.api.IClientPlugin;
-import journeymap.client.api.display.Context;
 import journeymap.client.api.display.DisplayType;
 import journeymap.client.api.display.ImageOverlay;
 import journeymap.client.api.event.ClientEvent;
-import journeymap.client.api.util.UIState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;

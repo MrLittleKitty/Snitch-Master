@@ -10,11 +10,11 @@ import java.io.IOException;
 /**
  * Created by Mr_Little_Kitty on 9/16/2016.
  */
-public class EditSnitchListsGUI extends GuiScreen
+public class EditSnitchListsGui extends GuiScreen
 {
     public GuiScreen parentScreen;
 
-    private SnitchListsGUI snitchListGUI;
+    private SnitchListsGui snitchListGUI;
     private SnitchMaster snitchMaster;
 
     private static final int separationDistance = 2;
@@ -23,7 +23,7 @@ public class EditSnitchListsGUI extends GuiScreen
     private static final int renderOnWidth = 147/3;
     private static final int renderOffWidth = 147/3;
 
-    public EditSnitchListsGUI(GuiScreen guiscreen, SnitchMaster snitchMaster)
+    public EditSnitchListsGui(GuiScreen guiscreen, SnitchMaster snitchMaster)
     {
         this.parentScreen = guiscreen;
         this.snitchMaster = snitchMaster;
@@ -46,7 +46,7 @@ public class EditSnitchListsGUI extends GuiScreen
     {
         byte b0 = -20;
 
-        this.snitchListGUI = new SnitchListsGUI(this, snitchMaster.getSnitchLists());
+        this.snitchListGUI = new SnitchListsGui(this, snitchMaster.getSnitchLists());
 
         this.buttonList.clear();
 
@@ -75,7 +75,7 @@ public class EditSnitchListsGUI extends GuiScreen
                 this.mc.displayGuiScreen(parentScreen);
                 break;
             case 5: //New Snitch List
-                Minecraft.getMinecraft().displayGuiScreen(new NewSnitchListGUI(this,snitchMaster));
+                Minecraft.getMinecraft().displayGuiScreen(new NewSnitchListGui(this,snitchMaster));
                 break;
             case 6: //Render all on
                 snitchListGUI.setAllRender(true);

@@ -1,4 +1,4 @@
-package com.gmail.nuclearcat1337.snitch_master.gui;
+package com.gmail.nuclearcat1337.snitch_master.gui.controls;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;

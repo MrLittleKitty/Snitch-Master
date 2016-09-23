@@ -2,6 +2,7 @@ package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
+import com.gmail.nuclearcat1337.snitch_master.gui.controls.TextBox;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
@@ -16,7 +17,7 @@ import java.io.IOException;
 /**
  * Created by Mr_Little_Kitty on 9/18/2016.
  */
-public class NewSnitchListGUI extends GuiScreen
+public class NewSnitchListGui extends GuiScreen
 {
     private static final String CREATE_NEW_LIST_STRING = "Create New Snitch List";
 
@@ -40,7 +41,7 @@ public class NewSnitchListGUI extends GuiScreen
     private int createNewListStringWidth;
     private int buttonWidth;
 
-    public NewSnitchListGUI(GuiScreen cancelToScreen, SnitchMaster snitchMaster)
+    public NewSnitchListGui(GuiScreen cancelToScreen, SnitchMaster snitchMaster)
     {
         this.cancelToScreen = cancelToScreen;
         this.snitchMaster = snitchMaster;
@@ -228,7 +229,7 @@ public class NewSnitchListGUI extends GuiScreen
 
                 IOHandler.asyncSaveSnitchLists(lists);
 
-                Minecraft.getMinecraft().displayGuiScreen(new EditSnitchListsGUI(null,snitchMaster));
+                Minecraft.getMinecraft().displayGuiScreen(new EditSnitchListsGui(null,snitchMaster));
                 break;
         }
     }

@@ -1,11 +1,9 @@
 package com.gmail.nuclearcat1337.snitch_master.handlers;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-import com.gmail.nuclearcat1337.snitch_master.gui.MainGUI;
-import net.java.games.input.Component;
+import com.gmail.nuclearcat1337.snitch_master.gui.MainGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -34,7 +32,7 @@ public class KeyHandler
     {
         if(snitchMasterMainGUI.isPressed())
         {
-            Minecraft.getMinecraft().displayGuiScreen(new MainGUI(snitchMaster));
+            Minecraft.getMinecraft().displayGuiScreen(new MainGui(snitchMaster));
         }
         if(toggleAllRender.isPressed())
         {
