@@ -7,11 +7,11 @@ import net.minecraft.client.gui.GuiScreen;
 /**
  * Created by Mr_Little_Kitty on 9/11/2016.
  */
-public class MainGUI extends GuiScreen
+public class MainGui extends GuiScreen
 {
     private SnitchMaster snitchMaster;
 
-    public MainGUI(SnitchMaster snitchMaster)
+    public MainGui(SnitchMaster snitchMaster)
     {
         this.snitchMaster = snitchMaster;
     }
@@ -19,12 +19,32 @@ public class MainGUI extends GuiScreen
     @SuppressWarnings("unchecked")
     public void initGui()
     {
-        byte b0 = -16;
+        //byte b0 = -16;
         this.buttonList.clear();
 
         String updateButtonMessage = snitchMaster.getChatSnitchParser().isUpdatingSnitchList() ? "Cancel Snitch Update" : "Full Snitch Update";
-        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 24 + b0, updateButtonMessage));
-//
+
+        int xPos = (this.width/2) - (GuiConstants.LONG_BUTTON_WIDTH/2);
+        int yPos = (this.height/4) + 8 - (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE);
+
+        this.buttonList.add(new GuiButton(0, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, updateButtonMessage));
+
+        yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
+
+        yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
+
+        yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
+
+        this.buttonList.add(new GuiButton(2, xPos, yPos, "View Snitch Lists"));
+
+        yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
+
+        this.buttonList.add(new GuiButton(3, xPos, yPos, "View Snitches"));
+
+        yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
+
+        this.buttonList.add(new GuiButton(4, xPos,yPos, "Done"));
+
 //        if(SVChatHandler.snitchReport)
 //        {
 //            this.buttonList.add(new GuiButton(6, this.width / 2 - 100, this.height / 4 + 48 + b0, StatCollector
@@ -42,12 +62,6 @@ public class MainGUI extends GuiScreen
 //                .getKeyBinding(SVSettings.Options.RENDER_ENABLED)));
 //
 //        this.buttonList.add(new SVGuiOptionSlider(100, this.width / 2 - 100, this.height / 4 + 96 + b0, renderDistance));
-
-        this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 4 + 96 + b0, "View Snitch Lists"));
-
-        this.buttonList.add(new GuiButton(3, this.width / 2 - 100, this.height / 4 + 120 + b0, "View Snitches"));
-
-        this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 120 + 24 + b0, "Done"));
     }
 
     public void actionPerformed(GuiButton button)
@@ -74,7 +88,7 @@ public class MainGUI extends GuiScreen
 //                break;
             case 2: //"View Snitch Lists"
                 this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new EditSnitchListsGUI(this,snitchMaster));
+                this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster));
                 break;
             case 3: //"View Snitches"
 
