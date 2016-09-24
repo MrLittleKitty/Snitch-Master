@@ -17,11 +17,10 @@ public class EditSnitchListsGui extends GuiScreen
     private SnitchListsGui snitchListGUI;
     private SnitchMaster snitchMaster;
 
-    private static final int separationDistance = 2;
-    private static final int doneButtonWidth = 147;
-    private static final int newButtonWidth = 147/3;
-    private static final int renderOnWidth = 147/3;
-    private static final int renderOffWidth = 147/3;
+    private static final int DONE_BUTTON_WIDTH = GuiConstants.MEDIUM_BUTTON_WIDTH*3;
+    private static final int NEW_BUTTON_WIDTH = GuiConstants.MEDIUM_BUTTON_WIDTH;
+    private static final int RENDER_ON_BUTTON_WIDTH = GuiConstants.MEDIUM_BUTTON_WIDTH;
+    private static final int RENDER_OFF_BUTTON_WIDTH = GuiConstants.MEDIUM_BUTTON_WIDTH;
 
     public EditSnitchListsGui(GuiScreen guiscreen, SnitchMaster snitchMaster)
     {
@@ -50,17 +49,19 @@ public class EditSnitchListsGui extends GuiScreen
 
         this.buttonList.clear();
 
-        int xPos = (this.width/2)-doneButtonWidth-(separationDistance/2);
-        this.buttonList.add(new GuiButton(4, xPos , this.height - 4 + b0, doneButtonWidth, 18, "Back to Settings"));
+        int xPos = (this.width/2)- DONE_BUTTON_WIDTH -(GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
+        int yPos = this.height - GuiConstants.STANDARD_BUTTON_HEIGHT - GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        xPos = (this.width/2)+(separationDistance/2);
-        this.buttonList.add(new GuiButton(5, xPos, this.height - 4 + b0, newButtonWidth, 18, "New"));
+        this.buttonList.add(new GuiButton(4, xPos , yPos, DONE_BUTTON_WIDTH, 18, "Back to Settings"));
 
-        xPos += separationDistance+newButtonWidth;
-        this.buttonList.add(new GuiButton(6, xPos, this.height - 4 + b0, renderOnWidth, 18, "All On"));
+        xPos = (this.width/2)+(GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
+        this.buttonList.add(new GuiButton(5, xPos, yPos, NEW_BUTTON_WIDTH, 18, "New"));
 
-        xPos += separationDistance+renderOnWidth;
-        this.buttonList.add(new GuiButton(7, xPos, this.height - 4 + b0, renderOffWidth, 18, "All Off"));
+        xPos += GuiConstants.STANDARD_SEPARATION_DISTANCE+ NEW_BUTTON_WIDTH;
+        this.buttonList.add(new GuiButton(6, xPos, yPos, RENDER_ON_BUTTON_WIDTH, 18, "All On"));
+
+        xPos += GuiConstants.STANDARD_SEPARATION_DISTANCE+ RENDER_ON_BUTTON_WIDTH;
+        this.buttonList.add(new GuiButton(7, xPos, yPos, RENDER_OFF_BUTTON_WIDTH, 18, "All Off"));
 
         this.snitchListGUI.registerScrollButtons(4, 5);
         super.initGui();

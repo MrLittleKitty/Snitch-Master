@@ -11,6 +11,7 @@ public class GuiConstants
     public static final int STANDARD_BUTTON_HEIGHT = 20;
 
     public static final int STANDARD_SEPARATION_DISTANCE = 4;
+    public static final int SMALL_SEPARATION_DISTANCE = 2;
 
     public static final int LONG_BUTTON_WIDTH = 200;
     public static final int MEDIUM_BUTTON_WIDTH = LONG_BUTTON_WIDTH/2;
