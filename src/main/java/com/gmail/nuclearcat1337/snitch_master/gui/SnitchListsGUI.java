@@ -20,21 +20,21 @@ public class SnitchListsGui extends GuiListExtended
     private final Minecraft mc;
     private final ListEntry[] iGuiList;
 
-    private final String controlsHeader = "Controls";
-    private final String nameHeader = "Name";
-    private final String colorHeader = "Color";
-    private final String qualifierHeader = "Qualifier";
-    private final String viewSnitchesHeader = "Snitches";
+    private static final String CONTROLS_HEADER = "Controls";
+    private static final String NAME_HEADER = "Name";
+    private static final String COLOR_HEADER = "Color";
+    private static final String QUALIFIER_HEADER = "Qualifier";
+    private static final String VIEW_SNITCHES_HEADER = "Snitches";
 
-    private final int nameWidth;
-    private static final int leftBorderSeparation = 10;
-    private static final int buttonHeight = 18;
-    private static final int separationDistance = 2;
-    private static final int arrowButtonWidth = 20;
-    private static final int onOffButtonWidth = 30;
-    private static final int editColorButtonWidth = 60;
-    private static final int editQualifierButtonWidth = 60;
-    private static final int viewSnitchesButtonWidth = 60;
+    private static final int NAME_COLUMN_WIDTH = Minecraft.getMinecraft().fontRendererObj.getStringWidth(SnitchList.MAX_NAME_CHARACTERS);
+
+    private static final int ARROW_BUTTON_WIDTH = 20;
+    private static final int ON_OFF_BUTTON_WIDTH = 30;
+    private static final int EDIT_COLOR_BUTTON_WIDTH = 60;
+    private static final int EDIT_QUALIFIER_BUTTON_WIDTH = 60;
+    private static final int VIEW_SNITCHES_BUTTON_WIDTH = 60;
+
+    private final int entryWidth;
 
     public SnitchListsGui(EditSnitchListsGui guiSnitches, SnitchLists lists)
     {
@@ -51,8 +51,6 @@ public class SnitchListsGui extends GuiListExtended
         int listSize = lists.size();
         this.iGuiList = new ListEntry[listSize];
 
-        nameWidth = mc.fontRendererObj.getStringWidth(SnitchList.MAX_NAME_CHARACTERS); //20 characters
-
         for (int k = 0; k < listSize; k++)
         {
             SnitchList snitchList = lists.get(k);
@@ -61,6 +59,12 @@ public class SnitchListsGui extends GuiListExtended
         }
 
         this.setHasListHeader(true, (int) ( (float) SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT * 1.5));
+
+        this.entryWidth =
+                ARROW_BUTTON_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE + ON_OFF_BUTTON_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE + ARROW_BUTTON_WIDTH +
+                        (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + NAME_COLUMN_WIDTH  + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + EDIT_COLOR_BUTTON_WIDTH +
+                        (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + EDIT_QUALIFIER_BUTTON_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + VIEW_SNITCHES_BUTTON_WIDTH;
+
     }
 
     private void swapItems(int index, int nextIndex)
@@ -82,48 +86,50 @@ public class SnitchListsGui extends GuiListExtended
         SnitchMaster.instance.getSnitchLists().sortSnitchLists();
     }
 
-    protected void drawListHeader(int listHeader1, int listHeader2, Tessellator tessalator)
+    protected void drawListHeader(int xPosition, int yPosition, Tessellator tessalator)
     {
         String root = ChatFormatting.UNDERLINE + "" + ChatFormatting.BOLD;
+        int controlsWidth = mc.fontRendererObj.getStringWidth(root+ CONTROLS_HEADER);
+        int nameHeaderWidth = mc.fontRendererObj.getStringWidth(root+ NAME_HEADER);
+        int colorHeaderWidth = mc.fontRendererObj.getStringWidth(root+ COLOR_HEADER);
+        int qualifierHeaderWidth = mc.fontRendererObj.getStringWidth(root+ QUALIFIER_HEADER);
+        int viewSnitchesHeaderWidth = mc.fontRendererObj.getStringWidth(root+ VIEW_SNITCHES_HEADER);
 
-        int xPosition = listHeader1;
-        int yFinal = listHeader2;
+        //This stuff is supposed to center all of our columns on the screen
+        int workingWidth = (this.width-xPosition);
+        int startingXPos = xPosition + (workingWidth/2) - (entryWidth/2);
 
-        int controlsWidth = mc.fontRendererObj.getStringWidth(root+controlsHeader);
-        int nameHeaderWidth = mc.fontRendererObj.getStringWidth(root+nameHeader);
-        int colorHeaderWidth = mc.fontRendererObj.getStringWidth(root+colorHeader);
-        int qualifierHeaderWidth = mc.fontRendererObj.getStringWidth(root+qualifierHeader);
-        int viewSnitchesHeaderWidth = mc.fontRendererObj.getStringWidth(root+viewSnitchesHeader);
+        //TODO----Keep working on revampin the gui and centering the header row and the entry rows
 
-        int columnWidth = (arrowButtonWidth*2) + onOffButtonWidth + (separationDistance*2);
+        int columnWidth = (ARROW_BUTTON_WIDTH *2) + ON_OFF_BUTTON_WIDTH + (GuiConstants.SMALL_SEPARATION_DISTANCE*2);
 
-        int xPos = xPosition + leftBorderSeparation + (columnWidth/2) - (controlsWidth/2);
+        int drawXPos = startingXPos + (columnWidth/2) - (controlsWidth/2);
 
-        this.mc.fontRendererObj.drawString(root + controlsHeader, xPos, yFinal, 16777215);
+        this.mc.fontRendererObj.drawString(root + CONTROLS_HEADER, drawXPos, yPosition, 16777215);
 
-        xPosition += leftBorderSeparation + columnWidth + (separationDistance*4);
+        startingXPos += columnWidth + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-        xPos = xPosition + (nameWidth/2) - (nameHeaderWidth/2);
+        drawXPos = startingXPos + (NAME_COLUMN_WIDTH /2) - (nameHeaderWidth/2);
 
-        this.mc.fontRendererObj.drawString(root + nameHeader, xPos, yFinal, 16777215);
+        this.mc.fontRendererObj.drawString(root + NAME_HEADER, drawXPos, yPosition, 16777215);
 
-        xPosition += nameWidth + (separationDistance*4);
+        startingXPos += NAME_COLUMN_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-        xPos = xPosition + (editColorButtonWidth/2) - (colorHeaderWidth/2);
+        drawXPos = startingXPos + (EDIT_COLOR_BUTTON_WIDTH /2) - (colorHeaderWidth/2);
 
-        this.mc.fontRendererObj.drawString(root + colorHeader, xPos, yFinal, 16777215);
+        this.mc.fontRendererObj.drawString(root + COLOR_HEADER, drawXPos, yPosition, 16777215);
 
-        xPosition += editColorButtonWidth + (separationDistance*2);
+        startingXPos += EDIT_COLOR_BUTTON_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-        xPos = xPosition + (editQualifierButtonWidth/2) - (qualifierHeaderWidth/2);
+        drawXPos = startingXPos + (EDIT_QUALIFIER_BUTTON_WIDTH /2) - (qualifierHeaderWidth/2);
 
-        this.mc.fontRendererObj.drawString(root + qualifierHeader, xPos, yFinal, 16777215);
+        this.mc.fontRendererObj.drawString(root + QUALIFIER_HEADER, drawXPos, yPosition, 16777215);
 
-        xPosition += editQualifierButtonWidth + (separationDistance*2);
+        startingXPos += EDIT_QUALIFIER_BUTTON_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-        xPos = xPosition + (viewSnitchesButtonWidth/2) - (viewSnitchesHeaderWidth/2);
+        drawXPos = startingXPos + (VIEW_SNITCHES_BUTTON_WIDTH /2) - (viewSnitchesHeaderWidth/2);
 
-        this.mc.fontRendererObj.drawString(root + viewSnitchesHeader, xPos, yFinal, 16777215);
+        this.mc.fontRendererObj.drawString(root + VIEW_SNITCHES_HEADER, drawXPos, yPosition, 16777215);
     }
 
     protected int getSize() {
@@ -171,15 +177,15 @@ public class SnitchListsGui extends GuiListExtended
             this.snitchList = snitchList;
             this.index = index;
 
-            this.upButton = new GuiButton(10, SnitchListsGui.this.width - 60, 0, arrowButtonWidth, buttonHeight, "↑");
-            this.downButton = new GuiButton(11, SnitchListsGui.this.width - 60, 0, arrowButtonWidth, buttonHeight, "↓");
+            this.upButton = new GuiButton(10, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "↑");
+            this.downButton = new GuiButton(11, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "↓");
 
-            this.toggleRenderButton = new GuiButton(12, SnitchListsGui.this.width - 60, 0, onOffButtonWidth, buttonHeight, snitchList.shouldRenderSnitches() ? "On" : "Off");
+            this.toggleRenderButton = new GuiButton(12, SnitchListsGui.this.width - 60, 0, ON_OFF_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, snitchList.shouldRenderSnitches() ? "On" : "Off");
 
-            this.editQualifierButton = new GuiButton(13, SnitchListsGui.this.width - 60, 0, editQualifierButtonWidth, buttonHeight, "Edit");
-            this.editColorButton = new GuiButton(14, SnitchListsGui.this.width - 60, 0, editColorButtonWidth, buttonHeight, "Edit");
+            this.editQualifierButton = new GuiButton(13, SnitchListsGui.this.width - 60, 0, EDIT_QUALIFIER_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Edit");
+            this.editColorButton = new GuiButton(14, SnitchListsGui.this.width - 60, 0, EDIT_COLOR_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Edit");
 
-            this.viewSnitchesButton = new GuiButton(14, SnitchListsGui.this.width - 60, 0, viewSnitchesButtonWidth, buttonHeight, "View");
+            this.viewSnitchesButton = new GuiButton(14, SnitchListsGui.this.width - 60, 0, VIEW_SNITCHES_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "View");
         }
 
         public void updateIndex(int index)
@@ -193,23 +199,24 @@ public class SnitchListsGui extends GuiListExtended
             //xPosition = xPosition - 1;
             int yFinal = yPosition + (p_148279_5_ + SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT) / 2;
 
-            int xPos = xPosition + leftBorderSeparation;
+            int workingWidth = (width-xPosition);
+            int xPos = xPosition + (workingWidth/2) - (entryWidth/2);
 
-            upButton.yPosition = yPosition + (buttonHeight/3);
+            upButton.yPosition = yPosition + (upButton.height/3);
             upButton.xPosition = xPos;
 
-            xPos += upButton.width + separationDistance;
+            xPos += upButton.width + GuiConstants.SMALL_SEPARATION_DISTANCE;
 
             toggleRenderButton.displayString = snitchList.shouldRenderSnitches() ? "On" : "Off";
-            toggleRenderButton.yPosition = yPosition + (buttonHeight/3);
+            toggleRenderButton.yPosition = yPosition + (toggleRenderButton.height/3);
             toggleRenderButton.xPosition = xPos;
 
-            xPos += toggleRenderButton.width + separationDistance;
+            xPos += toggleRenderButton.width + GuiConstants.SMALL_SEPARATION_DISTANCE;
 
-            downButton.yPosition = yPosition + (buttonHeight/3);
+            downButton.yPosition = yPosition + (downButton.height/3);
             downButton.xPosition = xPos;
 
-            xPos += downButton.width + separationDistance*4;
+            xPos += downButton.width + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
             this.upButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
             this.downButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
@@ -217,23 +224,23 @@ public class SnitchListsGui extends GuiListExtended
 
             int stringWidth = mc.fontRendererObj.getStringWidth(snitchList.getListName());
 
-            int namePos = xPos + (nameWidth/2) - (stringWidth/2);
+            int namePos = xPos + (NAME_COLUMN_WIDTH /2) - (stringWidth/2);
 
             mc.fontRendererObj.drawString(snitchList.getListName(), namePos ,yFinal,16777215);
 
-            xPos += nameWidth + (separationDistance*4);
+            xPos += NAME_COLUMN_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-            editColorButton.yPosition = yPosition + (buttonHeight/3);
+            editColorButton.yPosition = yPosition + (editColorButton.height/3);
             editColorButton.xPosition = xPos;
 
-            xPos += editColorButtonWidth + (separationDistance*2);
+            xPos += EDIT_COLOR_BUTTON_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-            editQualifierButton.yPosition = yPosition + (buttonHeight/3);
+            editQualifierButton.yPosition = yPosition + (editQualifierButton.height/3);
             editQualifierButton.xPosition = xPos;
 
-            xPos += editQualifierButtonWidth + (separationDistance*2);
+            xPos += EDIT_QUALIFIER_BUTTON_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-            viewSnitchesButton.yPosition = yPosition +(buttonHeight/3);
+            viewSnitchesButton.yPosition = yPosition +(viewSnitchesButton.height/3);
             viewSnitchesButton.xPosition = xPos;
 
             this.editColorButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);

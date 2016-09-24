@@ -17,10 +17,10 @@ public class EditSnitchListsGui extends GuiScreen
     private SnitchListsGui snitchListGUI;
     private SnitchMaster snitchMaster;
 
-    private static final int DONE_BUTTON_WIDTH = GuiConstants.MEDIUM_BUTTON_WIDTH*3;
-    private static final int NEW_BUTTON_WIDTH = GuiConstants.MEDIUM_BUTTON_WIDTH;
-    private static final int RENDER_ON_BUTTON_WIDTH = GuiConstants.MEDIUM_BUTTON_WIDTH;
-    private static final int RENDER_OFF_BUTTON_WIDTH = GuiConstants.MEDIUM_BUTTON_WIDTH;
+    private static final int DONE_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH*3;
+    private static final int NEW_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
+    private static final int RENDER_ON_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
+    private static final int RENDER_OFF_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
 
     public EditSnitchListsGui(GuiScreen guiscreen, SnitchMaster snitchMaster)
     {
