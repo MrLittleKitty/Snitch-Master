@@ -26,12 +26,27 @@ public class SnitchListQualifier
 
     private static final String STRING_LITERAL_CHAR = "'";
 
-    private final String expression;
-    private final String[] tokens;
+    private String expression;
+    private String[] tokens;
+
     public SnitchListQualifier(String expression)
     {
         this.expression = expression;
+
+        assert isSyntaxValid(expression);
+
         this.tokens = expression.split(" ");
+    }
+
+    public boolean updateQualifier(String expression)
+    {
+        if(!isSyntaxValid(expression))
+            return false;
+
+        this.expression = expression;
+        this.tokens = expression.split(" ");
+
+        return true;
     }
 
     public boolean isQualified(Snitch snitch)

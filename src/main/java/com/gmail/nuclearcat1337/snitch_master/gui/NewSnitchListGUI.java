@@ -103,6 +103,7 @@ public class NewSnitchListGui extends GuiScreen
         redBox.updateCursorCounter();
         greenBox.updateCursorCounter();
         blueBox.updateCursorCounter();
+        super.updateScreen();
     }
 
     public void keyTyped(char par1, int par2) throws IOException
@@ -169,7 +170,7 @@ public class NewSnitchListGui extends GuiScreen
         mc.fontRendererObj.drawString("Qualifier",qualifierBox.xPosition-constXValue,qualifierBox.yPosition + constYValue,16777215);
         mc.fontRendererObj.drawString("Name",nameBox.xPosition-constXValue,nameBox.yPosition + constYValue,16777215);
 
-        int yPos = nameBox.yPosition - GuiConstants.SMALL_SEPARATION_DISTANCE - mc.fontRendererObj.FONT_HEIGHT;
+        int yPos = nameBox.yPosition - GuiConstants.STANDARD_SEPARATION_DISTANCE - mc.fontRendererObj.FONT_HEIGHT;
         int xPos = nameBox.xPosition + (nameBoxWidth/2) - (createNewListStringWidth/2);
 
         mc.fontRendererObj.drawString(CREATE_NEW_LIST_STRING,xPos,yPos,16777215);

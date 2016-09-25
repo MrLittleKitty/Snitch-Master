@@ -7,6 +7,7 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,7 +56,7 @@ public class SnitchListsGui extends GuiListExtended
         {
             SnitchList snitchList = lists.get(k);
 
-            this.iGuiList[k] = new ListEntry(snitchList,k);
+            this.iGuiList[k] = new ListEntry(guiSnitches,snitchList,k);
         }
 
         this.setHasListHeader(true, (int) ( (float) SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT * 1.5));
@@ -162,6 +163,7 @@ public class SnitchListsGui extends GuiListExtended
     @SideOnly(Side.CLIENT)
     public class ListEntry implements GuiListExtended.IGuiListEntry
     {
+        private GuiScreen cancelToScreen;
         private int index;
         private SnitchList snitchList;
 
@@ -172,8 +174,9 @@ public class SnitchListsGui extends GuiListExtended
         private GuiButton editColorButton;
         private GuiButton viewSnitchesButton;
 
-        private ListEntry(SnitchList snitchList, int index)
+        private ListEntry(GuiScreen cancelToScreen, SnitchList snitchList, int index)
         {
+            this.cancelToScreen = cancelToScreen;
             this.snitchList = snitchList;
             this.index = index;
 
@@ -276,6 +279,7 @@ public class SnitchListsGui extends GuiListExtended
             }
             if (this.editQualifierButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
+                mc.displayGuiScreen(new EditStringGui(cancelToScreen,snitchList.getQualifier().toString(),"Edit Qualifier",null,100));
                 return true;
             }
             if (this.viewSnitchesButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))

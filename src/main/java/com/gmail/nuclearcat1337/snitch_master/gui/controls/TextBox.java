@@ -38,6 +38,33 @@ public class TextBox extends GuiTextField
         this.clampedMaximum = clampedMaximum;
     }
 
+    @Override
+    public void writeText(String text)
+    {
+        super.writeText(text);
+        if (this.number)
+        {
+            String fixed = getText().replaceAll(this.numericRegex, "");
+            if (this.allowNegative)
+            {
+                String start = fixed.startsWith("-") ? "-" : "";
+                fixed = start + fixed.replaceAll("-", "");
+            }
+            super.setText(fixed);
+        }
+    }
+
+    @Override
+    public boolean textboxKeyTyped(char par1, int par2)
+    {
+        boolean res = super.textboxKeyTyped(par1, par2);
+        if ((this.number) && (isFocused()))
+        {
+            clamp();
+        }
+        return res;
+    }
+
     public Integer clamp()
     {
         if (!this.number || this.clampedMinimum == null || this.clampedMaximum == null)
