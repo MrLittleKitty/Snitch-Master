@@ -1,16 +1,10 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
-import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
 import com.gmail.nuclearcat1337.snitch_master.gui.controls.TextBox;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
-import com.gmail.nuclearcat1337.snitch_master.util.Color;
-import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
-import com.gmail.nuclearcat1337.snitch_master.util.ReturningAcceptor;
+import com.gmail.nuclearcat1337.snitch_master.util.Acceptor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
@@ -24,13 +18,13 @@ public class EditStringGui extends GuiScreen
     private final String titleText;
     private final int titleWidth;
 
-    private ReturningAcceptor<Boolean,String> callback;
+    private Acceptor<String> callback;
     private String editString;
     private TextBox stringBox;
 
     private final int maxStringLength;
 
-    public EditStringGui(GuiScreen cancelToScreen, String editString, String titleText, ReturningAcceptor<Boolean,String> callback, int maxStringLength)
+    public EditStringGui(GuiScreen cancelToScreen, String editString, String titleText, Acceptor<String> callback, int maxStringLength)
     {
         this.cancelToScreen = cancelToScreen;
         this.editString = editString;
@@ -105,9 +99,12 @@ public class EditStringGui extends GuiScreen
                 mc.displayGuiScreen(cancelToScreen);
                 break;
             case 2:
-
-                //TODO----Save the edits to the text in a generic way using the acceptor thingy
-
+                String newText = stringBox.getText();
+                if(newText != null && !newText.equalsIgnoreCase(editString))
+                {
+                    if(callback.accept(newText))
+                        mc.displayGuiScreen(cancelToScreen);
+                }
                 break;
         }
     }

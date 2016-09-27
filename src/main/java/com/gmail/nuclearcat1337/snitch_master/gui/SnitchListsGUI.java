@@ -1,8 +1,10 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
+import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
+import com.gmail.nuclearcat1337.snitch_master.util.Acceptor;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -17,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class SnitchListsGui extends GuiListExtended
 {
+    private final SnitchLists lists;
     private final EditSnitchListsGui guiSnitches;
     private final Minecraft mc;
     private final ListEntry[] iGuiList;
@@ -28,6 +31,7 @@ public class SnitchListsGui extends GuiListExtended
     private static final String VIEW_SNITCHES_HEADER = "Snitches";
 
     private static final int NAME_COLUMN_WIDTH = Minecraft.getMinecraft().fontRendererObj.getStringWidth(SnitchList.MAX_NAME_CHARACTERS);
+    private int nameColumnLeftBound;
 
     private static final int ARROW_BUTTON_WIDTH = 20;
     private static final int ON_OFF_BUTTON_WIDTH = 30;
@@ -46,6 +50,7 @@ public class SnitchListsGui extends GuiListExtended
                 guiSnitches.height - 32, 	// bottom
                 20);						// slot height
 
+        this.lists = lists;
         this.guiSnitches = guiSnitches;
         this.mc = Minecraft.getMinecraft();
 
@@ -77,8 +82,8 @@ public class SnitchListsGui extends GuiListExtended
         iGuiList[nextIndex] = iGuiList[index];
         iGuiList[index] = entry;
 
-        iGuiList[index].updateIndex(index);
-        iGuiList[nextIndex].updateIndex(index);
+//        iGuiList[index].updateIndex(index);
+//        iGuiList[nextIndex].updateIndex(index);
 
         for(int i = 0; i < iGuiList.length; i++)
             iGuiList[i].snitchList.setRenderPriority(i+1);
@@ -100,8 +105,6 @@ public class SnitchListsGui extends GuiListExtended
         int workingWidth = (this.width-xPosition);
         int startingXPos = xPosition + (workingWidth/2) - (entryWidth/2);
 
-        //TODO----Keep working on revampin the gui and centering the header row and the entry rows
-
         int columnWidth = (ARROW_BUTTON_WIDTH *2) + ON_OFF_BUTTON_WIDTH + (GuiConstants.SMALL_SEPARATION_DISTANCE*2);
 
         int drawXPos = startingXPos + (columnWidth/2) - (controlsWidth/2);
@@ -110,6 +113,7 @@ public class SnitchListsGui extends GuiListExtended
 
         startingXPos += columnWidth + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
+        nameColumnLeftBound = startingXPos;
         drawXPos = startingXPos + (NAME_COLUMN_WIDTH /2) - (nameHeaderWidth/2);
 
         this.mc.fontRendererObj.drawString(root + NAME_HEADER, drawXPos, yPosition, 16777215);
@@ -142,9 +146,7 @@ public class SnitchListsGui extends GuiListExtended
         for(int i = 0; i < iGuiList.length; i++)
             iGuiList[i].snitchList.setShouldRenderSnitches(on);
     }
-    /**
-     * Gets the IGuiListEntry object for the given index
-     */
+
     public GuiListExtended.IGuiListEntry getListEntry(int index) {
         return this.iGuiList[index];
     }
@@ -153,9 +155,19 @@ public class SnitchListsGui extends GuiListExtended
         return this.width - 16;
     }
 
-    /**
-     * Gets the width of the list
-     */
+    @Override
+    protected void elementClicked(int slotIndex, boolean isRightClick, int mouseX, int mouseY)
+    {
+        if (slotIndex < 0 || slotIndex >= iGuiList.length) return;
+        ((ListEntry) getListEntry(slotIndex)).mousePressed(slotIndex, mouseX, mouseY, isRightClick ? 1 : 0, 0, 0);
+    }
+
+    //    @Override
+    //    protected void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY) {
+    //        if (isDoubleClick || slotIndex < 0 || slotIndex >= iGuiList.length) return;
+    //        ((ListEntry) getListEntry(slotIndex)).mousePressed(slotIndex, mouseX, mouseY, 0, 0, 0);
+    //    }
+
     public int getListWidth() {
         return this.width;
     }
@@ -164,7 +176,7 @@ public class SnitchListsGui extends GuiListExtended
     public class ListEntry implements GuiListExtended.IGuiListEntry
     {
         private GuiScreen cancelToScreen;
-        private int index;
+        //private int index;
         private SnitchList snitchList;
 
         private GuiButton upButton;
@@ -178,7 +190,7 @@ public class SnitchListsGui extends GuiListExtended
         {
             this.cancelToScreen = cancelToScreen;
             this.snitchList = snitchList;
-            this.index = index;
+            //this.index = index;
 
             this.upButton = new GuiButton(10, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "↑");
             this.downButton = new GuiButton(11, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "↓");
@@ -191,16 +203,14 @@ public class SnitchListsGui extends GuiListExtended
             this.viewSnitchesButton = new GuiButton(14, SnitchListsGui.this.width - 60, 0, VIEW_SNITCHES_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "View");
         }
 
-        public void updateIndex(int index)
-        {
-            this.index = index;
-        }
+        //public void updateIndex(int index)
+//        {
+//            this.index = index;
+//        }
 
-        public void drawEntry(int p_148279_1_, int xPosition, int yPosition, int p_148279_4_, int p_148279_5_,
-                              int p_148279_7_, int p_148279_8_, boolean p_148279_9_)
+        public void drawEntry(int slotIndex, int xPosition, int yPosition, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected)
         {
-            //xPosition = xPosition - 1;
-            int yFinal = yPosition + (p_148279_5_ + SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT) / 2;
+            int yFinal = yPosition + (slotHeight + SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT) / 2;
 
             int workingWidth = (width-xPosition);
             int xPos = xPosition + (workingWidth/2) - (entryWidth/2);
@@ -221,9 +231,9 @@ public class SnitchListsGui extends GuiListExtended
 
             xPos += downButton.width + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-            this.upButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
-            this.downButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
-            this.toggleRenderButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
+            this.upButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
+            this.downButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
+            this.toggleRenderButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
 
             int stringWidth = mc.fontRendererObj.getStringWidth(snitchList.getListName());
 
@@ -246,18 +256,25 @@ public class SnitchListsGui extends GuiListExtended
             viewSnitchesButton.yPosition = yPosition +(viewSnitchesButton.height/3);
             viewSnitchesButton.xPosition = xPos;
 
-            this.editColorButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
-            this.editQualifierButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
-            this.viewSnitchesButton.drawButton(SnitchListsGui.this.mc, p_148279_7_, p_148279_8_);
+            this.editColorButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
+            this.editQualifierButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
+            this.viewSnitchesButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
         }
 
-        /**
-         * Returns true if the mouse has been pressed on this control.
-         */
-        public boolean mousePressed(int index, int xPos, int yPos, int mouseEvent, int relX, int relY) {
+        public boolean mousePressed(int index, int xPos, int yPos, int mouseEvent, int relX, int relY)
+        {
+            if(mouseEvent == 1) //If its a right click
+            {
+                int rightBound = nameColumnLeftBound + NAME_COLUMN_WIDTH;
+                if(xPos >= nameColumnLeftBound && xPos <= rightBound) //Check if they right clicked in the name column
+                {
+                    mc.displayGuiScreen(new EditStringGui(cancelToScreen,snitchList.getListName(),"Edit List Name",new EditNameAcceptor(snitchList),20));
+                    return true;
+                }
 
-            //LogManager.getLogger("SnitchVisualizer").info("MousePress on SnitchListItem Detected!");
-
+                //Only allow right clicks on certain controls. So not all things should be triggered by right clicks
+                return false;
+            }
             if (this.upButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
                 swapItems(index,index-1); //The array is goes from bottom to top. so index 0 is at top of screen
@@ -279,7 +296,7 @@ public class SnitchListsGui extends GuiListExtended
             }
             if (this.editQualifierButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
-                mc.displayGuiScreen(new EditStringGui(cancelToScreen,snitchList.getQualifier().toString(),"Edit Qualifier",null,100));
+                mc.displayGuiScreen(new EditStringGui(cancelToScreen,snitchList.getQualifier().toString(),"Edit Qualifier",new EditQualifierAcceptor(snitchList),100));
                 return true;
             }
             if (this.viewSnitchesButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
@@ -289,11 +306,6 @@ public class SnitchListsGui extends GuiListExtended
 
             return false;
         }
-
-        /**
-         * Fired when the mouse button is released. Arguments: index, x, y,
-         * mouseEvent, relativeX, relativeY
-         */
 
         public void mouseReleased(int index, int xPos, int yPos, int mouseEvent, int relX, int relY)
         {
@@ -305,20 +317,52 @@ public class SnitchListsGui extends GuiListExtended
             this.viewSnitchesButton.mouseReleased(xPos,yPos);
         }
 
-//        ListEntry(SnitchList p_i45030_2_, Object notUsed) {
-//            this(p_i45030_2_);
-//        }
+        @Override
+        public void setSelected(int p_178011_1, int p_178011_2_, int p_178011_3_)
+        {}
+    }
+
+    private class EditNameAcceptor implements Acceptor<String>
+    {
+        private final SnitchList list;
+
+        private EditNameAcceptor(SnitchList list)
+        {
+            this.list = list;
+        }
 
         @Override
-        public void setSelected(int p_178011_1_, int p_178011_2_, int p_178011_3_) {
-            // TODO Auto-generated method stub
-
+        public boolean accept(String item)
+        {
+            boolean valid = !lists.doesListWithNameExist(item);
+            if(valid)
+            {
+                list.setListName(item);
+                return true;
+            }
+            return false;
         }
     }
 
-    @Override
-    protected void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY) {
-        if (isDoubleClick || slotIndex < 0 || slotIndex >= iGuiList.length) return;
-        ((ListEntry) getListEntry(slotIndex)).mousePressed(slotIndex, mouseX, mouseY, 0, 0, 0);
+    private class EditQualifierAcceptor implements Acceptor<String>
+    {
+        private final SnitchList list;
+
+        private EditQualifierAcceptor(SnitchList list)
+        {
+            this.list = list;
+        }
+
+        @Override
+        public boolean accept(String item)
+        {
+            boolean valid = SnitchListQualifier.isSyntaxValid(item);
+            if(valid)
+            {
+                list.getQualifier().updateQualifier(item);
+                return true;
+            }
+            return false;
+        }
     }
 }

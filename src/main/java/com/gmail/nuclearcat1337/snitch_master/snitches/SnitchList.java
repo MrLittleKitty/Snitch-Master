@@ -60,6 +60,11 @@ public class SnitchList
         return listName;
     }
 
+    public void setListName(String name)
+    {
+        this.listName = name;
+    }
+
     public int getRenderPriority()
     {
         return renderPriority;
