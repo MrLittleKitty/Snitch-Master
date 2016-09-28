@@ -43,8 +43,28 @@ public class Color
         return blue/255D;
     }
 
+    public int getRedInt()
+    {
+        return red;
+    }
+
+    public int getGreenInt()
+    {
+        return green;
+    }
+
+    public int getBlueInt()
+    {
+        return blue;
+    }
+
     public String serialize()
     {
         return "{"+red+":"+green+":"+blue+"}";
+    }
+
+    public static boolean AreEqual(Color one, Color two)
+    {
+        return one.red == two.red && one.green == two.green && one.blue == two.blue;
     }
 }

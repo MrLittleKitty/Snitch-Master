@@ -80,6 +80,11 @@ public class SnitchList
         return listColor;
     }
 
+    public void setListColor(Color newColor)
+    {
+        this.listColor = newColor;
+    }
+
     public boolean shouldRenderSnitches()
     {
         return renderSnitches;
