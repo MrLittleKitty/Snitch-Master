@@ -81,6 +81,12 @@ public class SnitchLists implements Iterable<SnitchList>
         return false;
     }
 
+    public void snitchListChanged()
+    {
+        if(snitchMaster.jmInterface != null)
+            snitchMaster.jmInterface.refresh(snitchMaster.getSnitches().getItems());
+    }
+
     public SnitchList get(int index)
     {
         return snitchLists.get(index);

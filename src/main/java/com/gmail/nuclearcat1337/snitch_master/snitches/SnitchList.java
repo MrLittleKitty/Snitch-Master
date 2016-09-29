@@ -124,7 +124,7 @@ public class SnitchList
 
         return builder.toString();
     }
-
+    
     public static SnitchList GetSnitchListFromCSV(String csv)
     {
         String[] args = csv.split(",");

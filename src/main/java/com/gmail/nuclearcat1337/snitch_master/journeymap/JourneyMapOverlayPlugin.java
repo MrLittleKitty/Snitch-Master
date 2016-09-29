@@ -135,6 +135,14 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
         }
     }
 
+    @Override
+    public void refresh(Iterable<Snitch> snitches)
+    {
+        clearDisplayed();
+        for(Snitch snitch : snitches)
+            displaySnitch(snitch);
+    }
+
     private void clearDisplayed()
     {
         api.removeAll(this.getModId());

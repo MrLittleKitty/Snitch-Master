@@ -337,6 +337,7 @@ public class SnitchListsGui extends GuiListExtended
         public boolean accept(Color item)
         {
             list.setListColor(item);
+            lists.snitchListChanged();
             return true;
         }
     }
@@ -357,6 +358,7 @@ public class SnitchListsGui extends GuiListExtended
             if(valid)
             {
                 list.setListName(item);
+                lists.snitchListChanged();
                 return true;
             }
             return false;
@@ -379,6 +381,7 @@ public class SnitchListsGui extends GuiListExtended
             if(valid)
             {
                 list.getQualifier().updateQualifier(item);
+                lists.snitchListChanged();
                 return true;
             }
             return false;
