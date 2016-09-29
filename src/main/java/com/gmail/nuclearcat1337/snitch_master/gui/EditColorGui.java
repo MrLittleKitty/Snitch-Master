@@ -79,7 +79,7 @@ public class EditColorGui extends GuiScreen
 
         xPos += (buttonWidth + GuiConstants.SMALL_SEPARATION_DISTANCE);
 
-        this.buttonList.add(new GuiButton(2,xPos,yPos,buttonWidth,GuiConstants.STANDARD_BUTTON_HEIGHT,"Create"));
+        this.buttonList.add(new GuiButton(2,xPos,yPos,buttonWidth,GuiConstants.STANDARD_BUTTON_HEIGHT,"Save"));
 
         super.initGui();
     }
@@ -157,32 +157,35 @@ public class EditColorGui extends GuiScreen
 
     public void actionPerformed(GuiButton button)
     {
-        switch (button.id)
+        //If they press the "save" button, we check if we need to save changes
+        if(button.id == 2)
         {
-            case 1:
-                mc.displayGuiScreen(cancelToScreen);
-                break;
-            case 2:
-                Integer red = redBox.clamp();
-                if(red == null)
-                    return;
-                Integer green = greenBox.clamp();
-                if(green == null)
-                    return;
-                Integer blue = blueBox.clamp();
-                if(blue == null)
-                    return;
+            //If there is not a correct red value don't go back to old screen
+            Integer red = redBox.clamp();
+            if(red == null)
+                return;
 
-                Color newColor = new Color(red,green,blue);
+            //If there is not a correct green value don't go back to old screen
+            Integer green = greenBox.clamp();
+            if (green == null)
+                return;
 
-                if(Color.AreEqual(newColor,baseColor))
-                    return;
+            //If there is not a correct blue value don't go back to old screen
+            Integer blue = blueBox.clamp();
+            if (blue == null)
+            return;
 
-                if(callback.accept(newColor))
-                        mc.displayGuiScreen(cancelToScreen);
-
-                break;
+            Color newColor = new Color(red, green, blue);
+            //We only need to save changes if they actually changed the color
+            if (!Color.AreEqual(newColor, baseColor))
+            {
+                //Pass the color to the callback (the return value really isn't used I guess...)
+                callback.accept(newColor);
+            }
         }
+
+        //Go to the previous screen if we get to this point (other places might return first)
+        mc.displayGuiScreen(cancelToScreen);
     }
 
     @Override

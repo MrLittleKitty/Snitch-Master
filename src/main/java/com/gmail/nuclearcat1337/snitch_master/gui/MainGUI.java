@@ -39,7 +39,7 @@ public class MainGui extends GuiScreen
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        this.buttonList.add(new GuiButton(3, xPos, yPos, "View Snitches"));
+//        this.buttonList.add(new GuiButton(3, xPos, yPos, "View Snitches"));
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 

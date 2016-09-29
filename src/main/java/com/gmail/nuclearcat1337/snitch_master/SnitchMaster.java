@@ -162,6 +162,8 @@ public class SnitchMaster// implements SnitchMasterAPI
         //send it to journey map if that is enabled
         if(jmInterface != null)
             jmInterface.displaySnitch(snitch);
+
+        IOHandler.asyncSaveSnitches(snitches.getItems());
     }
 
     public void refreshSnitchListPriorities()
