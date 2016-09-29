@@ -224,7 +224,8 @@ public class NewSnitchListGui extends GuiScreen
                 SnitchList list = new SnitchList(new SnitchListQualifier(qualifier),true,name,new Color(red,green,blue));
                 lists.addSnitchList(list);
 
-                IOHandler.asyncSaveSnitchLists(lists);
+                //Handles any things that need to happen when lists change. (saving, etc)
+                lists.snitchListChanged();
 
                 Minecraft.getMinecraft().displayGuiScreen(new EditSnitchListsGui(null,snitchMaster));
                 break;
