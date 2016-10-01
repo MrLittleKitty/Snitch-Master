@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Created by Mr_Little_Kitty on 9/8/2016.
+ * Handles misc events related to Snitches.
  */
 public class SnitchListeners
 {
@@ -25,6 +26,9 @@ public class SnitchListeners
         this.snitchMaster = snitchMaster;
     }
 
+    /**
+     * Event that handles when a Snitch is right clicked.
+     */
     @SubscribeEvent
     public void onSnitchPlace(PlayerInteractEvent event)
     {

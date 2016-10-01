@@ -25,6 +25,7 @@ import java.util.SortedSet;
 
 /**
  * Created by Mr_Little_Kitty on 6/26/2016.
+ * Handles the rendering of Snitches in the Minecraft world that the player is currently in.
  */
 public class SnitchRenderer
 {
@@ -39,6 +40,9 @@ public class SnitchRenderer
         this.snitchMaster = snitchMaster;
     }
 
+    /**
+     * Renders all the Snitches in that current world that are in a certain distance of the player
+     */
     @SubscribeEvent
     public void renderSnitches(RenderWorldLastEvent event)
     {
@@ -204,7 +208,7 @@ public class SnitchRenderer
         tess.draw();
     }
 
-    public static void drawCrossedOutlinedBoundingBox(AxisAlignedBB bb)
+    private static void drawCrossedOutlinedBoundingBox(AxisAlignedBB bb)
     {
         Tessellator tess = Tessellator.getInstance();
         VertexBuffer buffer = tess.getBuffer();

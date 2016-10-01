@@ -11,6 +11,8 @@ import org.lwjgl.input.Keyboard;
 
 /**
  * Created by Mr_Little_Kitty on 6/30/2016.
+ * Handles the keys that are bound for SnitchMaster.
+ * Currently this handles the settings key and the toggle render key.
  */
 public class KeyHandler
 {

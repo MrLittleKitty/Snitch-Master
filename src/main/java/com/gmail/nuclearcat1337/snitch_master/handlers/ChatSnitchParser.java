@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by Mr_Little_Kitty on 6/30/2016.
+ * Handles the parsing of Snitched from the /jalist command.
  */
 public class ChatSnitchParser
 {
@@ -46,6 +47,9 @@ public class ChatSnitchParser
         IAlertRecipients = new ArrayList<>();
     }
 
+    /**
+     * Adds a recipient that would like to receive Snitch alerts.
+     */
     public void addAlertRecipient(IAlertRecipient recipient)
     {
         this.IAlertRecipients.add(recipient);
@@ -133,11 +137,17 @@ public class ChatSnitchParser
         }
     }
 
+    /**
+     * Returns true if SnitchMaster is currently updating from the /jalist command.
+     */
     public boolean isUpdatingSnitchList()
     {
         return updatingSnitchList;
     }
 
+    /**
+     * Begins updating Snitches from the /jalist command.
+     */
     public void updateSnitchList()
     {
         resetUpdatingSnitchList();
@@ -179,6 +189,10 @@ public class ChatSnitchParser
         Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString("Timeout between commands is " + waitTime + " seconds."));
     }
 
+    /**
+     * Resets the updating of Snitches from the /jalist command.
+     * If an update is currently in progress, it is stopped.
+     */
     public void resetUpdatingSnitchList()
     {
         jaListIndex = 1;

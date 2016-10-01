@@ -5,6 +5,7 @@ import com.sun.javafx.fxml.expression.Expression;
 
 /**
  * Created by Mr_Little_Kitty on 7/20/2016.
+ * A conditional expression for a SnitchList to accept a Snitch.
  */
 public class SnitchListQualifier
 {
@@ -29,6 +30,10 @@ public class SnitchListQualifier
     private String expression;
     private String[] tokens;
 
+    /**
+     * Creates a new SnitchListQualifier with the given conditional expression.
+     * Throws an assertion exception if the given expression is not valid.
+     */
     public SnitchListQualifier(String expression)
     {
         this.expression = expression;
@@ -38,6 +43,11 @@ public class SnitchListQualifier
         this.tokens = expression.split(" ");
     }
 
+    /**
+     * Changes this qualifier to qualify using the provided expression.
+     * Returns true if the qualifier was updated.
+     * Returns false otherwise.
+     */
     public boolean updateQualifier(String expression)
     {
         if(!isSyntaxValid(expression))
@@ -49,6 +59,10 @@ public class SnitchListQualifier
         return true;
     }
 
+    /**
+     * Returns true if the given Snitch meets the criteria specified by this qualifier's expression.
+     * Returns false otherwise.
+     */
     public boolean isQualified(Snitch snitch)
     {
         try
@@ -104,11 +118,18 @@ public class SnitchListQualifier
         }
     }
 
+    /**
+     * Returns the expression that this qualifier uses to qualify Snitches.
+     */
     public String toString()
     {
         return expression;
     }
 
+    /**
+     * Returns true if the syntax of the provided conditional expression is correct.
+     * Returns false otherwise.
+     */
     public static boolean isSyntaxValid(String expression)
     {
         String[] tokens = expression.split(" ");

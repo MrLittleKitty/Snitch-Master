@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Created by Mr_Little_Kitty on 9/11/2016.
+ * Manages the current world the player is in. Handles servers with multiple worlds and single player.
  */
 public class WorldInfoListener
 {
@@ -68,6 +69,10 @@ public class WorldInfoListener
         }
     }
 
+    /**
+     * Gets the name of the current world the player is.
+     * Returns "single player" is the player is playing single player.
+     */
     public String getWorldID()
     {
         if(lastResponse < lastRequest)
@@ -85,6 +90,9 @@ public class WorldInfoListener
             return worldID;
     }
 
+    /**
+     * The packet class to be sent to the server requesting the name of the world.
+     */
     public static class WorldIDPacket implements IMessage
     {
         private String worldID;
@@ -114,6 +122,9 @@ public class WorldInfoListener
         }
     }
 
+    /**
+     * Receives the response from the server with the name of the world the player is currently in.
+     */
     public static class WorldListener implements IMessageHandler<WorldIDPacket, IMessage>
     {
         @SideOnly(Side.CLIENT)
