@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 /**
  * Created by Mr_Little_Kitty on 9/16/2016.
+ * Handles the management of all SnitchLists for the SnitchMaster Mod.
  */
 public class SnitchLists implements Iterable<SnitchList>
 {
@@ -19,6 +20,9 @@ public class SnitchLists implements Iterable<SnitchList>
 
     private boolean universalRender = false;
 
+    /**
+     * Creates a new SnitchLists object
+     */
     public SnitchLists(SnitchMaster snitchMaster)
     {
         this.snitchMaster = snitchMaster;
@@ -26,13 +30,18 @@ public class SnitchLists implements Iterable<SnitchList>
         nextPriority = 1;
     }
 
-    public void addSnitchList(SnitchList list)
+    /**
+     * Adds a new SnitchList to the collection and assigns it the next render priority.
+     * If the given SnitchList has the same name as an already existing SnitchList or it is null, it will NOT added to the collection.
+     * @return True if the SnitchList was added, false otherwise.
+     */
+    public boolean addSnitchList(SnitchList list)
     {
         if(list == null) //We dont let them add null lists
-            return;
+            return false;
 
         if(doesListWithNameExist(list.getListName())) //We dont let them add 2 lists with the same name
-            return;
+            return false;
 
         list.setRenderPriority(nextPriority++); //Make sure the render priorities are incremental
 
@@ -45,8 +54,13 @@ public class SnitchLists implements Iterable<SnitchList>
 
         //Add this list to the list collection
         this.snitchLists.add(list);
+
+        return true;
     }
 
+    /**
+     * Sorts the SnitchLists by their render priority.
+     */
     public void sortSnitchLists()
     {
         Collections.sort(snitchLists, new Comparator<SnitchList>()
@@ -59,6 +73,10 @@ public class SnitchLists implements Iterable<SnitchList>
         });
     }
 
+    /**
+     * Toggles the universal render of all SnitchLists.
+     * This sets the render of all SnitchLists according to a global variable, regardless of the current individual render status.
+     */
     public void toggleUniversalRender()
     {
         for(SnitchList list : snitchLists)
@@ -66,12 +84,20 @@ public class SnitchLists implements Iterable<SnitchList>
         universalRender = !universalRender;
     }
 
+    /**
+     * Adds the default SnitchLists to this collection.
+     * If they are already in the collection, they will NOT be re-added.
+     */
     public void addDefaultSnitchLists()
     {
         for(SnitchList list : SnitchList.getDefaultSnitchLists())
             addSnitchList(list);
     }
 
+    /**
+     * Returns true if a SnitchList with the given name exists in this collection.
+     * Returns false otherwise.
+     */
     public boolean doesListWithNameExist(String name)
     {
         for (SnitchList list : snitchLists)
@@ -82,6 +108,10 @@ public class SnitchLists implements Iterable<SnitchList>
         return false;
     }
 
+    /**
+     * A method that updates all necessary values when a SnitchList is changed externally.
+     * Example: If a SnitchList changes name or color, this method should be called to update values accordingly.
+     */
     public void snitchListChanged()
     {
         if(snitchMaster.jmInterface != null)
@@ -90,16 +120,26 @@ public class SnitchLists implements Iterable<SnitchList>
         IOHandler.asyncSaveSnitchLists(this);
     }
 
+    /**
+     * Returns the SnitchList at the given index.
+     * Index must be between 0 and (this.size()-1)
+     */
     public SnitchList get(int index)
     {
         return snitchLists.get(index);
     }
 
+    /**
+     * Returns the number of SnitchLists in this collection.
+     */
     public int size()
     {
         return snitchLists.size();
     }
 
+    /**
+     * Returns an Iterator for iterating over all SnitchLists in this collection.
+     */
     @Override
     public Iterator<SnitchList> iterator()
     {

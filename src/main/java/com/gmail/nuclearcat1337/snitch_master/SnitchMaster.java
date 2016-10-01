@@ -24,22 +24,31 @@ import java.util.logging.Logger;
 
 /**
  * Created by Mr_Little_Kitty on 6/25/2016.
+ * The main class for the SnitchMaster mod.
  */
-
 @Mod(modid = SnitchMaster.MODID, name = SnitchMaster.MODNAME, version = SnitchMaster.MODVERSION)
 public class SnitchMaster// implements SnitchMasterAPI
 {
-    public static JourneyMapInterface jmInterface = null;
-    public static SnitchMaster instance;
-
     public static final String MODID = "snitchmaster";
     public static final String MODNAME = "Snitch Master";
     public static final String MODVERSION = "1.0.1";
 
-    private static Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
+    /**
+     * The Logger instance to use to print to the console
+     */
     public static final Logger logger = Logger.getLogger(MODID);
-
     public static final boolean CULL_TIME_ENABLED = true;
+
+    /**
+     * The JourneyMap interface for communicating with the JourneyMap plugin
+     */
+    public static JourneyMapInterface jmInterface = null;
+
+    /**
+     * The static instance of this SnitchMaster class
+     */
+    public static SnitchMaster instance;
 
     private ChatSnitchParser chatSnitchParser;
     private WorldInfoListener worldInfoListener;
@@ -99,16 +108,26 @@ public class SnitchMaster// implements SnitchMasterAPI
         //TODO---Make sure we set all the defaults for the settings here
     }
 
+    /**
+     * Returns the instance of the ChatSnitchParser for dealing with chat Snitch loading.
+     */
     public ChatSnitchParser getChatSnitchParser()
     {
         return chatSnitchParser;
     }
 
+    /**
+     * Returns the name of the current world or "single player" if in single player.
+     */
     public String getCurrentWorld()
     {
         return worldInfoListener.getWorldID();
     }
 
+    /**
+     * Gets the SnitchLists object that manages SnitchLists.
+     * @return
+     */
     public SnitchLists getSnitchLists()
     {
         return snitchLists;
@@ -124,11 +143,18 @@ public class SnitchMaster// implements SnitchMasterAPI
         return null;
     }
 
+    /**
+     * Returns a LocateableObjectList of all the currently loaded Snitches
+     */
     public IReadOnlyLocatableObjectList<Snitch> getSnitches()
     {
         return snitches;
     }
 
+    /**
+     * Submits a Snitch for processing and adding to the Snitch collection.
+     * The Snitch is added to all SnitchLists, JourneyMap, (if applicable) and then saved to a file.
+     */
     public void submitSnitch(Snitch snitch)
     {
         //Check to see if there is already a snitch at this location
@@ -166,6 +192,9 @@ public class SnitchMaster// implements SnitchMasterAPI
         IOHandler.asyncSaveSnitches(snitches.getItems());
     }
 
+    /**
+     * Refreshes the render priorities of all currently loaded Snitches.
+     */
     public void refreshSnitchListPriorities()
     {
         for(Snitch snitch : getSnitches().getItems())
