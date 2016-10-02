@@ -18,7 +18,7 @@ Minecraft 1.10.2 --- [Release v1.0.1](https://github.com/MrLittleKitty/Snitch-Ma
 4. Put the compiled .jar file into your mods folder
 
 #Credits
-Thanks to all the contributors over at the (Snitch Visualizer Mod)[https://github.com/Scuwr/Snitch-Visualizer] who started the idea of a mod to render snitches in-game.
+Thanks to all the contributors over at the [Snitch Visualizer Mod](https://github.com/Scuwr/Snitch-Visualizer) who started the idea of a mod to render snitches in-game.
 
 #License
 This mod is licensed under the [MIT License](https://github.com/MrLittleKitty/Snitch-Master/blob/master/LICENSE.txt)
