@@ -105,11 +105,11 @@ public class ChatSnitchParser
         int x = Integer.parseInt(matcher.group(2));
         int y = Integer.parseInt(matcher.group(3));
         int z = Integer.parseInt(matcher.group(4));
-        Double cullTime;
+        double cullTime;
 
         String cullTimeString = matcher.group(5);
         if(cullTimeString == null || cullTimeString.isEmpty())
-            cullTime = null;
+            cullTime = Double.NaN;
         else
             cullTime = Double.parseDouble(cullTimeString);
 
