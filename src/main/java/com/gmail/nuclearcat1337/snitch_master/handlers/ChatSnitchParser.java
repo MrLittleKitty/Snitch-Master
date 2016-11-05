@@ -108,7 +108,7 @@ public class ChatSnitchParser
         Double cullTime;
 
         String cullTimeString = matcher.group(5);
-        if(cullTimeString.isEmpty())
+        if(cullTimeString == null || cullTimeString.isEmpty())
             cullTime = null;
         else
             cullTime = Double.parseDouble(cullTimeString);
