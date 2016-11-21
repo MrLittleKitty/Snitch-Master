@@ -1,7 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.api;
 
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import com.sun.javafx.fxml.expression.Expression;
 
 /**
  * Created by Mr_Little_Kitty on 7/20/2016.
