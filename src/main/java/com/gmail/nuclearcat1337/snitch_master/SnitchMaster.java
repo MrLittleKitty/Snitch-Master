@@ -31,7 +31,7 @@ public class SnitchMaster// implements SnitchMasterAPI
 {
     public static final String MODID = "snitchmaster";
     public static final String MODNAME = "Snitch Master";
-    public static final String MODVERSION = "1.0.4";
+    public static final String MODVERSION = "1.0.5";
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     /**
