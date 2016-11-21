@@ -4,11 +4,13 @@ import com.gmail.nuclearcat1337.snitch_master.handlers.*;
 import com.gmail.nuclearcat1337.snitch_master.journeymap.JourneyMapInterface;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.IReadOnlyLocatableObjectList;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObjectList;
+import com.gmail.nuclearcat1337.snitch_master.mapwriter.MapWriterDataProvider;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import io.netty.buffer.ByteBuf;
+import mapwriter.api.MwAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -44,6 +46,8 @@ public class SnitchMaster// implements SnitchMasterAPI
      * The JourneyMap interface for communicating with the JourneyMap plugin
      */
     public static JourneyMapInterface jmInterface = null;
+
+    private MapWriterDataProvider mapWriterDataProvider;
 
     /**
      * The static instance of this SnitchMaster class
@@ -96,6 +100,9 @@ public class SnitchMaster// implements SnitchMasterAPI
         {
             e.printStackTrace();
         }
+
+        mapWriterDataProvider = new MapWriterDataProvider(this);
+        MwAPI.registerDataProvider("SnitchMaster", mapWriterDataProvider);
 
         instance = this;
     }

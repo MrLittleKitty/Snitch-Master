@@ -42,8 +42,10 @@ minecraft {
 
 dependencies {
 
-	compile files("journeymap-1.10.2-5.2.4-unlimited.jar")
-	
+	compile files(
+        "journeymap-1.10.2-5.2.4-unlimited.jar",
+        "MapWriter-1.10.2-2.6.20.jar")
+
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

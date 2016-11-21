@@ -12,6 +12,6 @@
   "logoFile": "",
   "screenshots": [],
   "dependencies": [],
-  "dependants": [journeymap]
+  "dependants": [journeymap, MapWriter]
 }
 ]
