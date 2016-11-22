@@ -193,8 +193,8 @@ public class SnitchListsGui extends GuiListExtended
             this.snitchList = snitchList;
             //this.index = index;
 
-            this.upButton = new GuiButton(10, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "↑");
-            this.downButton = new GuiButton(11, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "↓");
+            this.upButton = new GuiButton(10, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "^");
+            this.downButton = new GuiButton(11, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "v");
 
             this.toggleRenderButton = new GuiButton(12, SnitchListsGui.this.width - 60, 0, ON_OFF_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, snitchList.shouldRenderSnitches() ? "On" : "Off");
 
@@ -303,6 +303,7 @@ public class SnitchListsGui extends GuiListExtended
             }
             if (this.viewSnitchesButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
+                viewSnitchesButton.displayString = "not implemented";
                 return true;
             }
 

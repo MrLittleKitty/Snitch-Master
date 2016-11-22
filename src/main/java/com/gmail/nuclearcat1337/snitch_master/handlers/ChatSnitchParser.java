@@ -4,7 +4,6 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.IAlertRecipient;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchAlert;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import net.minecraft.client.Minecraft;
@@ -25,7 +24,7 @@ import java.util.regex.Pattern;
  */
 public class ChatSnitchParser
 {
-    private static final Pattern jaListPattern = Pattern.compile("\\s*([^\\s]*?)\\s*\\[([-\\d]*)\\s([-\\d]*)\\s([-\\d]*)\\]\\s*(\\d*.\\d\\d)?\\s*([^\\s]*)\\s*");
+    private static final Pattern jaListPattern = Pattern.compile("World: (\\S+)\\sLocation: \\[([-\\d]+) ([-\\d]+) ([-\\d]+)\\]\\sHours to cull: ([-\\d]*)\\sGroup: (\\S+)\\sName: (\\S+)", Pattern.MULTILINE);
     private static final Pattern snitchAlertPattern = Pattern.compile("\\s*\\*\\s*([^\\s]*)\\s\\b(?:entered snitch at|logged out in snitch at|logged in to snitch at)\\b\\s*([^\\s]*)\\s\\[([^\\s]*)\\s([-\\d]*)\\s([-\\d]*)\\s([-\\d]*)\\]");
 
     private static final String[] resetSequences = {"Unknown command"," is empty", "You do not own any snitches nearby!"};
@@ -58,34 +57,29 @@ public class ChatSnitchParser
     @SubscribeEvent
     public void chatParser(ClientChatReceivedEvent event)
     {
-        if(event != null && event.getMessage() != null)
+        ITextComponent msg = event.getMessage();
+        if(event != null && msg != null)
         {
-            String message = event.getMessage().getUnformattedText();
-            if(message != null)
+            String msgText = msg.getUnformattedText();
+            if(msgText != null)
             {
                 //Check if its the tps message (this is quick)
-                if(message.contains(tpsMessage))
-                    parseTPS(message);
-                else if(containsAny(message,resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
+                if(msgText.contains(tpsMessage))
+                    parseTPS(msgText);
+                else if(containsAny(msgText,resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
                     resetUpdatingSnitchList();
                 else
                 {
                     //Check if this matches a snitch entry from the jalist command (this is less quick than above)
-                    Matcher matcher = jaListPattern.matcher(message);
-                    if(matcher.matches())
-                    {
-                        Snitch snitch = parseSnitchFromJaList(matcher);
-                        snitchMaster.submitSnitch(snitch);
-                    }
-                    else
+                    if (!tryParseJalistMsg(msg))
                     {
                         //Check if this matches the snitch alert message (slowest of all of these)
-                        matcher = snitchAlertPattern.matcher(message);
+                        Matcher matcher = snitchAlertPattern.matcher(msgText);
                         if(matcher.matches())
                         {
                             if(!IAlertRecipients.isEmpty())  //Sometimes an optimization because it avoids building the altert object
                             {
-                                SnitchAlert alert = buildSnitchAlert(matcher, event.getMessage());
+                                SnitchAlert alert = buildSnitchAlert(matcher, msg);
                                 for (IAlertRecipient recipient : IAlertRecipients)
                                 {
                                     recipient.receiveSnitchAlert(alert);
@@ -99,6 +93,52 @@ public class ChatSnitchParser
         }
     }
 
+    /**
+     * Attempt parsing a chat message as a /jalist message, fails quickly returning false,
+     * or submits all contained snitches for processing.
+     *
+     * @param msg
+     * @return true if it was parsed as /jalist message, false if it is a different message
+     */
+    private boolean tryParseJalistMsg(ITextComponent msg)
+    {
+        List<ITextComponent> snitchRows;
+        try {
+            ITextComponent snitchListComponent = msg.getSiblings().get(0);
+            snitchRows = snitchListComponent.getSiblings();
+            if (snitchRows.isEmpty()) return false;
+
+            if (!snitchListComponent.getUnformattedComponentText().startsWith("§f Snitch List for "))
+                return false;
+        } catch (IndexOutOfBoundsException e) {
+            return false;
+        } catch (NullPointerException e) {
+            return false;
+        }
+        for (ITextComponent row : snitchRows) {
+            String hoverText = "";
+            try {
+                hoverText = row.getStyle().getHoverEvent().getValue().getUnformattedComponentText();
+                Matcher matcher = jaListPattern.matcher(hoverText);
+                if (!matcher.matches())
+                    continue;
+                Snitch snitch = parseSnitchFromJaList(matcher);
+                snitchMaster.submitSnitch(snitch);
+            } catch (IllegalStateException e) {
+                SnitchMaster.logger.warning("No match on /jalist hover text " + hoverText);
+                e.printStackTrace();
+            } catch (NullPointerException ignored) {
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Parses a {@link Snitch} from the hover text of a /jalist output row.
+     *
+     * @param matcher the {@link Matcher} object, on which `.matches()` or similar has to be called already
+     */
     private Snitch parseSnitchFromJaList(Matcher matcher)
     {
         String worldName = matcher.group(1);
@@ -113,9 +153,10 @@ public class ChatSnitchParser
         else
             cullTime = Double.parseDouble(cullTimeString);
 
-        String ctGroup = matcher.group(6);
+        String name = matcher.group(6);
+        String ctGroup = matcher.group(7);
 
-        return new Snitch(new Location(x,y,z,worldName),"jalist",cullTime,ctGroup,Snitch.DEFAULT_NAME);
+        return new Snitch(new Location(x,y,z,worldName),"jalist",cullTime,ctGroup,name);
     }
 
     @SubscribeEvent

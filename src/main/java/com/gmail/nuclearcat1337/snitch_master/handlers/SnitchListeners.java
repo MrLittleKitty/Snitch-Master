@@ -34,24 +34,21 @@ public class SnitchListeners
     {
         if (event instanceof PlayerInteractEvent.RightClickBlock)
         {
-            if (event.getItemStack() != null)
+            PlayerInteractEvent.RightClickBlock event1 = (PlayerInteractEvent.RightClickBlock) event;
+            BlockPos pos = event1.getPos();
+            if (pos != null)
             {
-                PlayerInteractEvent.RightClickBlock event1 = (PlayerInteractEvent.RightClickBlock) event;
-                BlockPos pos = event1.getPos();
-                if (pos != null)
+                IBlockState state = event1.getWorld().getBlockState(pos);
+//                if (state.getBlock().equals(Blocks.SPONGE))
+//                {
+//                    block = new Block(pos.getX(), pos.getY(), pos.getZ(), 10, new Color(0.86, 0.08, 0.24, 0.25));
+//                }
+                if (state.getBlock().equals(Blocks.JUKEBOX) || state.getBlock().equals(Blocks.NOTEBLOCK))
                 {
-                    IBlockState state = event1.getWorld().getBlockState(pos);
-//                    if (state.getBlock().equals(Blocks.SPONGE))
-//                    {
-//                        block = new Block(pos.getX(), pos.getY(), pos.getZ(), 10, new Color(0.86, 0.08, 0.24, 0.25));
-//                    }
-                    if (state.getBlock().equals(Blocks.JUKEBOX) || state.getBlock().equals(Blocks.NOTEBLOCK))
-                    {
-                        Location loc = new Location(pos.getX(),pos.getY(),pos.getZ(),snitchMaster.getCurrentWorld());
-                        Snitch snitch = new Snitch(loc,"manual");
+                    Location loc = new Location(pos.getX(),pos.getY(),pos.getZ(),snitchMaster.getCurrentWorld());
+                    Snitch snitch = new Snitch(loc,"manual");
 
-                        snitchMaster.submitSnitch(snitch);
-                    }
+                    snitchMaster.submitSnitch(snitch);
                 }
             }
         }
