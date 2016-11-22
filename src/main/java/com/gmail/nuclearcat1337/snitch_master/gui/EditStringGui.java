@@ -100,11 +100,8 @@ public class EditStringGui extends GuiScreen
                 break;
             case 2:
                 String newText = stringBox.getText();
-                if(newText != null && !newText.equalsIgnoreCase(editString))
-                {
-                    if(callback.accept(newText))
-                        mc.displayGuiScreen(cancelToScreen);
-                }
+                if (!newText.isEmpty() && callback.accept(newText))
+                    mc.displayGuiScreen(cancelToScreen);
                 break;
         }
     }

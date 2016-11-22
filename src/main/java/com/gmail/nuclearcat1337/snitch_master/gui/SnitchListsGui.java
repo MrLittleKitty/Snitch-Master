@@ -303,6 +303,7 @@ public class SnitchListsGui extends GuiListExtended
             }
             if (this.viewSnitchesButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
+                viewSnitchesButton.displayString = "not implemented";
                 return true;
             }
 
