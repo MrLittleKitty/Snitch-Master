@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -153,7 +154,7 @@ public class SnitchListsGui extends GuiListExtended
     }
 
     protected int getScrollBarX() {
-        return this.width - 16;
+        return this.width - 8;
     }
 
     @Override
@@ -162,12 +163,6 @@ public class SnitchListsGui extends GuiListExtended
         if (slotIndex < 0 || slotIndex >= iGuiList.length) return;
         ((ListEntry) getListEntry(slotIndex)).mousePressed(slotIndex, mouseX, mouseY, isRightClick ? 1 : 0, 0, 0);
     }
-
-    //    @Override
-    //    protected void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY) {
-    //        if (isDoubleClick || slotIndex < 0 || slotIndex >= iGuiList.length) return;
-    //        ((ListEntry) getListEntry(slotIndex)).mousePressed(slotIndex, mouseX, mouseY, 0, 0, 0);
-    //    }
 
     public int getListWidth() {
         return this.width;
@@ -203,11 +198,6 @@ public class SnitchListsGui extends GuiListExtended
 
             this.viewSnitchesButton = new GuiButton(14, SnitchListsGui.this.width - 60, 0, VIEW_SNITCHES_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "View");
         }
-
-        //public void updateIndex(int index)
-        //        {
-        //            this.index = index;
-        //        }
 
         public void drawEntry(int slotIndex, int xPosition, int yPosition, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected)
         {

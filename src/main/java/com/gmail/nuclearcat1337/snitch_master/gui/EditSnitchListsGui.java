@@ -43,8 +43,6 @@ public class EditSnitchListsGui extends GuiScreen
 
     public void initGui()
     {
-        byte b0 = -20;
-
         this.snitchListGUI = new SnitchListsGui(this, snitchMaster.getSnitchLists());
 
         this.buttonList.clear();
@@ -63,7 +61,7 @@ public class EditSnitchListsGui extends GuiScreen
         xPos += GuiConstants.STANDARD_SEPARATION_DISTANCE+ RENDER_ON_BUTTON_WIDTH;
         this.buttonList.add(new GuiButton(7, xPos, yPos, RENDER_OFF_BUTTON_WIDTH, 18, "All Off"));
 
-        this.snitchListGUI.registerScrollButtons(4, 5);
+        this.snitchListGUI.registerScrollButtons(8, 9);
         super.initGui();
     }
 
@@ -99,5 +97,19 @@ public class EditSnitchListsGui extends GuiScreen
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void mouseReleased(int arg1, int arg2, int arg3)
+    {
+        //This method is ESSENTIAL to the functioning of the scroll bar
+        this.snitchListGUI.mouseReleased(arg1,arg2,arg3);
+    }
+
+    @Override
+    public void handleMouseInput()
+    {
+        //This method is ESSENTIAL to the functioning of the scroll bar
+        this.snitchListGUI.handleMouseInput();
     }
 }
