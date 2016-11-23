@@ -63,7 +63,7 @@ public class SnitchRenderer
                 ILocation location = snitch.getLocation();
                 double distanceSquared = GeneralUtils.DistanceSquared(location.getX(), location.getZ(), (int)mc.thePlayer.posX, (int)mc.thePlayer.posZ);
 
-                if (distanceSquared < BLOCK_RENDER_DISTANCE*BLOCK_RENDER_DISTANCE)
+                if (distanceSquared < BLOCK_RENDER_DISTANCE * BLOCK_RENDER_DISTANCE)
                 {
                     if (distanceSquared < BOX_RENDER_DISTANCE * BOX_RENDER_DISTANCE)
                     {

@@ -201,7 +201,6 @@ public class SnitchMaster// implements SnitchMasterAPI
             snitch.sortSnitchLists();
     }
 
-
 //    private static class ObjectParser implements ValueParser
 //    {
 //        @Override
@@ -210,23 +209,4 @@ public class SnitchMaster// implements SnitchMasterAPI
 //            return null;
 //        }
 //    }
-    //    @SubscribeEvent
-//    public void onJoinWorld(EntityJoinWorldEvent event)
-//    {
-//        logger.info("[Snitch-Master] We got into the entity join world event");
-//        if(event.getEntity() instanceof EntityPlayerMP)
-//        {
-//            if(!mc.isSingleplayer() && mc.thePlayer != null)
-//            {
-//                if(event.getEntity().getName().equals(mc.thePlayer.getName()))
-//                {
-//                    String message = "[Snitch-Master] Player joined world named "+event.getWorld().getWorldInfo().getWorldName()+" in dimension "+event.getWorld().provider.getDimension() ;
-//                    logger.info(message);
-//                    mc.thePlayer.addChatComponentMessage(new TextComponentString(message));
-//                }
-//            }
-//        }
-//    }
-
-
 }
