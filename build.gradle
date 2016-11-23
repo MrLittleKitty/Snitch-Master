@@ -20,7 +20,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "1.10.2-1.0.4"
+version = "1.10.2-1.0.5"
 group= "com.gmail.nuclearcat1337.snitch_master" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "SnitchMaster"
 
@@ -42,10 +42,8 @@ minecraft {
 
 dependencies {
 
-	compile files(
-        "journeymap-1.10.2-5.2.4-unlimited.jar",
-        "MapWriter-1.10.2-2.6.20.jar")
-
+	compile files("journeymap-1.10.2-5.2.4-unlimited.jar")
+	
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"

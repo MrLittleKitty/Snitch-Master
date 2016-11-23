@@ -3,7 +3,7 @@
   "modid": "snitchmaster",
   "name": "Snitch Master",
   "description": "A mod that handles JukeAlert Snitches",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "mcversion": "1.10.2",
   "url": "https://github.com/Scuwr/Snitch-Visualizer/",
   "updateUrl": "",
@@ -12,6 +12,6 @@
   "logoFile": "",
   "screenshots": [],
   "dependencies": [],
-  "dependants": [journeymap, MapWriter]
+  "dependants": [journeymap]
 }
 ]
