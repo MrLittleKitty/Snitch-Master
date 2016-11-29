@@ -16,6 +16,16 @@ import java.util.Comparator;
 public class Snitch extends LocatableObject<Snitch>
 {
     /**
+     * The maximum number of characters that are allowed to be in the name of a Snitch
+     */
+    public static final String MAX_NAME_CHARACTERS = "WWWWWWWWWWWWWWWWWWWW";
+
+    /**
+     * The maximum number of characters that are allowed to be in the name of a Citadel Group
+     */
+    public static final String MAX_CT_GROUP_NAME_CHARACTERS = "WWWWWWWWWWWWWWW";
+
+    /**
      * The radius out from the Snitch block in all directions.
      */
     public static final int SNITCH_RADIUS = 11;

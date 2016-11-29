@@ -12,7 +12,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -22,9 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SnitchListsGui extends GuiListExtended
 {
     private final SnitchLists lists;
-    private final EditSnitchListsGui guiSnitches;
     private final Minecraft mc;
-    private final ListEntry[] iGuiList;
+    private final SnitchListEntry[] iGuiList;
 
     private static final String CONTROLS_HEADER = "Controls";
     private static final String NAME_HEADER = "Name";
@@ -53,17 +51,16 @@ public class SnitchListsGui extends GuiListExtended
                 20);						// slot height
 
         this.lists = lists;
-        this.guiSnitches = guiSnitches;
         this.mc = Minecraft.getMinecraft();
 
         int listSize = lists.size();
-        this.iGuiList = new ListEntry[listSize];
+        this.iGuiList = new SnitchListEntry[listSize];
 
         for (int k = 0; k < listSize; k++)
         {
             SnitchList snitchList = lists.get(k);
 
-            this.iGuiList[k] = new ListEntry(guiSnitches,snitchList,k);
+            this.iGuiList[k] = new SnitchListEntry(guiSnitches,snitchList,k);
         }
 
         this.setHasListHeader(true, (int) ( (float) SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT * 1.5));
@@ -80,7 +77,7 @@ public class SnitchListsGui extends GuiListExtended
         if(nextIndex >= iGuiList.length || nextIndex  < 0)
             return;
 
-        ListEntry entry = iGuiList[nextIndex];
+        SnitchListEntry entry = iGuiList[nextIndex];
         iGuiList[nextIndex] = iGuiList[index];
         iGuiList[index] = entry;
 
@@ -161,7 +158,7 @@ public class SnitchListsGui extends GuiListExtended
     protected void elementClicked(int slotIndex, boolean isRightClick, int mouseX, int mouseY)
     {
         if (slotIndex < 0 || slotIndex >= iGuiList.length) return;
-        ((ListEntry) getListEntry(slotIndex)).mousePressed(slotIndex, mouseX, mouseY, isRightClick ? 1 : 0, 0, 0);
+        ((SnitchListEntry) getListEntry(slotIndex)).mousePressed(slotIndex, mouseX, mouseY, isRightClick ? 1 : 0, 0, 0);
     }
 
     public int getListWidth() {
@@ -169,10 +166,10 @@ public class SnitchListsGui extends GuiListExtended
     }
 
     @SideOnly(Side.CLIENT)
-    public class ListEntry implements GuiListExtended.IGuiListEntry
+    private class SnitchListEntry implements GuiListExtended.IGuiListEntry
     {
         private GuiScreen cancelToScreen;
-        //private int index;
+
         private SnitchList snitchList;
 
         private GuiButton upButton;
@@ -182,11 +179,10 @@ public class SnitchListsGui extends GuiListExtended
         private GuiButton editColorButton;
         private GuiButton viewSnitchesButton;
 
-        private ListEntry(GuiScreen cancelToScreen, SnitchList snitchList, int index)
+        private SnitchListEntry(GuiScreen cancelToScreen, SnitchList snitchList, int index)
         {
             this.cancelToScreen = cancelToScreen;
             this.snitchList = snitchList;
-            //this.index = index;
 
             this.upButton = new GuiButton(10, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "^");
             this.downButton = new GuiButton(11, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "v");
