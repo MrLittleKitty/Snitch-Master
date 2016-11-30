@@ -8,4 +8,6 @@ public abstract class LocatableObject<T> implements Comparable<T>
     public abstract String getWorld();
 
     public abstract int compareTo(ILocation location);
+
+    public abstract ILocation getLocation();
 }

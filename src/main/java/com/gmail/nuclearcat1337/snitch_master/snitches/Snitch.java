@@ -122,6 +122,7 @@ public class Snitch extends LocatableObject<Snitch>
                 y >= getFieldMinY() && y <= getFieldMaxY();
     }
 
+    @Override
     public ILocation getLocation()
     {
         return location;

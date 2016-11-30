@@ -46,7 +46,7 @@ public class SnitchLists implements Iterable<SnitchList>
         list.setRenderPriority(nextPriority++); //Make sure the render priorities are incremental
 
         //Go through all snitches currently loaded and see if they can be tagged in this list
-        for(Snitch snitch : snitchMaster.getSnitches().getItems())
+        for(Snitch snitch : snitchMaster.getSnitches())
         {
             if(list.getQualifier().isQualified(snitch))
                 snitch.attachSnitchList(list);
@@ -115,7 +115,7 @@ public class SnitchLists implements Iterable<SnitchList>
     public void snitchListChanged()
     {
         if(snitchMaster.jmInterface != null)
-            snitchMaster.jmInterface.refresh(snitchMaster.getSnitches().getItems());
+            snitchMaster.jmInterface.refresh(snitchMaster.getSnitches());
 
         IOHandler.asyncSaveSnitchLists(this);
     }

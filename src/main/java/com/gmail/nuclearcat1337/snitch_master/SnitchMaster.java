@@ -189,7 +189,7 @@ public class SnitchMaster// implements SnitchMasterAPI
         if(jmInterface != null)
             jmInterface.displaySnitch(snitch);
 
-        IOHandler.asyncSaveSnitches(snitches.getItems());
+        IOHandler.asyncSaveSnitches(snitches);
     }
 
     /**
@@ -197,7 +197,7 @@ public class SnitchMaster// implements SnitchMasterAPI
      */
     public void refreshSnitchListPriorities()
     {
-        for(Snitch snitch : getSnitches().getItems())
+        for(Snitch snitch : getSnitches())
             snitch.sortSnitchLists();
     }
 

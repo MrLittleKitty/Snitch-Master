@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Created by Mr_Little_Kitty on 7/26/2016.
  */
-public class LocatableObjectList<T extends LocatableObject<T>> implements IReadOnlyLocatableObjectList<T>
+public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnlyLocatableObjectList<T> implements Collection<T>
 {
     private final ArrayList<T> wrappedList;
     private final HashMap<String,IntPair> worldIndices;
@@ -18,7 +18,8 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
         worldIndices = new HashMap<>();
     }
 
-    public void add(T item)
+    @Override
+    public boolean add(T item)
     {
         int index = Collections.binarySearch(wrappedList,item);
         //This means the item isnt in the list but the returned vault is -(insertion point) - 1 = x
@@ -30,7 +31,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
         else
         {
             //If the item is already contained in the list then we do nothing
-            return;
+            return false;
         }
 
         //Insert the into the list at the insertion point. Doing this for all adds guarantees the list is sorted.
@@ -47,7 +48,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
             //Add the pair into the hashmap
             worldIndices.put(item.getWorld(),minMax);
             //Return because we don't need to do anything else
-            return;
+            return true;
         }
 
         //Increase the max index for this world.
@@ -72,11 +73,34 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
                 }
             }
         }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> c)
+    {
+        boolean changed = false;
+
+        for(T value : c)
+            if(add(value))
+                changed = true;
+
+        return changed;
+    }
+
+    public boolean remove(T element)
+    {
+        return remove(element.getLocation()) != null;
     }
 
     public T remove(ILocation location)
     {
-        int index = LocatableObjectList.binarySearch(wrappedList,location);
+        //Were only going to search the area in the arraylist that corresponds to the right world
+        IntPair pair = worldIndices.get(location.getWorld());
+        if(pair == null)
+            return null;
+
+        int index = LocatableObjectList.binarySearch(wrappedList,pair.one,pair.two,location);
         //If the item wasn't found then we return false
         if(index < 0)
             return null;
@@ -125,14 +149,127 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
         throw new IndexOutOfBoundsException();
     }
 
+    @Override
+    public boolean remove(Object o)
+    {
+        if(o instanceof ILocation)
+        {
+            T removedValue = remove((ILocation)o);
+            return removedValue != null;
+        }
+        else if(o instanceof  LocatableObject)
+        {
+            LocatableObject obj = (LocatableObject)o;
+
+            return remove(obj.getLocation()) != null;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c)
+    {
+        boolean changed = false;
+
+        for(Object obj : c)
+            if(remove(obj))
+                changed = true;
+
+        return changed;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c)
+    {
+        boolean changed = false;
+        for(int i = wrappedList.size()-1; i >= 0; i--)
+        {
+            //If the item at the current index isnt in the passed collection and we removed it, set changed
+            if(!c.contains(get(i)) && remove(i) != null)
+                changed = true;
+        }
+        return changed;
+    }
+
+    @Override
+    public void clear()
+    {
+        wrappedList.clear();
+        worldIndices.clear();
+    }
+
+    @Override
     public int size()
     {
         return wrappedList.size();
     }
 
+    @Override
+    public boolean isEmpty()
+    {
+        return wrappedList.isEmpty();
+    }
+
+    @Override
+    public boolean contains(ILocation location)
+    {
+        IntPair pair = worldIndices.get(location.getWorld());
+        if(pair == null)
+            return false;
+        return LocatableObjectList.binarySearch(wrappedList,pair.one,pair.two,location) >= 0;
+    }
+
+    public boolean contains(T element)
+    {
+        return contains(element.getLocation());
+    }
+
+    @Override
+    public boolean contains(Object o)
+    {
+        if(o instanceof ILocation)
+            return contains((ILocation)o);
+        else if(o instanceof LocatableObject)
+            return contains(((LocatableObject)o).getLocation());
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c)
+    {
+        for(Object val : c)
+            if(!contains(val))
+                return false;
+        return true;
+    }
+
+    @Override
+    public Iterator<T> iterator()
+    {
+        return new HiddenIterator(0,size()-1);
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        return wrappedList.toArray();
+    }
+
+    @Override
+    public <T1> T1[] toArray(T1[] a)
+    {
+        return wrappedList.toArray(a);
+    }
+
+    @Override
     public T get(ILocation location)
     {
-        int index = LocatableObjectList.binarySearch(wrappedList,location);
+        //Were only going to search the area in the arraylist that corresponds to the right world
+        IntPair pair = worldIndices.get(location.getWorld());
+        if(pair == null)
+            return null;
+
+        int index = LocatableObjectList.binarySearch(wrappedList,pair.one,pair.two,location);
 
         //The index will be less than zero if the search did not find a match
         if(index < 0)
@@ -141,16 +278,13 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
         return get(index);
     }
 
-    public boolean contains(ILocation location)
-    {
-        return LocatableObjectList.binarySearch(wrappedList,location) >= 0;
-    }
-
+    @Override
     public T get(int index)
     {
         return wrappedList.get(index);
     }
 
+    @Override
     public int getMinIndexForWorld(String world)
     {
         IntPair pair = worldIndices.get(world);
@@ -159,6 +293,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
         return pair.one;
     }
 
+    @Override
     public int getMaxIndexForWorld(String world)
     {
         IntPair pair = worldIndices.get(world);
@@ -167,11 +302,12 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
         return pair.two;
     }
 
-    public Iterable<T> getItems()
-    {
-        return wrappedList;
-    }
+    //public Iterable<T> getItems()
+//    {
+//        return wrappedList;
+//    }
 
+    @Override
     public Iterable<T> getItemsForWorld(String world)
     {
         final IntPair pair = worldIndices.get(world);
@@ -196,11 +332,9 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
         };
     }
 
-    private static int binarySearch(ArrayList<? extends LocatableObject> list, ILocation location)
-    {
-        int low = 0;
-        int high = list.size()-1;
 
+    private static int binarySearch(ArrayList<? extends LocatableObject> list, int low, int high, ILocation location)
+    {
         while (low <= high)
         {
             int mid = (low + high) >>> 1;
@@ -216,6 +350,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
         }
         return -(low + 1);  // key not found
     }
+
 
     private class EmptyIterator implements Iterator<T>
     {
@@ -237,7 +372,6 @@ public class LocatableObjectList<T extends LocatableObject<T>> implements IReadO
 
         }
     }
-
 
     private class HiddenIterator implements Iterator<T>
     {
