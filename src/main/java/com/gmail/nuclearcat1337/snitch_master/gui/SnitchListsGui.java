@@ -2,6 +2,7 @@ package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
+import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.Acceptor;
@@ -14,6 +15,8 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
 
 /**
  * Created by Mr_Little_Kitty on 9/16/2016.
@@ -289,7 +292,11 @@ public class SnitchListsGui extends GuiListExtended
             }
             if (this.viewSnitchesButton.mousePressed(SnitchListsGui.this.mc, xPos, yPos))
             {
-                viewSnitchesButton.displayString = "not implemented";
+                ArrayList<Snitch> snitches = lists.getSnitchesInList(snitchList);
+                if(snitches.isEmpty())
+                    viewSnitchesButton.displayString = "None";
+                else
+                    mc.displayGuiScreen(new EditSnitchesGui(cancelToScreen,snitches));
                 return true;
             }
 

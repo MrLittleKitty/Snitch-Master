@@ -58,6 +58,17 @@ public class SnitchLists implements Iterable<SnitchList>
         return true;
     }
 
+    public ArrayList<Snitch> getSnitchesInList(SnitchList list)
+    {
+        ArrayList<Snitch> snitches = new ArrayList<>();
+        for(Snitch snitch : snitchMaster.getSnitches())
+        {
+            if(snitch.getAttachedSnitchLists().contains(list))
+                snitches.add(snitch);
+        }
+        return snitches;
+    }
+
     /**
      * Sorts the SnitchLists by their render priority.
      */

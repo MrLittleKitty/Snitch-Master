@@ -66,6 +66,7 @@ public class SnitchGui extends GuiListExtended
         for(Snitch snitch : snitchesToDisplay)
         {
             iGuiList[i] = new SnitchEntry(parentScreen,snitch);
+            i++;
         }
 
         this.setHasListHeader(true, (int) ( (float) mc.fontRendererObj.FONT_HEIGHT * 1.5));

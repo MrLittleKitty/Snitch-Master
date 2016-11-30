@@ -166,6 +166,7 @@ public class SnitchMaster// implements SnitchMasterAPI
             //If it does then change the cull time and group
             contains.setCullTime(snitch.getCullTime());
             contains.setGroupName(snitch.getGroupName());
+            contains.setSnitchName(snitch.getSnitchName());
             //Clear the attached snitch lists because we are going to requalify the snitch because some attributes changed
             contains.clearAttachedSnitchLists();
         }
