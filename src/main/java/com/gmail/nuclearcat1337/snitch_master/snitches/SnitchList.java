@@ -142,7 +142,10 @@ public class SnitchList
     {
         String[] args = csv.split(",");
         if(args.length != NUMBER_OF_CSV_PARAMS)
-            throw new NumberFormatException("The CSV string provided does not have the correct number of arguments for a Snitch List.");
+        {
+            new NumberFormatException("The CSV string provided does not have the correct number of arguments for a Snitch List.").printStackTrace();
+            return null;
+        }
 
         int index = 0;
 
