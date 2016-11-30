@@ -160,34 +160,4 @@ public class SnitchList
 
         return list;
     }
-
-//    private Long getHashForCoordinates(int x, int y, int z)
-//    {
-//        x = x >= 0 ? 2 * x : -2 * x - 1;
-//        y = y >= 0 ? 2 * y : -2 * y - 1;
-//        z = z >= 0 ? 2 * z : -2 * z - 1;
-//
-//        int max = max(x, y, z);
-//        long hash = (max*max*max) + (2 * max * z) + z;
-//        if (max == z)
-//            hash += max(x, y)*max(x,y);
-//        if (y >= x)
-//            hash += x + y;
-//        else
-//            hash += y;
-//        return hash;
-//    }
-//
-//    private static int max(int x, int y)
-//    {
-//        if(x > y)
-//            return x;
-//        return y;
-//    }
-//
-//    private static int max(int x, int y, int z)
-//    {
-//        int one = max(x,y);
-//        return max(one,z);
-//    }
 }

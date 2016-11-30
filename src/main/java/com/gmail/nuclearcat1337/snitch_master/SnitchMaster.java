@@ -146,7 +146,7 @@ public class SnitchMaster// implements SnitchMasterAPI
     /**
      * Returns a LocateableObjectList of all the currently loaded Snitches
      */
-    public IReadOnlyLocatableObjectList<Snitch> getSnitches()
+    public LocatableObjectList<Snitch> getSnitches()
     {
         return snitches;
     }

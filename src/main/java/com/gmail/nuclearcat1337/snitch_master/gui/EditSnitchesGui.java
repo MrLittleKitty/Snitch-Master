@@ -47,10 +47,10 @@ public class EditSnitchesGui extends GuiScreen
 
         this.buttonList.clear();
 
-        int xPos = (this.width/2)- DONE_BUTTON_WIDTH -(GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
+        int xPos = (this.width/2)- DONE_BUTTON_WIDTH - (GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
         int yPos = this.height - GuiConstants.STANDARD_BUTTON_HEIGHT - GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        this.buttonList.add(new GuiButton(1, xPos , yPos, DONE_BUTTON_WIDTH, 18, "Back to Settings"));
+        this.buttonList.add(new GuiButton(1, xPos , yPos, DONE_BUTTON_WIDTH, 18, "Back"));
 
 //        xPos = (this.width/2)+(GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
 //        this.buttonList.add(new GuiButton(5, xPos, yPos, NEW_BUTTON_WIDTH, 18, "New"));

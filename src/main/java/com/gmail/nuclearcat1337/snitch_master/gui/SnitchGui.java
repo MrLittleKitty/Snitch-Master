@@ -227,8 +227,8 @@ public class SnitchGui extends GuiListExtended
                 int rightBound = snitchListNameColumnLeftBound + SNITCH_LIST_COLUMN_WIDTH;
                 if(xPos >= snitchListNameColumnLeftBound && xPos <= rightBound) //Check if they right clicked in the name column
                 {
-                    //TODO---This is where we will open a new gui displaying all the snitch lists connected to this snitch
-                    //mc.displayGuiScreen(new EditStringGui(cancelToScreen,snitchList.getListName(),"Edit List Name",new EditNameAcceptor(snitchList),20));
+                    //Sorry im cheating by using the static instance but im lazy and its only 1 line right? right? :(
+                    mc.displayGuiScreen(new EditSnitchListsGui(cancelToScreen,SnitchMaster.instance,snitch.getAttachedSnitchLists(),false));
                     return true;
                 }
                 return false;

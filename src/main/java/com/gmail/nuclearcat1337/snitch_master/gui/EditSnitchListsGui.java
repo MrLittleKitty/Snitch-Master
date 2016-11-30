@@ -1,11 +1,13 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Created by Mr_Little_Kitty on 9/16/2016.
@@ -16,16 +18,20 @@ public class EditSnitchListsGui extends GuiScreen
 
     private SnitchListsGui snitchListGUI;
     private SnitchMaster snitchMaster;
+    private Collection<SnitchList> snitchLists;
+    private boolean fullList;
 
     private static final int DONE_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH*3;
     private static final int NEW_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
     private static final int RENDER_ON_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
     private static final int RENDER_OFF_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
 
-    public EditSnitchListsGui(GuiScreen guiscreen, SnitchMaster snitchMaster)
+    public EditSnitchListsGui(GuiScreen guiscreen, SnitchMaster snitchMaster, Collection<SnitchList> listsToDisplay, boolean fullList)
     {
         this.parentScreen = guiscreen;
         this.snitchMaster = snitchMaster;
+        this.fullList = fullList;
+        snitchLists = listsToDisplay;
     }
 
     @Override
@@ -43,17 +49,19 @@ public class EditSnitchListsGui extends GuiScreen
 
     public void initGui()
     {
-        this.snitchListGUI = new SnitchListsGui(this, snitchMaster.getSnitchLists());
+        this.snitchListGUI = new SnitchListsGui(this, snitchMaster.getSnitchLists(),snitchLists,fullList);
 
         this.buttonList.clear();
 
         int xPos = (this.width/2)- DONE_BUTTON_WIDTH -(GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
         int yPos = this.height - GuiConstants.STANDARD_BUTTON_HEIGHT - GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        this.buttonList.add(new GuiButton(4, xPos , yPos, DONE_BUTTON_WIDTH, 18, "Back to Settings"));
+        this.buttonList.add(new GuiButton(4, xPos , yPos, DONE_BUTTON_WIDTH, 18, "Back"));
 
         xPos = (this.width/2)+(GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
-        this.buttonList.add(new GuiButton(5, xPos, yPos, NEW_BUTTON_WIDTH, 18, "New"));
+
+        if(fullList)
+            this.buttonList.add(new GuiButton(5, xPos, yPos, NEW_BUTTON_WIDTH, 18, "New"));
 
         xPos += GuiConstants.STANDARD_SEPARATION_DISTANCE+ NEW_BUTTON_WIDTH;
         this.buttonList.add(new GuiButton(6, xPos, yPos, RENDER_ON_BUTTON_WIDTH, 18, "All On"));

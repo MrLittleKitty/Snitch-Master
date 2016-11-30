@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by Mr_Little_Kitty on 9/16/2016.
@@ -26,6 +27,8 @@ public class SnitchListsGui extends GuiListExtended
     private final SnitchLists lists;
     private final Minecraft mc;
     private final SnitchListEntry[] iGuiList;
+
+    private final boolean fullList;
 
     private static final String CONTROLS_HEADER = "Controls";
     private static final String NAME_HEADER = "Name";
@@ -44,7 +47,7 @@ public class SnitchListsGui extends GuiListExtended
 
     private final int entryWidth;
 
-    public SnitchListsGui(EditSnitchListsGui guiSnitches, SnitchLists lists)
+    public SnitchListsGui(EditSnitchListsGui guiSnitches, SnitchLists lists, Collection<SnitchList> listsToDisplay, boolean fullList)
     {
         super(Minecraft.getMinecraft(),
                 guiSnitches.width,		// width
@@ -53,25 +56,27 @@ public class SnitchListsGui extends GuiListExtended
                 guiSnitches.height - 32, 	// bottom
                 20);						// slot height
 
+        this.fullList = fullList;
+
         this.lists = lists;
         this.mc = Minecraft.getMinecraft();
 
-        int listSize = lists.size();
+        int listSize = listsToDisplay.size();
         this.iGuiList = new SnitchListEntry[listSize];
 
-        for (int k = 0; k < listSize; k++)
+        int k = 0;
+        for (SnitchList list : listsToDisplay)
         {
-            SnitchList snitchList = lists.get(k);
-
-            this.iGuiList[k] = new SnitchListEntry(guiSnitches,snitchList,k);
+            this.iGuiList[k] = new SnitchListEntry(guiSnitches,list,k);
+            k++;
         }
 
         this.setHasListHeader(true, (int) ( (float) SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT * 1.5));
 
         this.entryWidth =
-                ARROW_BUTTON_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE + ON_OFF_BUTTON_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE + ARROW_BUTTON_WIDTH +
-                        (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + NAME_COLUMN_WIDTH  + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + EDIT_COLOR_BUTTON_WIDTH +
-                        (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + EDIT_QUALIFIER_BUTTON_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + VIEW_SNITCHES_BUTTON_WIDTH;
+            ARROW_BUTTON_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE + ON_OFF_BUTTON_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE + ARROW_BUTTON_WIDTH +
+                    (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + NAME_COLUMN_WIDTH  + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + EDIT_COLOR_BUTTON_WIDTH +
+                    (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + EDIT_QUALIFIER_BUTTON_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2) + VIEW_SNITCHES_BUTTON_WIDTH;
 
     }
 
@@ -189,6 +194,14 @@ public class SnitchListsGui extends GuiListExtended
 
             this.upButton = new GuiButton(10, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "^");
             this.downButton = new GuiButton(11, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "v");
+
+            if(!fullList)
+            {
+                upButton.enabled = false;
+                upButton.visible = false;
+                downButton.enabled = false;
+                downButton.visible = false;
+            }
 
             this.toggleRenderButton = new GuiButton(12, SnitchListsGui.this.width - 60, 0, ON_OFF_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, snitchList.shouldRenderSnitches() ? "On" : "Off");
 

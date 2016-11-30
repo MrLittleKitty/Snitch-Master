@@ -39,7 +39,7 @@ public class MainGui extends GuiScreen
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-//        this.buttonList.add(new GuiButton(3, xPos, yPos, "View Snitches"));
+        this.buttonList.add(new GuiButton(3, xPos, yPos, "View Snitches"));
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
@@ -88,10 +88,10 @@ public class MainGui extends GuiScreen
 //                break;
             case 2: //"View Snitch Lists"
                 this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster));
+                this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true));
                 break;
             case 3: //"View Snitches"
-
+                this.mc.displayGuiScreen(new EditSnitchesGui(this,snitchMaster.getSnitches()));
                 break;
             case 4: //"Done"
                 this.mc.displayGuiScreen((GuiScreen) null);

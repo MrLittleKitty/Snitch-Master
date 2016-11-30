@@ -227,7 +227,7 @@ public class NewSnitchListGui extends GuiScreen
                 //Handles any things that need to happen when lists change. (saving, etc)
                 lists.snitchListChanged();
 
-                Minecraft.getMinecraft().displayGuiScreen(new EditSnitchListsGui(null,snitchMaster));
+                Minecraft.getMinecraft().displayGuiScreen(new EditSnitchListsGui(null,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true));
                 break;
         }
     }

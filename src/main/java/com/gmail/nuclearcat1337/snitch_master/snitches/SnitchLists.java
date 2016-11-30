@@ -3,10 +3,7 @@ package com.gmail.nuclearcat1337.snitch_master.snitches;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Created by Mr_Little_Kitty on 9/16/2016.
@@ -129,6 +126,11 @@ public class SnitchLists implements Iterable<SnitchList>
             snitchMaster.jmInterface.refresh(snitchMaster.getSnitches());
 
         IOHandler.asyncSaveSnitchLists(this);
+    }
+
+    public Collection<SnitchList> asCollection()
+    {
+        return snitchLists;
     }
 
     /**
