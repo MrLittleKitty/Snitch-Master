@@ -128,6 +128,16 @@ public class SnitchLists implements Iterable<SnitchList>
         IOHandler.asyncSaveSnitchLists(this);
     }
 
+    public void requalifySnitchList(SnitchList list)
+    {
+        for(Snitch snitch : snitchMaster.getSnitches())
+        {
+            snitch.getAttachedSnitchLists().remove(list);
+            if(list.getQualifier().isQualified(snitch))
+                snitch.attachSnitchList(list);
+        }
+    }
+
     public Collection<SnitchList> asCollection()
     {
         return snitchLists;

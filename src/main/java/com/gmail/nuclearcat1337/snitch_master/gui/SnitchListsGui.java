@@ -386,7 +386,13 @@ public class SnitchListsGui extends GuiListExtended
             boolean valid = SnitchListQualifier.isSyntaxValid(item);
             if(valid)
             {
+                //Change the qualifier to the new one
                 list.getQualifier().updateQualifier(item);
+
+                //We need to clear all links to this snitch list and requalify all snitches
+                lists.requalifySnitchList(list);
+
+                //This updates journeymap and other things now that lists/snitches have changed
                 lists.snitchListChanged();
                 return true;
             }
