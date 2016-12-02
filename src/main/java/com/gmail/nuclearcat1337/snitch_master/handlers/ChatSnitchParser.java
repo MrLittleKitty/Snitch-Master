@@ -8,7 +8,9 @@ import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -63,28 +65,32 @@ public class ChatSnitchParser
             String msgText = msg.getUnformattedText();
             if(msgText != null)
             {
+                SnitchMaster.logger.warning("Temp message " + msgText);
                 //Check if its the tps message (this is quick)
                 if(msgText.contains(tpsMessage))
                     parseTPS(msgText);
-                else if(containsAny(msgText,resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
-                    resetUpdatingSnitchList();
-                else
+                else if(updatingSnitchList)
                 {
-                    //Check if this matches a snitch entry from the jalist command (this is less quick than above)
-                    if (!tryParseJalistMsg(msg))
+                    if (containsAny(msgText, resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
+                        resetUpdatingSnitchList(true);
+                    else
                     {
-                        //Check if this matches the snitch alert message (slowest of all of these)
-                        Matcher matcher = snitchAlertPattern.matcher(msgText);
-                        if(matcher.matches())
+                        //Check if this matches a snitch entry from the jalist command (this is less quick than above)
+                        if (!tryParseJalistMsg(msg))
                         {
-                            if(!IAlertRecipients.isEmpty())  //Sometimes an optimization because it avoids building the altert object
+                            //Check if this matches the snitch alert message (slowest of all of these)
+                            Matcher matcher = snitchAlertPattern.matcher(msgText);
+                            if (matcher.matches())
                             {
-                                SnitchAlert alert = buildSnitchAlert(matcher, msg);
-                                for (IAlertRecipient recipient : IAlertRecipients)
+                                if (!IAlertRecipients.isEmpty())  //Sometimes an optimization because it avoids building the altert object
                                 {
-                                    recipient.receiveSnitchAlert(alert);
+                                    SnitchAlert alert = buildSnitchAlert(matcher, msg);
+                                    for (IAlertRecipient recipient : IAlertRecipients)
+                                    {
+                                        recipient.receiveSnitchAlert(alert);
+                                    }
+                                    event.setMessage(alert.getRawMessage());
                                 }
-                                event.setMessage(alert.getRawMessage());
                             }
                         }
                     }
@@ -106,28 +112,36 @@ public class ChatSnitchParser
         try {
             ITextComponent snitchListComponent = msg.getSiblings().get(0);
             snitchRows = snitchListComponent.getSiblings();
-            if (snitchRows.isEmpty()) return false;
 
-            if (!snitchListComponent.getUnformattedComponentText().startsWith("§f Snitch List for "))
+            if (snitchRows.isEmpty())
                 return false;
+
+//            if (!snitchListComponent.getUnformattedComponentText().startsWith("§f Snitch List for "))
+//                return false;
         } catch (IndexOutOfBoundsException e) {
             return false;
         } catch (NullPointerException e) {
             return false;
         }
+
         for (ITextComponent row : snitchRows) {
             String hoverText = "";
             try {
-                hoverText = row.getStyle().getHoverEvent().getValue().getUnformattedComponentText();
-                Matcher matcher = jaListPattern.matcher(hoverText);
-                if (!matcher.matches())
-                    continue;
-                Snitch snitch = parseSnitchFromJaList(matcher);
-                snitchMaster.submitSnitch(snitch);
+                //For some reason row.getStyle() is never null
+                HoverEvent event =  row.getStyle().getHoverEvent();
+                if(event != null)
+                {
+                    hoverText = event.getValue().getUnformattedComponentText();
+
+                    Matcher matcher = jaListPattern.matcher(hoverText);
+                    if (!matcher.matches())
+                        continue;
+                    Snitch snitch = parseSnitchFromJaList(matcher);
+                    snitchMaster.submitSnitch(snitch);
+                }
             } catch (IllegalStateException e) {
-                SnitchMaster.logger.warning("No match on /jalist hover text " + hoverText);
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("No match on /jalist hover text " + hoverText));
                 e.printStackTrace();
-            } catch (NullPointerException ignored) {
             }
         }
 
@@ -153,8 +167,8 @@ public class ChatSnitchParser
         else
             cullTime = Double.parseDouble(cullTimeString);
 
-        String name = matcher.group(6);
-        String ctGroup = matcher.group(7);
+        String ctGroup = matcher.group(6);
+        String name = matcher.group(7);
 
         return new Snitch(new Location(x,y,z,worldName),"jalist",cullTime,ctGroup,name);
     }
@@ -173,7 +187,8 @@ public class ChatSnitchParser
                     jaListIndex++;
                     nextUpdate = System.currentTimeMillis() + (long) (waitTime * 1000);
                 }
-                else resetUpdatingSnitchList();
+                else
+                    resetUpdatingSnitchList(true);
             }
         }
     }
@@ -191,7 +206,7 @@ public class ChatSnitchParser
      */
     public void updateSnitchList()
     {
-        resetUpdatingSnitchList();
+        resetUpdatingSnitchList(false);
 
         Minecraft.getMinecraft().thePlayer.sendChatMessage("/tps");
         nextUpdate = System.currentTimeMillis() + 2000;
@@ -234,15 +249,18 @@ public class ChatSnitchParser
      * Resets the updating of Snitches from the /jalist command.
      * If an update is currently in progress, it is stopped.
      */
-    public void resetUpdatingSnitchList()
+    public void resetUpdatingSnitchList(boolean save)
     {
         jaListIndex = 1;
 
-        //TODO----Make it save all the snitch lists (asynchronously) after its done updating from the /jalist command
-        //if(updatingSnitchList)
+        if(save)
+        {
+            //TODO----Make it save all the snitch lists (asynchronously) after its done updating from the /jalist command
+            //if(updatingSnitchList)
             //snitchMaster.saveTheCorrectSnitchListOrSomething
-        IOHandler.asyncSaveSnitches(snitchMaster.getSnitches());
-        IOHandler.asyncSaveSnitchLists(snitchMaster.getSnitchLists());
+            IOHandler.asyncSaveSnitches(snitchMaster.getSnitches());
+            IOHandler.asyncSaveSnitchLists(snitchMaster.getSnitchLists());
+        }
 
         updatingSnitchList = false;
     }

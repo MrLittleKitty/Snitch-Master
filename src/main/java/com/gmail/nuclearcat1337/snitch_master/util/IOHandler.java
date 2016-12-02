@@ -140,6 +140,7 @@ public class IOHandler
                     writer.write(line);
                     writer.write(System.lineSeparator());
                 }
+                writer.flush();
             }
             catch (IOException e)
             {

@@ -70,7 +70,7 @@ public class MainGui extends GuiScreen
         {
             case 0:
                 if(snitchMaster.getChatSnitchParser().isUpdatingSnitchList())
-                    snitchMaster.getChatSnitchParser().resetUpdatingSnitchList();
+                    snitchMaster.getChatSnitchParser().resetUpdatingSnitchList(true);
                 else
                     snitchMaster.getChatSnitchParser().updateSnitchList();
                 this.mc.displayGuiScreen((GuiScreen) null);

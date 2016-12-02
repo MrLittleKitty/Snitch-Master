@@ -31,7 +31,7 @@ public class SnitchMaster// implements SnitchMasterAPI
 {
     public static final String MODID = "snitchmaster";
     public static final String MODNAME = "Snitch Master";
-    public static final String MODVERSION = "1.0.5";
+    public static final String MODVERSION = "1.0.7";
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     /**
@@ -188,7 +188,7 @@ public class SnitchMaster// implements SnitchMasterAPI
 
         //send it to journey map if that is enabled
         if(jmInterface != null)
-            jmInterface.displaySnitch(snitch);
+            jmInterface.displaySnitch(contains);
 
         IOHandler.asyncSaveSnitches(snitches);
     }
