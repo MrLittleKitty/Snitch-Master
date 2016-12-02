@@ -18,12 +18,12 @@ public class Snitch extends LocatableObject<Snitch>
     /**
      * The maximum number of characters that are allowed to be in the name of a Snitch
      */
-    public static final String MAX_NAME_CHARACTERS = "WWWWWWWWWWWWWWWWWWWW";
+    public static final String MAX_NAME_CHARACTERS = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
 
     /**
      * The maximum number of characters that are allowed to be in the name of a Citadel Group
      */
-    public static final String MAX_CT_GROUP_NAME_CHARACTERS = "WWWWWWWWWWWWWWW";
+    public static final String MAX_CT_GROUP_NAME_CHARACTERS = "WWWWWWWWWWWWWWWWWWWW";
 
     /**
      * The radius out from the Snitch block in all directions.
@@ -227,6 +227,10 @@ public class Snitch extends LocatableObject<Snitch>
     @Override
     public int compareTo(ILocation other)
     {
+        int compare = location.getWorld().compareTo(other.getWorld());
+        if(compare != 0)
+            return compare;
+
         if(location.getX() < other.getX())
             return -1;
         if(location.getX() > other.getX())

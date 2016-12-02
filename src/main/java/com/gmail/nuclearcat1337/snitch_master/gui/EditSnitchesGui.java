@@ -1,13 +1,13 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
-import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Mr_Little_Kitty on 11/29/2016.
@@ -34,6 +34,18 @@ public class EditSnitchesGui extends GuiScreen
         this.drawDefaultBackground();
         this.snitchesGui.drawScreen(mouseX, mouseY, partialTicks);
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        int index = snitchesGui.getSlotIndexFromScreenCoords(mouseX,mouseY);
+        if(index > 0)
+        {
+            Snitch snitch = snitchesGui.getSnitchForIndex(index);
+            if(mouseX >= snitchesGui.getCoordsLeftBound() && mouseX <= snitchesGui.getCoordsRightBound())
+            {
+                List<String> temp = new ArrayList<>(1);
+                temp.add(snitch.getWorld());
+                drawHoveringText(temp,mouseX,mouseY);
+            }
+        }
     }
 
     @Override
@@ -43,7 +55,7 @@ public class EditSnitchesGui extends GuiScreen
 
     public void initGui()
     {
-        snitchesGui = new SnitchGui(parentScreen,snitches);
+        snitchesGui = new SnitchGui(this,snitches);
 
         this.buttonList.clear();
 
@@ -85,11 +97,14 @@ public class EditSnitchesGui extends GuiScreen
         }
     }
 
+//    public void drawHoverText(List<String> text, int x, int y)
+//    {
+//        drawHoveringText(text,x,y);
+//    }
 
     protected void mouseClicked(int mouseX, int mouseY, int mouseEvent)
     {
         this.snitchesGui.mouseClicked(mouseX, mouseY, mouseEvent);
-
         try
         {
             super.mouseClicked(mouseX, mouseY, mouseEvent);

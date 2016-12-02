@@ -11,7 +11,6 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -27,6 +26,7 @@ public class SnitchListsGui extends GuiListExtended
     private final SnitchLists lists;
     private final Minecraft mc;
     private final SnitchListEntry[] iGuiList;
+    private final EditSnitchListsGui cancelToScreen;
 
     private final boolean fullList;
 
@@ -56,6 +56,8 @@ public class SnitchListsGui extends GuiListExtended
                 guiSnitches.height - 32, 	// bottom
                 20);						// slot height
 
+        cancelToScreen = guiSnitches;
+
         this.fullList = fullList;
 
         this.lists = lists;
@@ -67,7 +69,7 @@ public class SnitchListsGui extends GuiListExtended
         int k = 0;
         for (SnitchList list : listsToDisplay)
         {
-            this.iGuiList[k] = new SnitchListEntry(guiSnitches,list,k);
+            this.iGuiList[k] = new SnitchListEntry(list,k);
             k++;
         }
 
@@ -176,8 +178,6 @@ public class SnitchListsGui extends GuiListExtended
     @SideOnly(Side.CLIENT)
     private class SnitchListEntry implements GuiListExtended.IGuiListEntry
     {
-        private GuiScreen cancelToScreen;
-
         private SnitchList snitchList;
 
         private GuiButton upButton;
@@ -187,9 +187,8 @@ public class SnitchListsGui extends GuiListExtended
         private GuiButton editColorButton;
         private GuiButton viewSnitchesButton;
 
-        private SnitchListEntry(GuiScreen cancelToScreen, SnitchList snitchList, int index)
+        private SnitchListEntry(SnitchList snitchList, int index)
         {
-            this.cancelToScreen = cancelToScreen;
             this.snitchList = snitchList;
 
             this.upButton = new GuiButton(10, SnitchListsGui.this.width - 60, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "^");

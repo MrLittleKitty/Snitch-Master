@@ -2,13 +2,9 @@ package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,6 +20,7 @@ public class SnitchGui extends GuiListExtended
 {
     private static final NumberFormat CULL_TIME_FORMAT = new DecimalFormat("#.000");
 
+    private EditSnitchesGui cancelToScreen;
     private final Minecraft mc;
     private final SnitchEntry[] iGuiList;
 
@@ -33,7 +30,7 @@ public class SnitchGui extends GuiListExtended
     private static final String Y_HEADER = "Y";
     private static final String Z_HEADER = "Z";
     private static final String CULL_TIME_HEADER = "Cull Time";
-    private static final String SNITCH_LISTS_HEADER = "Snitch Lists";
+    //private static final String SNITCH_LISTS_HEADER = "Snitch Lists";
 
     private static final int NAME_COLUMN_WIDTH = Minecraft.getMinecraft().fontRendererObj.getStringWidth(Snitch.MAX_NAME_CHARACTERS);
     private static final int GROUP_COLUMN_WIDTH = Minecraft.getMinecraft().fontRendererObj.getStringWidth(Snitch.MAX_CT_GROUP_NAME_CHARACTERS);
@@ -44,12 +41,16 @@ public class SnitchGui extends GuiListExtended
     private static final int Y_COLUMN_WIDTH = Minecraft.getMinecraft().fontRendererObj.getStringWidth("WWW");
     private static final int Z_COLUMN_WIDTH = Minecraft.getMinecraft().fontRendererObj.getStringWidth("WWWWW");
 
-    private static final int SNITCH_LIST_COLUMN_WIDTH = Minecraft.getMinecraft().fontRendererObj.getStringWidth(SnitchList.MAX_NAME_CHARACTERS);
+   // private static final int SNITCH_LIST_COLUMN_WIDTH = Minecraft.getMinecraft().fontRendererObj.getStringWidth(SnitchList.MAX_NAME_CHARACTERS);
 
     private final int entryWidth;
-    private final int snitchListNameColumnLeftBound;
+    //private final int snitchListNameColumnLeftBound;
+    private final int coordsLeftBound;
+    private final int coordsRightBound;
 
-    public SnitchGui(GuiScreen parentScreen, Collection<Snitch> snitchesToDisplay)
+    private int xOffset;
+
+    public SnitchGui(EditSnitchesGui parentScreen, Collection<Snitch> snitchesToDisplay)
     {
         super(Minecraft.getMinecraft(),
                 parentScreen.width,		// width
@@ -58,6 +59,8 @@ public class SnitchGui extends GuiListExtended
                 parentScreen.height - 32, 	// bottom
                 20);
 
+        cancelToScreen = parentScreen;
+
         this.mc = Minecraft.getMinecraft();
 
         iGuiList = new SnitchEntry[snitchesToDisplay.size()];
@@ -65,7 +68,7 @@ public class SnitchGui extends GuiListExtended
 
         for(Snitch snitch : snitchesToDisplay)
         {
-            iGuiList[i] = new SnitchEntry(parentScreen,snitch);
+            iGuiList[i] = new SnitchEntry(snitch);
             i++;
         }
 
@@ -76,14 +79,23 @@ public class SnitchGui extends GuiListExtended
                         + CULLTIME_COLUMN_WIDTH + GuiConstants.STANDARD_SEPARATION_DISTANCE
                         + X_COLUMN_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE
                         + Y_COLUMN_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE
-                        + Z_COLUMN_WIDTH + GuiConstants.STANDARD_SEPARATION_DISTANCE
-                        + SNITCH_LIST_COLUMN_WIDTH;
+                        + Z_COLUMN_WIDTH + GuiConstants.STANDARD_SEPARATION_DISTANCE;
+                        //+ SNITCH_LIST_COLUMN_WIDTH;
 
-        this.snitchListNameColumnLeftBound = entryWidth - SNITCH_LIST_COLUMN_WIDTH;
+        this.coordsLeftBound = NAME_COLUMN_WIDTH + GuiConstants.STANDARD_SEPARATION_DISTANCE
+                                + GROUP_COLUMN_WIDTH + GuiConstants.STANDARD_SEPARATION_DISTANCE
+                                + CULLTIME_COLUMN_WIDTH + GuiConstants.STANDARD_SEPARATION_DISTANCE;
+
+        this.coordsRightBound = coordsLeftBound
+                                + X_COLUMN_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE
+                                + Y_COLUMN_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE
+                                + Z_COLUMN_WIDTH;
+        //this.snitchListNameColumnLeftBound = entryWidth - SNITCH_LIST_COLUMN_WIDTH;
     }
 
     protected void drawListHeader(int xPosition, int yPosition, Tessellator tessalator)
     {
+        yPosition = yPosition + this.getSlotHeight();
         String root = ChatFormatting.UNDERLINE + "" + ChatFormatting.BOLD;
         int nameWidth = mc.fontRendererObj.getStringWidth(root+ NAME_HEADER);
         int groupWidth = mc.fontRendererObj.getStringWidth(root+ GROUP_HEADER);
@@ -93,7 +105,7 @@ public class SnitchGui extends GuiListExtended
         int zWidth = mc.fontRendererObj.getStringWidth(root+ Z_HEADER);
 
         int cullTimeWidth = mc.fontRendererObj.getStringWidth(root+ CULL_TIME_HEADER);
-        int snitchListsWidth = mc.fontRendererObj.getStringWidth(root+ SNITCH_LISTS_HEADER);
+         //int snitchListsWidth = mc.fontRendererObj.getStringWidth(root+ SNITCH_LISTS_HEADER);
 
         //This stuff is supposed to center all of our columns on the screen
         int workingWidth = (this.width-xPosition);
@@ -123,16 +135,17 @@ public class SnitchGui extends GuiListExtended
         this.mc.fontRendererObj.drawString(root + Z_HEADER, drawXPos, yPosition, 16777215);
         startingXPos += Z_COLUMN_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE);
 
-        drawXPos = startingXPos + (SNITCH_LIST_COLUMN_WIDTH /2) - (snitchListsWidth/2);
-        this.mc.fontRendererObj.drawString(root + SNITCH_LISTS_HEADER, drawXPos, yPosition, 16777215);
-        //startingXPos += SNITCH_LIST_COLUMN_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
+        //drawXPos = startingXPos + (SNITCH_LIST_COLUMN_WIDTH /2) - (snitchListsWidth/2);
+        //this.mc.fontRendererObj.drawString(root + SNITCH_LISTS_HEADER, drawXPos, yPosition, 16777215);
+
+        ////startingXPos += SNITCH_LIST_COLUMN_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
     }
 
     protected int getSize() {
         return this.iGuiList.length;
     }
 
-    public GuiListExtended.IGuiListEntry getListEntry(int index) {
+    public SnitchEntry getListEntry(int index) {
         return this.iGuiList[index];
     }
 
@@ -148,29 +161,47 @@ public class SnitchGui extends GuiListExtended
     protected void elementClicked(int slotIndex, boolean isRightClick, int mouseX, int mouseY)
     {
         if (slotIndex < 0 || slotIndex >= iGuiList.length) return;
-        ((SnitchEntry) getListEntry(slotIndex)).mousePressed(slotIndex, mouseX, mouseY, isRightClick ? 1 : 0, 0, 0);
+        getListEntry(slotIndex).mousePressed(slotIndex, mouseX, mouseY, isRightClick ? 1 : 0, 0, 0);
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
+    {
+        super.drawScreen(mouseX,mouseY,partialTicks);
+    }
+
+    public int getCoordsLeftBound()
+    {
+        return xOffset+coordsLeftBound;
+    }
+
+    public int getCoordsRightBound()
+    {
+        return xOffset+coordsRightBound;
+    }
+
+    public Snitch getSnitchForIndex(int i)
+    {
+        return getListEntry(i).snitch;
     }
 
     @SideOnly(Side.CLIENT)
     private class SnitchEntry implements GuiListExtended.IGuiListEntry
     {
-        private GuiScreen cancelToScreen;
-
         private Snitch snitch;
 
-        private SnitchEntry(GuiScreen cancelToScreen, Snitch snitch)
+        private SnitchEntry(Snitch snitch)
         {
-            this.cancelToScreen = cancelToScreen;
-
             this.snitch = snitch;
         }
 
         public void drawEntry(int slotIndex, int xPosition, int yPosition, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected)
         {
-            int yFinal = yPosition + (slotHeight + mc.fontRendererObj.FONT_HEIGHT) / 2;
+            int yFinal = yPosition + (slotHeight + mc.fontRendererObj.FONT_HEIGHT); /// 2;
 
             int workingWidth = (width-xPosition);
             int xPos = xPosition + (workingWidth/2) - (entryWidth/2);
+            xOffset = xPos;
 
             //Draw the Snitches name in the center of the name column
             int nameWidth = mc.fontRendererObj.getStringWidth(snitch.getSnitchName());
@@ -212,25 +243,32 @@ public class SnitchGui extends GuiListExtended
             mc.fontRendererObj.drawString(zString, zStringPos ,yFinal,16777215);
             xPos += Z_COLUMN_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE);
 
+//            if(mouseX >= xPos+coordsLeftBound && mouseX <= xPos+coordsRightBound && mouseY >= yFinal && mouseY <= yFinal+slotHeight)
+//            {
+//                List<String> temp = new ArrayList<>(1);
+//                temp.add(snitch.getWorld());
+//                cancelToScreen.drawHoverText(temp,mouseX,mouseY);
+//            }
+
             //Draw the snitch list name (or arbitrary string_ in the middle of the snitch lists column
-            String snitchListString = snitch.getAttachedSnitchLists().size() > 1 ? "View Snitch Lists" : snitch.getAttachedSnitchLists().get(0).getListName();
-            int snitchListWidth = mc.fontRendererObj.getStringWidth(snitchListString);
-            int snitchListStringPos = xPos + (SNITCH_LIST_COLUMN_WIDTH /2) - (snitchListWidth/2);
-            mc.fontRendererObj.drawString(snitchListString, snitchListStringPos ,yFinal,16777215);
-            //xPos += SNITCH_LIST_COLUMN_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE);
+//            String snitchListString = snitch.getAttachedSnitchLists().size() > 1 ? "View Snitch Lists" : snitch.getAttachedSnitchLists().get(0).getListName();
+//            int snitchListWidth = mc.fontRendererObj.getStringWidth(snitchListString);
+//            int snitchListStringPos = xPos + (SNITCH_LIST_COLUMN_WIDTH /2) - (snitchListWidth/2);
+//            mc.fontRendererObj.drawString(snitchListString, snitchListStringPos ,yFinal,16777215);
+//            //xPos += SNITCH_LIST_COLUMN_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE);
         }
 
         public boolean mousePressed(int index, int xPos, int yPos, int mouseEvent, int relX, int relY)
         {
             if(mouseEvent == 1) //If its a right click
             {
-                int rightBound = snitchListNameColumnLeftBound + SNITCH_LIST_COLUMN_WIDTH;
-                if(xPos >= snitchListNameColumnLeftBound && xPos <= rightBound) //Check if they right clicked in the name column
-                {
-                    //Sorry im cheating by using the static instance but im lazy and its only 1 line right? right? :(
-                    mc.displayGuiScreen(new EditSnitchListsGui(cancelToScreen,SnitchMaster.instance,snitch.getAttachedSnitchLists(),false));
-                    return true;
-                }
+//                int rightBound = snitchListNameColumnLeftBound + SNITCH_LIST_COLUMN_WIDTH;
+//                if(xPos >= snitchListNameColumnLeftBound && xPos <= rightBound) //Check if they right clicked in the name column
+//                {
+//                    //Sorry im cheating by using the static instance but im lazy and its only 1 line right? right? :(
+//                    mc.displayGuiScreen(new EditSnitchListsGui(cancelToScreen,SnitchMaster.instance,snitch.getAttachedSnitchLists(),false));
+//                    return true;
+//                }
                 return false;
             }
             return false;

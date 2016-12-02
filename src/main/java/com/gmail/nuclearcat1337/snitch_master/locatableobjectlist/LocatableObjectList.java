@@ -7,8 +7,9 @@ import java.util.*;
 /**
  * Created by Mr_Little_Kitty on 7/26/2016.
  */
-public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnlyLocatableObjectList<T> implements Collection<T>
+public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnlyLocatableObjectList<T> implements Collection<T>, RandomAccess
 {
+    private int modCount = 0;
     private final ArrayList<T> wrappedList;
     private final HashMap<String,IntPair> worldIndices;
 
@@ -34,8 +35,11 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
             return false;
         }
 
-        //Insert the into the list at the insertion point. Doing this for all adds guarantees the list is sorted.
+        //Insert the item into the list at the insertion point. Doing this for all adds guarantees the list is sorted.
         wrappedList.add(index,item);
+
+        //cocurrency mod count needs to be incremented
+        modCount++;
 
         //Get the min and max index for the world of this item were adding
         IntPair minMax = worldIndices.get(item.getWorld());
@@ -61,7 +65,6 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
             if(entry == null)
                 continue;
 
-//            SnitchMaster.logger.info("key="+entry.getKey()+",value="+entry.getValue());
             //Dont do anything to the world were adding
             if(!entry.getKey().equals(item.getWorld()))
             {
@@ -117,6 +120,9 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         {
             //Remove the item from the list at the index it was found
             T item = wrappedList.remove(index);
+
+            //Increase cocurrency mod count
+            modCount++;
 
             IntPair minMax = worldIndices.get(item.getWorld());
 
@@ -196,6 +202,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     {
         wrappedList.clear();
         worldIndices.clear();
+        modCount++;
     }
 
     @Override
@@ -246,7 +253,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     @Override
     public Iterator<T> iterator()
     {
-        return new HiddenIterator(0,size()-1);
+        return new HiddenIterator(0,size()-1,modCount);
     }
 
     @Override
@@ -302,11 +309,6 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         return pair.two;
     }
 
-    //public Iterable<T> getItems()
-//    {
-//        return wrappedList;
-//    }
-
     @Override
     public Iterable<T> getItemsForWorld(String world)
     {
@@ -327,7 +329,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
             @Override
             public Iterator<T> iterator()
             {
-                return new HiddenIterator(pair.one,pair.two);
+                return new HiddenIterator(pair.one,pair.two,modCount);
             }
         };
     }
@@ -375,13 +377,15 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
 
     private class HiddenIterator implements Iterator<T>
     {
-        private final int max;
+        private final int max, expectedModCount;
         private int index;
 
-        public HiddenIterator(int min, int max)
+
+        public HiddenIterator(int min, int max, int expectedModCount)
         {
             this.max = max;
             this.index = min;
+            this.expectedModCount = expectedModCount;
         }
 
         @Override
@@ -393,6 +397,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         @Override
         public T next()
         {
+            checkForConcurrentModification();
             //Increment the index after getting the value at the current index
             if(hasNext())
                 return get(index++);
@@ -402,8 +407,15 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         @Override
         public void remove()
         {
+            checkForConcurrentModification();
             //TODO---Decide if we should support removing elements with the iterator
             throw new UnsupportedOperationException("You can not remove items using this iterator.");
+        }
+
+        private void checkForConcurrentModification()
+        {
+            if(expectedModCount != modCount)
+                throw new ConcurrentModificationException("The Locatable Object List was modified while using an iterator.");
         }
     }
 
