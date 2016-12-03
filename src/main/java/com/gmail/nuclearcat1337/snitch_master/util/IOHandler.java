@@ -46,7 +46,8 @@ public class IOHandler
         for(Snitch snitch : snitches)
             csvs.add(Snitch.ConvertSnitchToCSV(snitch));
 
-        new Thread(new AsyncSaveToCSV(csvs,modSnitchesFile)).start();
+        //new Thread(new AsyncSaveToCSV(csvs,modSnitchesFile)).start();
+       new AsyncSaveToCSV(csvs,modSnitchesFile).run();
     }
 
     public static void asyncSaveSnitchLists(Iterable<SnitchList> snitchLists)
@@ -55,7 +56,8 @@ public class IOHandler
         for(SnitchList list : snitchLists)
             csvs.add(SnitchList.ConvertSnitchListToCSV(list));
 
-        new Thread(new AsyncSaveToCSV(csvs,modSnitchListsFile)).start();
+        //new Thread(new AsyncSaveToCSV(csvs,modSnitchListsFile)).start();
+        new AsyncSaveToCSV(csvs,modSnitchListsFile).run();
     }
 
     public static void loadSnitches(SnitchMaster snitchMaster) throws IOException
