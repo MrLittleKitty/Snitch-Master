@@ -212,52 +212,53 @@ public class SnitchListsGui extends GuiListExtended
 
         public void drawEntry(int slotIndex, int xPosition, int yPosition, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected)
         {
-            int yFinal = yPosition + (slotHeight + SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT) / 2;
+            int stringYPosition = yPosition + ((slotHeight - SnitchListsGui.this.mc.fontRendererObj.FONT_HEIGHT) / 2);
+            yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) /2);
 
             int workingWidth = (width-xPosition);
             int xPos = xPosition + (workingWidth/2) - (entryWidth/2);
 
-            upButton.yPosition = yPosition + (upButton.height/3);
+            upButton.yPosition = yPosition;// + (upButton.height/3);
             upButton.xPosition = xPos;
 
             xPos += upButton.width + GuiConstants.SMALL_SEPARATION_DISTANCE;
 
             toggleRenderButton.displayString = snitchList.shouldRenderSnitches() ? "On" : "Off";
-            toggleRenderButton.yPosition = yPosition + (toggleRenderButton.height/3);
+            toggleRenderButton.yPosition = yPosition;// + (toggleRenderButton.height/3);
             toggleRenderButton.xPosition = xPos;
 
             xPos += toggleRenderButton.width + GuiConstants.SMALL_SEPARATION_DISTANCE;
 
-            downButton.yPosition = yPosition + (downButton.height/3);
+            downButton.yPosition = yPosition;// + (downButton.height/3);
             downButton.xPosition = xPos;
 
             xPos += downButton.width + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
-
-            this.upButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
-            this.downButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
-            this.toggleRenderButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
 
             int stringWidth = mc.fontRendererObj.getStringWidth(snitchList.getListName());
 
             int namePos = xPos + (NAME_COLUMN_WIDTH /2) - (stringWidth/2);
 
-            mc.fontRendererObj.drawString(snitchList.getListName(), namePos ,yFinal,16777215);
+            mc.fontRendererObj.drawString(snitchList.getListName(), namePos , stringYPosition,16777215);
 
             xPos += NAME_COLUMN_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-            editColorButton.yPosition = yPosition + (editColorButton.height/3);
+            editColorButton.yPosition = yPosition;// + (editColorButton.height/3);
             editColorButton.xPosition = xPos;
 
             xPos += EDIT_COLOR_BUTTON_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-            editQualifierButton.yPosition = yPosition + (editQualifierButton.height/3);
+            editQualifierButton.yPosition = yPosition;// + (editQualifierButton.height/3);
             editQualifierButton.xPosition = xPos;
 
             xPos += EDIT_QUALIFIER_BUTTON_WIDTH + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2);
 
-            viewSnitchesButton.yPosition = yPosition +(viewSnitchesButton.height/3);
+            viewSnitchesButton.yPosition = yPosition;// +(viewSnitchesButton.height/3);
             viewSnitchesButton.xPosition = xPos;
 
+
+            this.upButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
+            this.downButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
+            this.toggleRenderButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
             this.editColorButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
             this.editQualifierButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
             this.viewSnitchesButton.drawButton(SnitchListsGui.this.mc, mouseX, mouseY);
@@ -308,7 +309,7 @@ public class SnitchListsGui extends GuiListExtended
                 if(snitches.isEmpty())
                     viewSnitchesButton.displayString = "None";
                 else
-                    mc.displayGuiScreen(new EditSnitchesGui(cancelToScreen,snitches));
+                    mc.displayGuiScreen(new EditSnitchesGui(cancelToScreen,snitches,"Snitches for Snitch List: "+snitchList.getListName()));
                 return true;
             }
 

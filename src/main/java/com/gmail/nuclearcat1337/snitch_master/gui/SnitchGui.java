@@ -102,7 +102,7 @@ public class SnitchGui extends GuiListExtended
 
     protected void drawListHeader(int xPosition, int yPosition, Tessellator tessalator)
     {
-        yPosition = yPosition + this.getSlotHeight();
+        yPosition = yPosition;// + this.getSlotHeight();
         String root = ChatFormatting.UNDERLINE + "" + ChatFormatting.BOLD;
         int nameWidth = mc.fontRendererObj.getStringWidth(root+ NAME_HEADER);
         int groupWidth = mc.fontRendererObj.getStringWidth(root+ GROUP_HEADER);
@@ -214,7 +214,7 @@ public class SnitchGui extends GuiListExtended
 
         public void drawEntry(int slotIndex, int xPosition, int yPosition, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected)
         {
-            int yFinal = yPosition + (slotHeight + mc.fontRendererObj.FONT_HEIGHT); /// 2;
+            int yFinal = yPosition + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2); //+ (slotHeight + mc.fontRendererObj.FONT_HEIGHT); /// 2;
 
             int workingWidth = (width-xPosition);
             int xPos = xPosition + (workingWidth/2) - (entryWidth/2);
@@ -285,7 +285,7 @@ public class SnitchGui extends GuiListExtended
                     if(snitch.getAttachedSnitchLists().size() > 0)
                     {
                         //Sorry im cheating by using the static instance but im lazy and its only 1 line right? right? :(
-                        mc.displayGuiScreen(new EditSnitchListsGui(cancelToScreen, SnitchMaster.instance, snitch.getAttachedSnitchLists(), false));
+                        mc.displayGuiScreen(new EditSnitchListsGui(cancelToScreen, SnitchMaster.instance, snitch.getAttachedSnitchLists(), false, "Snitch Lists for Snitch: "+(snitch.getSnitchName().isEmpty() ? "[Not Named]" : snitch.getSnitchName())));
                         return true;
                     }
                 }

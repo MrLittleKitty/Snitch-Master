@@ -2,6 +2,7 @@ package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -15,6 +16,9 @@ import java.util.List;
  */
 public class EditSnitchesGui extends GuiScreen
 {
+    private final String title;
+    private final int titleWidth;
+
     private GuiScreen parentScreen;
     private Collection<Snitch> snitches;
 
@@ -23,10 +27,12 @@ public class EditSnitchesGui extends GuiScreen
     private static final int DONE_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH*3;
     //private static final int NEW_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
 
-    public EditSnitchesGui(GuiScreen guiscreen, Collection<Snitch> snitches)
+    public EditSnitchesGui(GuiScreen guiscreen, Collection<Snitch> snitches, String title)
     {
         this.parentScreen = guiscreen;
         this.snitches = snitches;
+        this.title = title;
+        this.titleWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(title);
     }
 
     @Override
@@ -36,8 +42,13 @@ public class EditSnitchesGui extends GuiScreen
         this.snitchesGui.drawScreen(mouseX, mouseY, partialTicks);
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        int yPos = 16 - (mc.fontRendererObj.FONT_HEIGHT/2);
+        int xPos = (this.width/2) - (titleWidth/2);
+
+        mc.fontRendererObj.drawString(title, xPos ,yPos, 16777215);
+
         int index = snitchesGui.getSlotIndexFromScreenCoords(mouseX,mouseY);
-        if(index > 0)
+        if(index >= 0)
         {
             Snitch snitch = snitchesGui.getSnitchForIndex(index);
             if(mouseX >= snitchesGui.getCoordsLeftBound() && mouseX <= snitchesGui.getCoordsRightBound())

@@ -88,10 +88,10 @@ public class MainGui extends GuiScreen
 //                break;
             case 2: //"View Snitch Lists"
                 this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true));
+                this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true, "All Snitch Lists"));
                 break;
             case 3: //"View Snitches"
-                this.mc.displayGuiScreen(new EditSnitchesGui(this,snitchMaster.getSnitches()));
+                this.mc.displayGuiScreen(new EditSnitchesGui(this,snitchMaster.getSnitches(),"All Snitches"));
                 break;
             case 4: //"Done"
                 this.mc.displayGuiScreen((GuiScreen) null);

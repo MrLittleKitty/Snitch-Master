@@ -16,6 +16,9 @@ public class EditSnitchListsGui extends GuiScreen
 {
     private GuiScreen parentScreen;
 
+    private final String title;
+    private final int titleWidth;
+
     private SnitchListsGui snitchListGUI;
     private SnitchMaster snitchMaster;
     private Collection<SnitchList> snitchLists;
@@ -26,12 +29,14 @@ public class EditSnitchListsGui extends GuiScreen
     private static final int RENDER_ON_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
     private static final int RENDER_OFF_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
 
-    public EditSnitchListsGui(GuiScreen guiscreen, SnitchMaster snitchMaster, Collection<SnitchList> listsToDisplay, boolean fullList)
+    public EditSnitchListsGui(GuiScreen guiscreen, SnitchMaster snitchMaster, Collection<SnitchList> listsToDisplay, boolean fullList, String title)
     {
         this.parentScreen = guiscreen;
         this.snitchMaster = snitchMaster;
         this.fullList = fullList;
         snitchLists = listsToDisplay;
+        this.title = title;
+        this.titleWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(title);
     }
 
     @Override
@@ -39,6 +44,12 @@ public class EditSnitchListsGui extends GuiScreen
     {
         this.drawDefaultBackground();
         this.snitchListGUI.drawScreen(mouseX, mouseY, partialTicks);
+
+        int yPos = 16 - (mc.fontRendererObj.FONT_HEIGHT/2);
+        int xPos = (this.width/2) - (titleWidth/2);
+
+        mc.fontRendererObj.drawString(title, xPos ,yPos, 16777215);
+
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
