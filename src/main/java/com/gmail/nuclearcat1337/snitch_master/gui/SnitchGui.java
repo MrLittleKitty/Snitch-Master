@@ -48,6 +48,9 @@ public class SnitchGui extends GuiListExtended
     private final int coordsLeftBound;
     private final int coordsRightBound;
 
+    private final int nameLeftBound;
+    private final int nameRightBound;
+
     private int xOffset;
 
     public SnitchGui(EditSnitchesGui parentScreen, Collection<Snitch> snitchesToDisplay)
@@ -90,6 +93,10 @@ public class SnitchGui extends GuiListExtended
                                 + X_COLUMN_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE
                                 + Y_COLUMN_WIDTH + GuiConstants.SMALL_SEPARATION_DISTANCE
                                 + Z_COLUMN_WIDTH;
+
+        this.nameLeftBound = 0;
+
+        this.nameRightBound = nameLeftBound + NAME_COLUMN_WIDTH;
         //this.snitchListNameColumnLeftBound = entryWidth - SNITCH_LIST_COLUMN_WIDTH;
     }
 
@@ -180,6 +187,16 @@ public class SnitchGui extends GuiListExtended
         return xOffset+coordsRightBound;
     }
 
+    public int getNameLeftBound()
+    {
+        return xOffset + nameLeftBound;
+    }
+
+    public int getNameRightBound()
+    {
+        return xOffset + nameRightBound;
+    }
+
     public Snitch getSnitchForIndex(int i)
     {
         return getListEntry(i).snitch;
@@ -262,13 +279,16 @@ public class SnitchGui extends GuiListExtended
         {
             if(mouseEvent == 1) //If its a right click
             {
-//                int rightBound = snitchListNameColumnLeftBound + SNITCH_LIST_COLUMN_WIDTH;
-//                if(xPos >= snitchListNameColumnLeftBound && xPos <= rightBound) //Check if they right clicked in the name column
-//                {
-//                    //Sorry im cheating by using the static instance but im lazy and its only 1 line right? right? :(
-//                    mc.displayGuiScreen(new EditSnitchListsGui(cancelToScreen,SnitchMaster.instance,snitch.getAttachedSnitchLists(),false));
-//                    return true;
-//                }
+                if(xPos >= getNameLeftBound() && xPos <= getNameRightBound()) //Check if they right clicked in the name column
+                {
+                    //If this snitch has attached snitch lists and they right click on the name then display them
+                    if(snitch.getAttachedSnitchLists().size() > 0)
+                    {
+                        //Sorry im cheating by using the static instance but im lazy and its only 1 line right? right? :(
+                        mc.displayGuiScreen(new EditSnitchListsGui(cancelToScreen, SnitchMaster.instance, snitch.getAttachedSnitchLists(), false));
+                        return true;
+                    }
+                }
                 return false;
             }
             return false;

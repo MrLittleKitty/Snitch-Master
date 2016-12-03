@@ -65,7 +65,6 @@ public class ChatSnitchParser
             String msgText = msg.getUnformattedText();
             if(msgText != null)
             {
-                SnitchMaster.logger.warning("Temp message " + msgText);
                 //Check if its the tps message (this is quick)
                 if(msgText.contains(tpsMessage))
                     parseTPS(msgText);

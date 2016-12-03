@@ -1,6 +1,7 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -43,6 +44,14 @@ public class EditSnitchesGui extends GuiScreen
             {
                 List<String> temp = new ArrayList<>(1);
                 temp.add(snitch.getWorld());
+                drawHoveringText(temp,mouseX,mouseY);
+            }
+            else if(mouseX >= snitchesGui.getNameLeftBound() && mouseX <= snitchesGui.getNameRightBound())
+            {
+                List<String> temp = new ArrayList<>(snitch.getAttachedSnitchLists().size()+1);
+                temp.add("Snitch Lists:");
+                for(SnitchList list : snitch.getAttachedSnitchLists())
+                    temp.add(list.getListName());
                 drawHoveringText(temp,mouseX,mouseY);
             }
         }
