@@ -44,8 +44,8 @@ public class SnitchImageFactory
             ILocation loc = snitch.getLocation();
             String displayID = loc.getX()+","+loc.getY()+","+loc.getZ()+","+loc.getWorld();
 
-            BlockPos nw = new BlockPos(snitch.getFieldMinX(),snitch.getFieldMinY(),snitch.getFieldMinZ());
-            BlockPos se = new BlockPos(snitch.getFieldMaxX(),snitch.getFieldMaxY(),snitch.getFieldMaxZ());
+            BlockPos nw = new BlockPos(snitch.getFieldMinX(),loc.getY(),snitch.getFieldMinZ());
+            BlockPos se = new BlockPos(snitch.getFieldMaxX()+1,loc.getY(),snitch.getFieldMaxZ()+1);
 
             ImageOverlay overlay = new ImageOverlay(SnitchMaster.MODID,displayID,nw,se,image);
 
