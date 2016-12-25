@@ -60,42 +60,47 @@ public class ChatSnitchParser
     public void chatParser(ClientChatReceivedEvent event)
     {
         ITextComponent msg = event.getMessage();
-        if(event != null && msg != null)
+        if(event == null || msg == null)
+            return;
+
+        String msgText = msg.getUnformattedText();
+        if(msgText == null)
+            return;
+
+        //Check if its the tps message (this is quick)
+        if(msgText.contains(tpsMessage))
         {
-            String msgText = msg.getUnformattedText();
-            if(msgText != null)
-            {
-                //Check if its the tps message (this is quick)
-                if(msgText.contains(tpsMessage))
-                    parseTPS(msgText);
-                else if(updatingSnitchList)
-                {
-                    if (containsAny(msgText, resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
-                        resetUpdatingSnitchList(true);
-                    else
-                    {
-                        //Check if this matches a snitch entry from the jalist command (this is less quick than above)
-                        if (!tryParseJalistMsg(msg))
-                        {
-                            //Check if this matches the snitch alert message (slowest of all of these)
-                            Matcher matcher = snitchAlertPattern.matcher(msgText);
-                            if (matcher.matches())
-                            {
-                                if (!IAlertRecipients.isEmpty())  //Sometimes an optimization because it avoids building the altert object
-                                {
-                                    SnitchAlert alert = buildSnitchAlert(matcher, msg);
-                                    for (IAlertRecipient recipient : IAlertRecipients)
-                                    {
-                                        recipient.receiveSnitchAlert(alert);
-                                    }
-                                    event.setMessage(alert.getRawMessage());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            parseTPS(msgText);
+            return;
         }
+
+        if(!updatingSnitchList)
+            return;
+
+        if (containsAny(msgText, resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
+        {
+            resetUpdatingSnitchList(true);
+            return;
+        }
+
+        //Check if this matches a snitch entry from the jalist command (this is less quick than above)
+        if (tryParseJalistMsg(msg))
+            return;
+
+        //Check if this matches the snitch alert message (slowest of all of these)
+        Matcher matcher = snitchAlertPattern.matcher(msgText);
+        if (!matcher.matches())
+            return;
+
+        if (IAlertRecipients.isEmpty())  //Sometimes an optimization because it avoids building the altert object
+            return;
+
+        SnitchAlert alert = buildSnitchAlert(matcher, msg);
+        for (IAlertRecipient recipient : IAlertRecipients)
+        {
+            recipient.receiveSnitchAlert(alert);
+        }
+        event.setMessage(alert.getRawMessage());
     }
 
     /**
