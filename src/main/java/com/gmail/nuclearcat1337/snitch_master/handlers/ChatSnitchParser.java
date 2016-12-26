@@ -60,7 +60,7 @@ public class ChatSnitchParser
     public void chatParser(ClientChatReceivedEvent event)
     {
         ITextComponent msg = event.getMessage();
-        if(event == null || msg == null)
+        if(msg == null)
             return;
 
         String msgText = msg.getUnformattedText();
@@ -74,17 +74,22 @@ public class ChatSnitchParser
             return;
         }
 
-        if(!updatingSnitchList)
-            return;
-
-        if (containsAny(msgText, resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
+        //Only check for reset sequences or /jalist messages if we are updating
+        if(updatingSnitchList)
         {
-            resetUpdatingSnitchList(true);
-            return;
+            if (containsAny(msgText, resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
+            {
+                resetUpdatingSnitchList(true);
+                return;
+            }
+
+            //Check if this matches a snitch entry from the /jalist command (this is less quick than above)
+            if (tryParseJalistMsg(msg))
+                return;
         }
 
-        //Check if this matches a snitch entry from the jalist command (this is less quick than above)
-        if (tryParseJalistMsg(msg))
+        //If there are no alert recipients then don't even bother checking if its a snitch alert
+        if (IAlertRecipients.isEmpty())  //Sometimes an optimization because it avoids building the alert object
             return;
 
         //Check if this matches the snitch alert message (slowest of all of these)
@@ -92,14 +97,13 @@ public class ChatSnitchParser
         if (!matcher.matches())
             return;
 
-        if (IAlertRecipients.isEmpty())  //Sometimes an optimization because it avoids building the altert object
-            return;
-
+        //Build the snitch alert and send it to all the recipients
         SnitchAlert alert = buildSnitchAlert(matcher, msg);
         for (IAlertRecipient recipient : IAlertRecipients)
         {
             recipient.receiveSnitchAlert(alert);
         }
+        //Set the alert's message to whatever the final message is from the alert "event"
         event.setMessage(alert.getRawMessage());
     }
 
