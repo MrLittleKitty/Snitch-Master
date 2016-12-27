@@ -1,14 +1,14 @@
 package com.gmail.nuclearcat1337.snitch_master.util;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObjectList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 
 import java.io.*;
-import java.lang.reflect.Array;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by Mr_Little_Kitty on 6/26/2016.
@@ -65,20 +65,14 @@ public class IOHandler
         File file = new File(modSnitchesFile);
         if(file.exists())
         {
-            try(FileReader reader = new FileReader(file);)
+            try (BufferedReader br = Files.newBufferedReader(Paths.get(modSnitchesFile), StandardCharsets.UTF_8))
             {
-                BufferedReader buf = new BufferedReader(reader);
-                String line;
-                while((line = buf.readLine()) != null)
+                for (String line = null; (line = br.readLine()) != null;)
                 {
-                    Snitch snitch = Snitch.GetSnitchFromCSV(line,snitchMaster);
+                    Snitch snitch = Snitch.GetSnitchFromCSV(line);
                     if(snitch != null)
                         snitchMaster.submitSnitch(snitch);
                 }
-            }
-            catch (FileNotFoundException e)
-            {
-                e.printStackTrace();
             }
         }
     }
