@@ -40,7 +40,7 @@ public class IOHandler
         return file;
     }
 
-    public static void asyncSaveSnitches(Iterable<Snitch> snitches)
+    public static void saveSnitches(Iterable<Snitch> snitches)
     {
         ArrayList<String> csvs = new ArrayList<>();
         for(Snitch snitch : snitches)
@@ -50,7 +50,7 @@ public class IOHandler
        new AsyncSaveToCSV(csvs,modSnitchesFile).run();
     }
 
-    public static void asyncSaveSnitchLists(Iterable<SnitchList> snitchLists)
+    public static void saveSnitchLists(Iterable<SnitchList> snitchLists)
     {
         ArrayList<String> csvs = new ArrayList<>();
         for(SnitchList list : snitchLists)

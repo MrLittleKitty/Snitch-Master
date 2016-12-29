@@ -8,7 +8,6 @@ import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -266,8 +265,8 @@ public class ChatSnitchParser
             //TODO----Make it save all the snitch lists (asynchronously) after its done updating from the /jalist command
             //if(updatingSnitchList)
             //snitchMaster.saveTheCorrectSnitchListOrSomething
-            IOHandler.asyncSaveSnitches(snitchMaster.getSnitches());
-            IOHandler.asyncSaveSnitchLists(snitchMaster.getSnitchLists());
+            IOHandler.saveSnitches(snitchMaster.getSnitches());
+            IOHandler.saveSnitchLists(snitchMaster.getSnitchLists());
         }
 
         updatingSnitchList = false;

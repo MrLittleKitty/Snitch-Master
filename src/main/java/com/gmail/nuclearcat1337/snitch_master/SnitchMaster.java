@@ -2,24 +2,19 @@ package com.gmail.nuclearcat1337.snitch_master;
 
 import com.gmail.nuclearcat1337.snitch_master.handlers.*;
 import com.gmail.nuclearcat1337.snitch_master.journeymap.JourneyMapInterface;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.IReadOnlyLocatableObjectList;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObjectList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -189,8 +184,6 @@ public class SnitchMaster// implements SnitchMasterAPI
         //send it to journey map if that is enabled
         if(jmInterface != null)
             jmInterface.displaySnitch(contains);
-
-        IOHandler.asyncSaveSnitches(snitches);
     }
 
     /**

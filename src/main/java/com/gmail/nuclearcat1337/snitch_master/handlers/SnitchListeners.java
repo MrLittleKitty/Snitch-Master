@@ -4,6 +4,7 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
+import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import com.gmail.nuclearcat1337.snitch_master.util.PointLocation;
 import net.minecraft.block.state.IBlockState;
@@ -49,6 +50,8 @@ public class SnitchListeners
                     Snitch snitch = new Snitch(loc,"manual");
 
                     snitchMaster.submitSnitch(snitch);
+
+                    IOHandler.saveSnitches(snitchMaster.getSnitches());
                 }
             }
         }

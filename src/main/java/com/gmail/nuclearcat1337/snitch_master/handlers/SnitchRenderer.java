@@ -102,13 +102,12 @@ public class SnitchRenderer
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.09F);
         GL11.glDepthMask(false);
 
-
         double px = -(renderPosX - x);
         double py = -(renderPosY - y);
         double pz = -(renderPosZ - z);
 
-        double max = radius +.99D; //.99
-        double min = radius - .01D;//-.01
+        double max = radius + 1.01D;   // +.99D; //.99
+        double min = radius + .01D;    // - .01D;//-.01
 
         if(radius == 0)
         {
@@ -125,7 +124,6 @@ public class SnitchRenderer
         GL11.glColor4d(color.getRed(),color.getGreen(),color.getBlue(),alpha);
 
         drawBoundingBoxQuads(bb);
-
 
         GL11.glDepthMask(true);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);

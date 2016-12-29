@@ -4,13 +4,11 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
-import com.gmail.nuclearcat1337.snitch_master.util.*;
 import journeymap.client.api.display.ImageOverlay;
 import journeymap.client.api.model.MapImage;
 import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
