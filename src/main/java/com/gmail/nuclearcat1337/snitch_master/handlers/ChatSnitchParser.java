@@ -86,7 +86,10 @@ public class ChatSnitchParser
 
             //Check if this matches a snitch entry from the /jalist command (this is less quick than above)
             if (tryParseJalistMsg(msg))
+            {
+                event.setCanceled(true); // do not spam the chat
                 return;
+            }
         }
 
         //Check if this matches the snitch alert message (slowest of all of these)
