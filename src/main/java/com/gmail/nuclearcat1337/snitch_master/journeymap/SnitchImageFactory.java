@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
  */
 public class SnitchImageFactory
 {
-    private static final String SNITCH_FORMAT_STRING = "Group: {0}, Name: {1}, List: {2}";
+    private static final String SNITCH_FORMAT_STRING = "Group: {0}\nName: {1}\nList: {2}";
 
     /**
      * Returns an ImageOverlay object used to display the provided Snitch on JourneyMap (both on minimap and on the fullscreen map)
