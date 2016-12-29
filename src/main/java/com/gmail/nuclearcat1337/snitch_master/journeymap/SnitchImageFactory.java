@@ -47,7 +47,6 @@ public class SnitchImageFactory
 
             ImageOverlay overlay = new ImageOverlay(SnitchMaster.MODID,displayID,nw,se,image);
 
-            overlay.getImage().setOpacity(0.5F);
             overlay.setTitle(SNITCH_FORMAT_STRING.replace("{0}",snitch.getGroupName()).replace("{1}",snitch.getSnitchName()).replace("{2}",listName));
 
             return overlay;
@@ -61,13 +60,19 @@ public class SnitchImageFactory
      */
     static BufferedImage createSnitchField(float red, float green, float blue)
     {
-        int length = (Snitch.SNITCH_RADIUS*2)+1;
-        BufferedImage bufferedImage = new BufferedImage(length, length, BufferedImage.TYPE_INT_ARGB);
+        int snitchLength = (Snitch.SNITCH_RADIUS*2)+1;
+        // oversampling to make the image less blurry
+        int blockPixels = 8;
+        int imgLength = snitchLength * blockPixels;
+        BufferedImage bufferedImage = new BufferedImage(imgLength, imgLength, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = bufferedImage.createGraphics();
 
-        // Garish background
-        g.setColor(new java.awt.Color(red,green,blue));
-        g.fillRect(0, 0, length, length);
+        g.setColor(new java.awt.Color(red,green,blue, .5f));
+        g.fillRect(0, 0, imgLength, imgLength);
+        g.setStroke(new BasicStroke(blockPixels*2 / 2));
+        g.drawRect(0, 0, imgLength, imgLength);
+        int centerBlockOffset = snitchLength / 2 * blockPixels;
+        g.fillRect(centerBlockOffset, centerBlockOffset, blockPixels, blockPixels);
 
         // Done
         g.dispose();
