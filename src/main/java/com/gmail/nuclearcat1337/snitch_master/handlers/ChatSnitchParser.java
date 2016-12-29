@@ -26,13 +26,13 @@ import java.util.regex.Pattern;
 public class ChatSnitchParser
 {
     private static final Pattern jaListPattern = Pattern.compile("\\s*World: (\\S*)\\sLocation: \\[([-\\d]+) ([-\\d]+) ([-\\d]+)\\]\\sHours to cull: ([-\\d]*)\\sGroup: (\\S*)\\sName: (\\S*)\\s*", Pattern.MULTILINE);
-    private static final Pattern snitchAlertPattern = Pattern.compile("\\s*\\*\\s*([^\\s]*)\\s\\b(?:entered snitch at|logged out in snitch at|logged in to snitch at)\\b\\s*([^\\s]*)\\s\\[([^\\s]*)\\s([-\\d]*)\\s([-\\d]*)\\s([-\\d]*)\\]");
+    private static final Pattern snitchAlertPattern = Pattern.compile("\\s*\\*\\s*([^\\s]*)\\s\\b(entered snitch at|logged out in snitch at|logged in to snitch at)\\b\\s*([^\\s]*)\\s\\[([^\\s]*)\\s([-\\d]*)\\s([-\\d]*)\\s([-\\d]*)\\]");
 
     private static final String[] resetSequences = {"Unknown command"," is empty", "You do not own any snitches nearby!"};
     private static final String tpsMessage = "TPS from last 1m, 5m, 15m:";
 
     private final SnitchMaster snitchMaster;
-    private final List<IAlertRecipient> IAlertRecipients;
+    private final List<IAlertRecipient> alertRecipients;
 
     private int jaListIndex = 1;
     private boolean updatingSnitchList = false;
@@ -44,7 +44,7 @@ public class ChatSnitchParser
     public ChatSnitchParser(SnitchMaster api)
     {
         this.snitchMaster = api;
-        IAlertRecipients = new ArrayList<>();
+        alertRecipients = new ArrayList<>();
     }
 
     /**
@@ -52,7 +52,7 @@ public class ChatSnitchParser
      */
     public void addAlertRecipient(IAlertRecipient recipient)
     {
-        this.IAlertRecipients.add(recipient);
+        this.alertRecipients.add(recipient);
     }
 
     @SubscribeEvent
@@ -98,7 +98,7 @@ public class ChatSnitchParser
 
         //Build the snitch alert and send it to all the recipients
         SnitchAlert alert = buildSnitchAlert(matcher, msg);
-        for (IAlertRecipient recipient : IAlertRecipients)
+        for (IAlertRecipient recipient : alertRecipients)
         {
             recipient.receiveSnitchAlert(alert);
         }
@@ -275,12 +275,13 @@ public class ChatSnitchParser
     private static SnitchAlert buildSnitchAlert(Matcher matcher, ITextComponent message)
     {
         String playerName = matcher.group(1);
-        String snitchName = matcher.group(2);
-        String worldName = matcher.group(3);
-        int x = Integer.parseInt(matcher.group(4));
-        int y = Integer.parseInt(matcher.group(5));
-        int z = Integer.parseInt(matcher.group(6));
-        return new SnitchAlert(playerName,x,y,z,worldName,message);
+        String activity = matcher.group(2);
+        String snitchName = matcher.group(3);
+        String worldName = matcher.group(4);
+        int x = Integer.parseInt(matcher.group(5));
+        int y = Integer.parseInt(matcher.group(6));
+        int z = Integer.parseInt(matcher.group(7));
+        return new SnitchAlert(playerName, x, y, z, activity, snitchName, worldName, message);
     }
 
     private static boolean containsAny(String message, String[] tokens)
