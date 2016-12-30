@@ -72,4 +72,10 @@ public class Location implements ILocation
         result = 31 * result + world.hashCode();
         return result;
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format("[%d %d %d]", x, y, z);
+    }
 }

@@ -8,7 +8,9 @@ import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -87,21 +89,36 @@ public class ChatSnitchParser
                 return;
         }
 
-        //If there are no alert recipients then don't even bother checking if its a snitch alert
-        if (IAlertRecipients.isEmpty())  //Sometimes an optimization because it avoids building the alert object
-            return;
-
         //Check if this matches the snitch alert message (slowest of all of these)
         Matcher matcher = snitchAlertPattern.matcher(msgText);
         if (!matcher.matches())
-            return;
+            return; // this was the last kind of message we check
 
         //Build the snitch alert and send it to all the recipients
         SnitchAlert alert = buildSnitchAlert(matcher, msg);
+
+        if (alertRecipients.isEmpty())
+        {
+            // by default, move the coordinates into hovertext
+            String snitchLocation = alert.getLocation().toString();
+            Style aqua = new Style().setColor(TextFormatting.AQUA);
+            HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(snitchLocation));
+            ITextComponent snitchNameComponent = new TextComponentString(alert.getSnitchName())
+                    .setStyle(new Style().setHoverEvent(hover));
+            String visibleText = String.format("%s %s ", alert.getPlayerName(), alert.getActivity());
+            ITextComponent newMessage = new TextComponentString(visibleText)
+                    .setStyle(aqua)
+                    .appendSibling(snitchNameComponent);
+
+            snitchMaster.logger.info("<Snitch location converted to hovertext> " + alert.getSnitchName() + " " + snitchLocation);
+
+            alert.setRawMessage(newMessage);
+        }
         for (IAlertRecipient recipient : alertRecipients)
         {
             recipient.receiveSnitchAlert(alert);
         }
+
         //Set the alert's message to whatever the final message is from the alert "event"
         event.setMessage(alert.getRawMessage());
     }
