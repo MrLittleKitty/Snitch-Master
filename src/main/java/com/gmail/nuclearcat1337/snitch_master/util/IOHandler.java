@@ -22,8 +22,8 @@ public class IOHandler
     private static final String modSnitchesFile = modDataFolder+"/Snitches.csv";
     private static final String modSnitchListsFile = modDataFolder+"/SnitchLists.csv";
 
-    private static boolean savingSnitches = false;
-    private static boolean savingSnitchLists = false;
+//    private static boolean savingSnitches = false;
+//    private static boolean savingSnitchLists = false;
 
     public static void prepareFiles()
     {
@@ -34,9 +34,18 @@ public class IOHandler
 
     public static File getSettingsFile()
     {
-        File file = new File(modSnitchListsFile);
+        File file = new File(modSettingsFile);
         if(file.exists())
-            file.mkdir();
+        {
+            try
+            {
+                file.createNewFile();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
         return file;
     }
 

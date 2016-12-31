@@ -7,6 +7,7 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
+import com.gmail.nuclearcat1337.snitch_master.util.ValueParser;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -15,18 +16,19 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
  * Created by Mr_Little_Kitty on 6/25/2016.
  * The main class for the SnitchMaster mod.
  */
-@Mod(modid = SnitchMaster.MODID, name = SnitchMaster.MODNAME, version = SnitchMaster.MODVERSION)
-public class SnitchMaster// implements SnitchMasterAPI
+@Mod(modid = SnitchMaster.MODID, name = SnitchMaster.MODNAME, version = SnitchMaster.MODVERSION, guiFactory = "com.gmail.nuclearcat1337.snitch_master.gui.ConfigGuiFactory")
+public class SnitchMaster
 {
     public static final String MODID = "snitchmaster";
     public static final String MODNAME = "Snitch Master";
-    public static final String MODVERSION = "snapshot";
+    public static final String MODVERSION = "1.0.8";
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     /**
@@ -45,14 +47,13 @@ public class SnitchMaster// implements SnitchMasterAPI
      */
     public static SnitchMaster instance;
 
+    private Settings settings;
+
     private ChatSnitchParser chatSnitchParser;
     private WorldInfoListener worldInfoListener;
 
     private SnitchLists snitchLists;
     private LocatableObjectList<Snitch> snitches;
-
-    //private static final String settingsPath =  mc.mcDataDir.getAbsolutePath()+"/mods/Snitch-Master/settings.txt";
-    //private Settings snitchMasterSettings = null;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -82,6 +83,8 @@ public class SnitchMaster// implements SnitchMasterAPI
 
         FMLCommonHandler.instance().bus().register(new KeyHandler(this));
 
+        chatSnitchParser.addAlertRecipient(new QuietTimeHandler(getSettings()));
+
         try
         {
             IOHandler.loadSnitchLists(this);
@@ -97,10 +100,18 @@ public class SnitchMaster// implements SnitchMasterAPI
 
     private void initializeSettings()
     {
-        //snitchMasterSettings = new Settings(settingsPath,new ObjectParser());
-        //snitchMasterSettings.loadSettings();
+        settings = new Settings(IOHandler.getSettingsFile(),new ObjectParser());
+        settings.loadSettings();
 
-        //TODO---Make sure we set all the defaults for the settings here
+        settings.setValueIfNotSet(Settings.QUIET_TIME_KEY, Boolean.FALSE);
+        settings.setValueIfNotSet(Settings.CHAT_SPAM_KEY, Settings.ChatSpamState.ON);
+
+        settings.saveSettings();
+    }
+
+    public Settings getSettings()
+    {
+        return settings;
     }
 
     /**
@@ -195,12 +206,20 @@ public class SnitchMaster// implements SnitchMasterAPI
             snitch.sortSnitchLists();
     }
 
-//    private static class ObjectParser implements ValueParser
-//    {
-//        @Override
-//        public Object parse(String key, String value)
-//        {
-//            return null;
-//        }
-//    }
+    private static class ObjectParser implements ValueParser
+    {
+//        settings.setValueIfNotSet("quiet-time", Boolean.FALSE.toString());
+//        settings.setValueIfNotSet("chat-spam", 1);
+
+        @Override
+        public Object parse(String key, String value)
+        {
+            if(key.equalsIgnoreCase(Settings.QUIET_TIME_KEY))
+                return Boolean.parseBoolean(value);
+            else if(key.equalsIgnoreCase(Settings.CHAT_SPAM_KEY))
+                return Settings.ChatSpamState.valueOf(value);
+
+            return null;
+        }
+    }
 }

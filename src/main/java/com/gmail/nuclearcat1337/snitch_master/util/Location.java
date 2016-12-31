@@ -76,6 +76,6 @@ public class Location implements ILocation
     @Override
     public String toString()
     {
-        return String.format("[%d %d %d]", x, y, z);
+        return String.format("[%s %d %d %d]", world, x, y, z);
     }
 }

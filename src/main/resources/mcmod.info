@@ -3,7 +3,7 @@
   "modid": "snitchmaster",
   "name": "Snitch Master",
   "description": "A mod that handles JukeAlert Snitches",
-  "version": "snapshot",
+  "version": "1.0.8",
   "mcversion": "1.10.2",
   "url": "https://github.com/MrLittleKitty/Snitch-Master",
   "updateUrl": "",

@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.handlers;
 
+import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.IAlertRecipient;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchAlert;
@@ -81,13 +82,17 @@ public class ChatSnitchParser
             if (containsAny(msgText, resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
             {
                 resetUpdatingSnitchList(true);
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] Finished full snitch update"));
                 return;
             }
 
             //Check if this matches a snitch entry from the /jalist command (this is less quick than above)
             if (tryParseJalistMsg(msg))
             {
-                event.setCanceled(true); // do not spam the chat
+                //If they have it set to not spam the chat then cancel the chat message
+                Settings.ChatSpamState state = (Settings.ChatSpamState) snitchMaster.getSettings().getValue(Settings.CHAT_SPAM_KEY);
+                if(state == Settings.ChatSpamState.OFF || state == Settings.ChatSpamState.PAGENUMBERS)
+                    event.setCanceled(true);
                 return;
             }
         }
@@ -100,23 +105,6 @@ public class ChatSnitchParser
         //Build the snitch alert and send it to all the recipients
         SnitchAlert alert = buildSnitchAlert(matcher, msg);
 
-        if (alertRecipients.isEmpty())
-        {
-            // by default, move the coordinates into hovertext
-            String snitchLocation = alert.getLocation().toString();
-            Style aqua = new Style().setColor(TextFormatting.AQUA);
-            HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(snitchLocation));
-            ITextComponent snitchNameComponent = new TextComponentString(alert.getSnitchName())
-                    .setStyle(new Style().setHoverEvent(hover));
-            String visibleText = String.format("%s %s ", alert.getPlayerName(), alert.getActivity());
-            ITextComponent newMessage = new TextComponentString(visibleText)
-                    .setStyle(aqua)
-                    .appendSibling(snitchNameComponent);
-
-            snitchMaster.logger.info("<Snitch location converted to hovertext> " + alert.getSnitchName() + " " + snitchLocation);
-
-            alert.setRawMessage(newMessage);
-        }
         for (IAlertRecipient recipient : alertRecipients)
         {
             recipient.receiveSnitchAlert(alert);
@@ -143,8 +131,6 @@ public class ChatSnitchParser
             if (snitchRows.isEmpty())
                 return false;
 
-//            if (!snitchListComponent.getUnformattedComponentText().startsWith("§f Snitch List for "))
-//                return false;
         } catch (IndexOutOfBoundsException e) {
             return false;
         } catch (NullPointerException e) {
@@ -213,6 +199,9 @@ public class ChatSnitchParser
                     Minecraft.getMinecraft().thePlayer.sendChatMessage("/jalist " + jaListIndex);
                     jaListIndex++;
                     nextUpdate = System.currentTimeMillis() + (long) (waitTime * 1000);
+
+                    if(((Settings.ChatSpamState)snitchMaster.getSettings().getValue(Settings.CHAT_SPAM_KEY)) == Settings.ChatSpamState.PAGENUMBERS)
+                        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] Parsed snitches from /jalist "+(jaListIndex-1)));
                 }
                 else
                     resetUpdatingSnitchList(true);
