@@ -46,22 +46,22 @@ public class SnitchRenderer
     @SubscribeEvent
     public void renderSnitches(RenderWorldLastEvent event)
     {
-        for(Snitch snitch : snitchMaster.getSnitches().getItemsForWorld(snitchMaster.getCurrentWorld()))
+        for (Snitch snitch : snitchMaster.getSnitches().getItemsForWorld(snitchMaster.getCurrentWorld()))
         {
             Color renderColor = null;
-            for(SnitchList list : snitch.getAttachedSnitchLists())
+            for (SnitchList list : snitch.getAttachedSnitchLists())
             {
-                if(!list.shouldRenderSnitches())
+                if (!list.shouldRenderSnitches())
                     continue;
 
                 renderColor = list.getListColor();
                 break;
             }
 
-            if(renderColor != null)
+            if (renderColor != null)
             {
                 ILocation location = snitch.getLocation();
-                double distanceSquared = GeneralUtils.DistanceSquared(location.getX(), location.getZ(), (int)mc.thePlayer.posX, (int)mc.thePlayer.posZ);
+                double distanceSquared = GeneralUtils.DistanceSquared(location.getX(), location.getZ(), (int) mc.thePlayer.posX, (int) mc.thePlayer.posZ);
 
                 if (distanceSquared < BLOCK_RENDER_DISTANCE * BLOCK_RENDER_DISTANCE)
                 {
@@ -89,9 +89,11 @@ public class SnitchRenderer
         double renderPosZ = (float) (mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ)
                 * partialTicks);
 
+        GL11.glPushMatrix();
+
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glLineWidth(5.0F);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        //GL11.glDisable(GL11.GL_LIGHTING);
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);
@@ -100,13 +102,12 @@ public class SnitchRenderer
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.09F);
         GL11.glDepthMask(false);
 
-        GL11.glPushMatrix();
         double px = -(renderPosX - x);
         double py = -(renderPosY - y);
         double pz = -(renderPosZ - z);
 
-        double max = radius +.99D; //.99
-        double min = radius - .01D;//-.01
+        double max = radius + 1.01D;   // +.99D; //.99
+        double min = radius + .01D;    // - .01D;//-.01
 
         if(radius == 0)
         {
@@ -115,7 +116,6 @@ public class SnitchRenderer
         }
 
         AxisAlignedBB bb = new AxisAlignedBB(px - min, py - min, pz - min, px + max, py + max, pz + max);
-        //AxisAlignedBB bb = new AxisAlignedBB(px - min, py - max, pz - min, px + max, py + min, pz + max);
 
         GL11.glColor4d(color.getRed(),color.getGreen(),color.getBlue(),outlineAlpha);
 
@@ -124,14 +124,15 @@ public class SnitchRenderer
         GL11.glColor4d(color.getRed(),color.getGreen(),color.getBlue(),alpha);
 
         drawBoundingBoxQuads(bb);
-        GL11.glPopMatrix();
 
         GL11.glDepthMask(true);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL13.GL_MULTISAMPLE);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        //GL11.glEnable(GL11.GL_LIGHTING);
+
+        GL11.glPopMatrix();
     }
 
     private static final VertexFormat format = DefaultVertexFormats.POSITION;

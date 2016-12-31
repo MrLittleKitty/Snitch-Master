@@ -11,14 +11,24 @@ import java.util.Map;
  */
 public class Settings
 {
-    private final String filePath;
+    public enum ChatSpamState
+    {
+        ON,
+        OFF,
+        PAGENUMBERS;
+    }
+
+    public static final String QUIET_TIME_KEY = "quiet-time";
+    public static final String CHAT_SPAM_KEY = "chat-spam";
+
+    private final File file;
     private final ValueParser parser;
 
     private final HashMap<String,Object> values;
 
-    public Settings(String filePath, ValueParser parser)
+    public Settings(File file, ValueParser parser)
     {
-        this.filePath = filePath;
+        this.file = file;
         this.parser = parser;
         values = new HashMap<>();
     }
@@ -41,8 +51,6 @@ public class Settings
 
     public void loadSettings()
     {
-        values.clear();
-        File file = new File(filePath);
         if(file.exists())
         {
             try
@@ -70,8 +78,6 @@ public class Settings
 
     public void saveSettings()
     {
-        //TODO---Need to create the folder path before the file can be created
-        File file = new File(filePath);
         BufferedWriter writer = null;
         try
         {

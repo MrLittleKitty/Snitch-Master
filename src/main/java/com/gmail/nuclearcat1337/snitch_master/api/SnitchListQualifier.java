@@ -13,6 +13,9 @@ public class SnitchListQualifier
     private static final String GROUP_TOKEN = "group";
     private static final String NAME_TOKEN = "name";
     private static final String ORIGIN_TOKEN = "origin";
+    private static final String X_TOKEN = "x";
+    private static final String Y_TOKEN = "y";
+    private static final String Z_TOKEN = "z";
 
     private static final String AND_OPERATOR = "&&";
     private static final String OR_OPERATOR = "||";
@@ -174,6 +177,7 @@ public class SnitchListQualifier
 
     private static boolean checkTokens(String left, String right, String operator)
     {
+        //Check if the left side is either a string variable or a string literal
         if(isStringLiteral(left) || isStringVariable(left))
         {
             //If the operator is a not a valid string operator then throw an error
@@ -186,17 +190,25 @@ public class SnitchListQualifier
 
             return true;
         }
-        else if(isDoubleVariable(left) || isNumberLiteral(left))
+        else //If it wasnt any type of string then it is some type of number operation (or just invalid syntax)
         {
-            //Is the operator is not valid for doubles then throw an error
-            if(!isComparisonToken(operator))
-                return false;
+            //I guess right here is where im taking a stance that we wont allow things like: 100 == 100
+            if(isDoubleVariable(left) || isDoubleVariable(right))
+            {
+                //Is the operator is not valid for doubles then throw an error
+                if(!isComparisonToken(operator))
+                    return false;
 
-            //If the right hand operand is not a double operand then throw an error
-            if(!isDoubleVariable(right) && !isNumberLiteral(right))
-                return false;
+               return (isDoubleVariable(left) || isDoubleLiteral(left)) && (isDoubleVariable(right) || isDoubleLiteral(right));
+            }
+            else if(isIntegerVariable(left) || isIntegerVariable(right))
+            {
+                //Is the operator is not valid for doubles then throw an error
+                if(!isComparisonToken(operator))
+                    return false;
 
-            return true;
+                return (isIntegerVariable(left) || isIntegerLiteral(left)) && (isIntegerVariable(right) || isIntegerLiteral(right));
+            }
         }
         return false;
     }
@@ -215,17 +227,30 @@ public class SnitchListQualifier
 
             return evaluateStringExpression(getStringValue(left,snitch),getStringValue(right,snitch),operator);
         }
-        else if(isDoubleVariable(left) || isNumberLiteral(left))
+        else
         {
-            //Is the operator is not valid for doubles then throw an error
-            if(!isComparisonToken(operator))
-                throw new Exception("Syntax error at expression: "+left+" "+operator+" "+right);
+            if(isDoubleVariable(left) || isDoubleVariable(right))
+            {
+                //Is the operator is not valid for doubles then throw an error
+                if(!isComparisonToken(operator))
+                    throw new Exception("Syntax error at expression: "+left+" "+operator+" "+right);
 
-            //If the right hand operand is not a double operand then throw an error
-            if(!isDoubleVariable(right) && !isNumberLiteral(right))
-                throw new Exception("Syntax error at expression: "+left+" "+operator+" "+right);
+                if((isDoubleVariable(left) || isDoubleLiteral(left)) && (isDoubleVariable(right) || isDoubleLiteral(right)))
+                    return evaluateDoubleComparisonExpression(getDoubleValue(left,snitch),getDoubleValue(right,snitch),operator);
 
-            return evaluateComparisonExpression(getDoubleValue(left,snitch),getDoubleValue(right,snitch),operator);
+                throw new Exception("Syntax error at expression: "+left+" "+operator+" "+right);
+            }
+            else if(isIntegerVariable(left) || isIntegerVariable(right))
+            {
+                //Is the operator is not valid for doubles then throw an error
+                if(!isComparisonToken(operator))
+                    throw new Exception("Syntax error at expression: "+left+" "+operator+" "+right);
+
+                if((isIntegerVariable(left) || isIntegerLiteral(left)) && (isIntegerVariable(right) || isIntegerLiteral(right)))
+                    return evaluateIntegerComparisonExpression(getIntegerValue(left,snitch),getIntegerValue(right,snitch),operator);
+
+                throw new Exception("Syntax error at expression: "+left+" "+operator+" "+right);
+            }
         }
         throw new Exception("Syntax error: Not valid operand types for expression: "+left+" "+operator+" ");
     }
@@ -266,10 +291,24 @@ public class SnitchListQualifier
     {
         if(token.equalsIgnoreCase(CULL_TIME_TOKEN))
             return snitch.getCullTime();
-        else if(isNumberLiteral(token))
+        else if(isDoubleLiteral(token))
             return Double.parseDouble(token);
         else
             throw new Exception("Syntax error: Token "+token+" is not a valid double value");
+    }
+
+    private static int getIntegerValue(String token, Snitch snitch) throws Exception
+    {
+        if(token.equalsIgnoreCase(X_TOKEN))
+            return snitch.getLocation().getX();
+        else if(token.equalsIgnoreCase(Y_TOKEN))
+            return snitch.getLocation().getY();
+        else if(token.equalsIgnoreCase(Z_TOKEN))
+            return snitch.getLocation().getZ();
+        else if(isIntegerLiteral(token))
+            return Integer.parseInt(token);
+        else
+            throw new Exception("Syntax error: Token "+token+" is not a valid integer value");
     }
 
     private static String getStringValue(String token, Snitch snitch) throws Exception
@@ -288,7 +327,20 @@ public class SnitchListQualifier
             throw new Exception("Syntax error: Token "+token+" is not a valid String value");
     }
 
-    private static boolean isNumberLiteral(String token)
+    private static boolean isIntegerLiteral(String token)
+    {
+        try
+        {
+            Integer.parseInt(token);
+            return true;
+        }
+        catch(NumberFormatException e)
+        {
+            return false;
+        }
+    }
+
+    private static boolean isDoubleLiteral(String token)
     {
         try
         {
@@ -332,6 +384,11 @@ public class SnitchListQualifier
         return  token.equalsIgnoreCase(CULL_TIME_TOKEN);
     }
 
+    private static boolean isIntegerVariable(String token)
+    {
+        return token.equalsIgnoreCase(X_TOKEN) || token.equalsIgnoreCase(Y_TOKEN) || token.equalsIgnoreCase(Z_TOKEN);
+    }
+
     private static boolean isComparisonToken(String token)
     {
         return  token.equals(EQUAL_OPERATOR) ||
@@ -356,7 +413,24 @@ public class SnitchListQualifier
         else throw new Exception("Error doing String comparison on expression: "+one+" "+operator+" "+two);
     }
 
-    private static boolean evaluateComparisonExpression(double one, double two, String operator) throws Exception
+    private static boolean evaluateIntegerComparisonExpression(int one, int two, String operator) throws Exception
+    {
+        if(operator.equals(EQUAL_OPERATOR))
+            return one == two;
+        else if(operator.equals(NOT_EQUAL_OPERATOR))
+            return one != two;
+        else if(operator.equals(LESS_THAN_OR_EQUAL_OPERATOR))
+            return one <= two;
+        else if(operator.equals(GREATER_THAN_OR_EQUAL_OPERATOR))
+            return one >= two;
+        else if(operator.equals(LESS_THAN_OPERATOR))
+            return one < two;
+        else if(operator.equals(GREATER_THAN_OPERATOR))
+            return one > two;
+        else throw new Exception("Error doing integer comparison on expression: "+one+" "+operator+" "+two);
+    }
+
+    private static boolean evaluateDoubleComparisonExpression(double one, double two, String operator) throws Exception
     {
         if(operator.equals(EQUAL_OPERATOR))
             return one == two;

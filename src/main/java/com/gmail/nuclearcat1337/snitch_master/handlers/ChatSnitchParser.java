@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.handlers;
 
+import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.IAlertRecipient;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchAlert;
@@ -10,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -27,13 +29,13 @@ import java.util.regex.Pattern;
 public class ChatSnitchParser
 {
     private static final Pattern jaListPattern = Pattern.compile("\\s*World: (\\S*)\\sLocation: \\[([-\\d]+) ([-\\d]+) ([-\\d]+)\\]\\sHours to cull: ([-\\d]*)\\sGroup: (\\S*)\\sName: (\\S*)\\s*", Pattern.MULTILINE);
-    private static final Pattern snitchAlertPattern = Pattern.compile("\\s*\\*\\s*([^\\s]*)\\s\\b(?:entered snitch at|logged out in snitch at|logged in to snitch at)\\b\\s*([^\\s]*)\\s\\[([^\\s]*)\\s([-\\d]*)\\s([-\\d]*)\\s([-\\d]*)\\]");
+    private static final Pattern snitchAlertPattern = Pattern.compile("\\s*\\*\\s*([^\\s]*)\\s\\b(entered snitch at|logged out in snitch at|logged in to snitch at)\\b\\s*([^\\s]*)\\s\\[([^\\s]*)\\s([-\\d]*)\\s([-\\d]*)\\s([-\\d]*)\\]");
 
     private static final String[] resetSequences = {"Unknown command"," is empty", "You do not own any snitches nearby!"};
     private static final String tpsMessage = "TPS from last 1m, 5m, 15m:";
 
     private final SnitchMaster snitchMaster;
-    private final List<IAlertRecipient> IAlertRecipients;
+    private final List<IAlertRecipient> alertRecipients;
 
     private int jaListIndex = 1;
     private boolean updatingSnitchList = false;
@@ -45,7 +47,7 @@ public class ChatSnitchParser
     public ChatSnitchParser(SnitchMaster api)
     {
         this.snitchMaster = api;
-        IAlertRecipients = new ArrayList<>();
+        alertRecipients = new ArrayList<>();
     }
 
     /**
@@ -53,7 +55,7 @@ public class ChatSnitchParser
      */
     public void addAlertRecipient(IAlertRecipient recipient)
     {
-        this.IAlertRecipients.add(recipient);
+        this.alertRecipients.add(recipient);
     }
 
     @SubscribeEvent
@@ -80,29 +82,34 @@ public class ChatSnitchParser
             if (containsAny(msgText, resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
             {
                 resetUpdatingSnitchList(true);
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] Finished full snitch update"));
                 return;
             }
 
             //Check if this matches a snitch entry from the /jalist command (this is less quick than above)
             if (tryParseJalistMsg(msg))
+            {
+                //If they have it set to not spam the chat then cancel the chat message
+                Settings.ChatSpamState state = (Settings.ChatSpamState) snitchMaster.getSettings().getValue(Settings.CHAT_SPAM_KEY);
+                if(state == Settings.ChatSpamState.OFF || state == Settings.ChatSpamState.PAGENUMBERS)
+                    event.setCanceled(true);
                 return;
+            }
         }
-
-        //If there are no alert recipients then don't even bother checking if its a snitch alert
-        if (IAlertRecipients.isEmpty())  //Sometimes an optimization because it avoids building the alert object
-            return;
 
         //Check if this matches the snitch alert message (slowest of all of these)
         Matcher matcher = snitchAlertPattern.matcher(msgText);
         if (!matcher.matches())
-            return;
+            return; // this was the last kind of message we check
 
         //Build the snitch alert and send it to all the recipients
         SnitchAlert alert = buildSnitchAlert(matcher, msg);
-        for (IAlertRecipient recipient : IAlertRecipients)
+
+        for (IAlertRecipient recipient : alertRecipients)
         {
             recipient.receiveSnitchAlert(alert);
         }
+
         //Set the alert's message to whatever the final message is from the alert "event"
         event.setMessage(alert.getRawMessage());
     }
@@ -124,8 +131,6 @@ public class ChatSnitchParser
             if (snitchRows.isEmpty())
                 return false;
 
-//            if (!snitchListComponent.getUnformattedComponentText().startsWith("§f Snitch List for "))
-//                return false;
         } catch (IndexOutOfBoundsException e) {
             return false;
         } catch (NullPointerException e) {
@@ -194,6 +199,9 @@ public class ChatSnitchParser
                     Minecraft.getMinecraft().thePlayer.sendChatMessage("/jalist " + jaListIndex);
                     jaListIndex++;
                     nextUpdate = System.currentTimeMillis() + (long) (waitTime * 1000);
+
+                    if(((Settings.ChatSpamState)snitchMaster.getSettings().getValue(Settings.CHAT_SPAM_KEY)) == Settings.ChatSpamState.PAGENUMBERS)
+                        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] Parsed snitches from /jalist "+(jaListIndex-1)));
                 }
                 else
                     resetUpdatingSnitchList(true);
@@ -266,8 +274,8 @@ public class ChatSnitchParser
             //TODO----Make it save all the snitch lists (asynchronously) after its done updating from the /jalist command
             //if(updatingSnitchList)
             //snitchMaster.saveTheCorrectSnitchListOrSomething
-            IOHandler.asyncSaveSnitches(snitchMaster.getSnitches());
-            IOHandler.asyncSaveSnitchLists(snitchMaster.getSnitchLists());
+            IOHandler.saveSnitches(snitchMaster.getSnitches());
+            IOHandler.saveSnitchLists(snitchMaster.getSnitchLists());
         }
 
         updatingSnitchList = false;
@@ -276,12 +284,13 @@ public class ChatSnitchParser
     private static SnitchAlert buildSnitchAlert(Matcher matcher, ITextComponent message)
     {
         String playerName = matcher.group(1);
-        String snitchName = matcher.group(2);
-        String worldName = matcher.group(3);
-        int x = Integer.parseInt(matcher.group(4));
-        int y = Integer.parseInt(matcher.group(5));
-        int z = Integer.parseInt(matcher.group(6));
-        return new SnitchAlert(playerName,x,y,z,worldName,message);
+        String activity = matcher.group(2);
+        String snitchName = matcher.group(3);
+        String worldName = matcher.group(4);
+        int x = Integer.parseInt(matcher.group(5));
+        int y = Integer.parseInt(matcher.group(6));
+        int z = Integer.parseInt(matcher.group(7));
+        return new SnitchAlert(playerName, x, y, z, activity, snitchName, worldName, message);
     }
 
     private static boolean containsAny(String message, String[] tokens)

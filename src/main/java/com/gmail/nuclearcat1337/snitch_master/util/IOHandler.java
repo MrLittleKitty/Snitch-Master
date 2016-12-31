@@ -1,14 +1,14 @@
 package com.gmail.nuclearcat1337.snitch_master.util;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObjectList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 
 import java.io.*;
-import java.lang.reflect.Array;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by Mr_Little_Kitty on 6/26/2016.
@@ -22,8 +22,8 @@ public class IOHandler
     private static final String modSnitchesFile = modDataFolder+"/Snitches.csv";
     private static final String modSnitchListsFile = modDataFolder+"/SnitchLists.csv";
 
-    private static boolean savingSnitches = false;
-    private static boolean savingSnitchLists = false;
+//    private static boolean savingSnitches = false;
+//    private static boolean savingSnitchLists = false;
 
     public static void prepareFiles()
     {
@@ -34,13 +34,22 @@ public class IOHandler
 
     public static File getSettingsFile()
     {
-        File file = new File(modSnitchListsFile);
+        File file = new File(modSettingsFile);
         if(file.exists())
-            file.mkdir();
+        {
+            try
+            {
+                file.createNewFile();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
         return file;
     }
 
-    public static void asyncSaveSnitches(Iterable<Snitch> snitches)
+    public static void saveSnitches(Iterable<Snitch> snitches)
     {
         ArrayList<String> csvs = new ArrayList<>();
         for(Snitch snitch : snitches)
@@ -50,7 +59,7 @@ public class IOHandler
        new AsyncSaveToCSV(csvs,modSnitchesFile).run();
     }
 
-    public static void asyncSaveSnitchLists(Iterable<SnitchList> snitchLists)
+    public static void saveSnitchLists(Iterable<SnitchList> snitchLists)
     {
         ArrayList<String> csvs = new ArrayList<>();
         for(SnitchList list : snitchLists)
@@ -65,20 +74,14 @@ public class IOHandler
         File file = new File(modSnitchesFile);
         if(file.exists())
         {
-            try(FileReader reader = new FileReader(file);)
+            try (BufferedReader br = Files.newBufferedReader(Paths.get(modSnitchesFile), StandardCharsets.UTF_8))
             {
-                BufferedReader buf = new BufferedReader(reader);
-                String line;
-                while((line = buf.readLine()) != null)
+                for (String line = null; (line = br.readLine()) != null;)
                 {
-                    Snitch snitch = Snitch.GetSnitchFromCSV(line,snitchMaster);
+                    Snitch snitch = Snitch.GetSnitchFromCSV(line);
                     if(snitch != null)
                         snitchMaster.submitSnitch(snitch);
                 }
-            }
-            catch (FileNotFoundException e)
-            {
-                e.printStackTrace();
             }
         }
     }

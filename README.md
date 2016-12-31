@@ -18,8 +18,9 @@ Minecraft 1.10.2 --- [Release v1.0.3](https://github.com/MrLittleKitty/Snitch-Ma
 #Building the mod yourself
 1. Setup MinecraftForge
 2. Setup Gradle
-3. Run the build.gradle file from this repository
-4. Put the compiled .jar file into your mods folder
+3. Create the `libs` directory and place the JourneyMap Jar in there
+4. Run the build.gradle file from this repository
+5. The result can be found at `build/libs/*.jar`
 
 #Credits
 Thanks to all the contributors over at the [Snitch Visualizer Mod](https://github.com/Scuwr/Snitch-Visualizer) who started the idea of a mod to render snitches in-game.

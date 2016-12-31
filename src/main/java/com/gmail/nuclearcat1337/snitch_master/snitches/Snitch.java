@@ -305,8 +305,9 @@ public class Snitch extends LocatableObject<Snitch>
      * The given Snitch has NO attached SnitchLists.
      * Throws a NumberFormatException if the given CSV string has the wrong number of parameters.
      */
-    public static Snitch GetSnitchFromCSV(String csv, SnitchMaster snitchMaster)
+    public static Snitch GetSnitchFromCSV(String csv)
     {
+
         String[] args = csv.split(",");
         if(args.length != NUMBER_OF_CSV_PARAMS)
         {
@@ -314,19 +315,26 @@ public class Snitch extends LocatableObject<Snitch>
             return null;
         }
 
-        int index = 0;
+        try
+        {
+            int index = 0;
 
-        int x = Integer.parseInt(args[index++]);
-        int y = Integer.parseInt(args[index++]);
-        int z = Integer.parseInt(args[index++]);
-        String world = args[index++];
-        String origin = args[index++];
-        String groupName = args[index++];
-        String snitchName = args[index++];
-        double cullTime = Double.parseDouble(args[index++]);
+            int x = Integer.parseInt(args[index++]);
+            int y = Integer.parseInt(args[index++]);
+            int z = Integer.parseInt(args[index++]);
+            String world = args[index++];
+            String origin = args[index++];
+            String groupName = args[index++];
+            String snitchName = args[index++];
+            double cullTime = Double.parseDouble(args[index++]);
 
-        Snitch snitch = new Snitch(new Location(x,y,z,world),origin,cullTime,groupName,snitchName);
+            Snitch snitch = new Snitch(new Location(x, y, z, world), origin, cullTime, groupName, snitchName);
 
-        return snitch;
+            return snitch;
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
     }
 }
