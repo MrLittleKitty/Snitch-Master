@@ -1,9 +1,11 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.tables;
 
 import com.gmail.nuclearcat1337.snitch_master.util.Pair;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
+import net.minecraft.client.renderer.Tessellator;
 
 import java.util.*;
 
@@ -33,6 +35,8 @@ public class TableGui<T> extends GuiListExtended
 
         this.tableTop = tableTop;
         this.columns = columns;
+
+        this.setHasListHeader(true, (int) ( (float) mc.fontRendererObj.FONT_HEIGHT * 1.5));
 
         //Populate the entries list using the passed item
         entries = new ArrayList<>(items.size());
@@ -65,6 +69,24 @@ public class TableGui<T> extends GuiListExtended
     public T getItemForSlotIndex(int index)
     {
         return entries.get(index).item;
+    }
+
+    @Override
+    protected void drawListHeader(int xPosition, int yPosition, Tessellator tessalator)
+    {
+        String root = ChatFormatting.UNDERLINE + "" + ChatFormatting.BOLD;
+
+        int workingWidth = (width-xPosition);
+        int xPos = xPosition + (workingWidth/2) - (entryWidth/2);
+
+        for(TableColumn<T> col : columns)
+        {
+            String text = root + col.getColumnName();
+            int textWidth = mc.fontRendererObj.getStringWidth(text);
+            int drawXPos =  xPos + (col.getColumnWidth()/2) - (textWidth/2);
+            this.mc.fontRendererObj.drawString(text, drawXPos, yPosition, 16777215);
+            xPos += (col.getColumnWidth() + col.getRightSeparationDistance());
+        }
     }
 
     @Override

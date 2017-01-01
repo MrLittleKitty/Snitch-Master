@@ -78,7 +78,7 @@ public abstract class TableTopGui<T> extends GuiScreen
                 {
                     List<String> text = col.hover(tableGui.getItemForSlotIndex(index),xPos,yPos);
                     if(text != null && !text.isEmpty())
-                        drawHoveringText(text,xPos,yPos);
+                        drawHoveringText(text,mouseX,mouseY);
                     break;
                 }
             }

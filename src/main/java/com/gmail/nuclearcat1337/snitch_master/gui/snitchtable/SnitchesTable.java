@@ -16,21 +16,35 @@ import java.util.Collection;
 public class SnitchesTable extends TableTopGui<Snitch>
 {
     private static final int DONE_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH*3;
+    private final GuiScreen parentScreen;
 
     public SnitchesTable(GuiScreen parentScreen, Collection<Snitch> items, String title)
     {
         super(parentScreen, items, "View Snitches");
+        this.parentScreen = parentScreen;
     }
 
     @Override
     protected void initializeButtons()
     {
-        this.buttonList.clear();
+        buttonList.clear();
 
         int xPos = (this.width/2)- DONE_BUTTON_WIDTH - (GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
         int yPos = this.height - GuiConstants.STANDARD_BUTTON_HEIGHT - GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        this.buttonList.add(new GuiButton(1, xPos , yPos, DONE_BUTTON_WIDTH, 18, "Back"));
+        buttonList.add(new GuiButton(1, xPos , yPos, DONE_BUTTON_WIDTH, 18, "Back"));
+    }
+
+    @Override
+    public void actionPerformed(GuiButton button)
+    {
+        if (!button.enabled) return;
+        switch (button.id)
+        {
+            case 1: //Done
+                this.mc.displayGuiScreen(parentScreen);
+                break;
+        }
     }
 
     @Override
