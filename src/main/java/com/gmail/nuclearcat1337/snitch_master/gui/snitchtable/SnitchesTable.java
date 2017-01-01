@@ -51,8 +51,15 @@ public class SnitchesTable extends TableTopGui<Snitch>
     protected Collection<TableColumn<Snitch>> initializeColumns()
     {
         ArrayList<TableColumn<Snitch>> columns = new ArrayList<>();
-
         columns.add(new SnitchNameColumn());
+        columns.add(new SnitchGroupColumn());
+        //columns.add(new SnitchCullTimeColumn());
+
+        columns.add(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.X));
+        columns.add(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.Y));
+        columns.add(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.Z));
+
+        columns.add(new SnitchDistanceColumn());
         return columns;
     }
 }

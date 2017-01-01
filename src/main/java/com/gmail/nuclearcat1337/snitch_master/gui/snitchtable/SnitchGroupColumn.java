@@ -11,16 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Mr_Little_Kitty on 12/31/2016.
+ * Created by Mr_Little_Kitty on 1/1/2017.
  */
-public class SnitchNameColumn implements TableColumn<Snitch>
+public class SnitchGroupColumn implements TableColumn<Snitch>
 {
     private final Minecraft mc;
     private final int columnWidth;
-    public SnitchNameColumn()
+
+    public SnitchGroupColumn()
     {
         mc = Minecraft.getMinecraft();
-        columnWidth = mc.fontRendererObj.getStringWidth(Snitch.MAX_NAME_CHARACTERS);
+        columnWidth = mc.fontRendererObj.getStringWidth(Snitch.MAX_CT_GROUP_NAME_CHARACTERS);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     @Override
     public String getColumnName()
     {
-        return "Snitch Name";
+        return "Citadel Group";
     }
 
     @Override
@@ -50,7 +51,7 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     @Override
     public boolean doBoundsCheck()
     {
-        return true;
+        return false;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     @Override
     public void draw(Snitch snitch, int xPos, int yPos, int slotHeight, GuiButton[] buttons)
     {
-        String text = snitch.getSnitchName().isEmpty() ? "Undefined" : snitch.getSnitchName();
+        String text = snitch.getGroupName().isEmpty() ? "Undefined" : snitch.getGroupName();
         int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);
         int nameWidth = mc.fontRendererObj.getStringWidth(text);
         int namePos = xPos + (columnWidth /2) - (nameWidth/2);
@@ -78,11 +79,7 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     @Override
     public List<String> hover(Snitch snitch, int xPos, int yPos)
     {
-        List<String> temp = new ArrayList<>(snitch.getAttachedSnitchLists().size()+1);
-        temp.add("Snitch Lists:");
-        for(SnitchList list : snitch.getAttachedSnitchLists())
-            temp.add(list.getListName());
-        return temp;
+        return null;
     }
 
     @Override
