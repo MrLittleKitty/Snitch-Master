@@ -1,6 +1,7 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchtable.SnitchesTable;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -66,7 +67,8 @@ public class MainGui extends GuiScreen
                 this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true, "All Snitch Lists"));
                 break;
             case 3: //"View Snitches"
-                this.mc.displayGuiScreen(new EditSnitchesGui(this,snitchMaster.getSnitches(),"All Snitches"));
+                //this.mc.displayGuiScreen(new EditSnitchesGui(this,snitchMaster.getSnitches(),"All Snitches"));
+                this.mc.displayGuiScreen(new SnitchesTable(this,snitchMaster.getSnitches(),"All Snitches"));
                 break;
             case 4: //"Done"
                 this.mc.displayGuiScreen((GuiScreen) null);

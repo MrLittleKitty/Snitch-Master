@@ -25,7 +25,6 @@ public class EditSnitchesGui extends GuiScreen
     private SnitchGui snitchesGui;
 
     private static final int DONE_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH*3;
-    //private static final int NEW_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
 
     public EditSnitchesGui(GuiScreen guiscreen, Collection<Snitch> snitches, String title)
     {
