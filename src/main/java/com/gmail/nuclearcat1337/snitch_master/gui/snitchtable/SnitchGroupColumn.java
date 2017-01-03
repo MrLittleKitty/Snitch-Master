@@ -16,12 +16,10 @@ import java.util.List;
 public class SnitchGroupColumn implements TableColumn<Snitch>
 {
     private final Minecraft mc;
-    private final int columnWidth;
 
     public SnitchGroupColumn()
     {
         mc = Minecraft.getMinecraft();
-        columnWidth = mc.fontRendererObj.getStringWidth(Snitch.MAX_CT_GROUP_NAME_CHARACTERS);
     }
 
     @Override
@@ -34,18 +32,6 @@ public class SnitchGroupColumn implements TableColumn<Snitch>
     public String getColumnName()
     {
         return "Citadel Group";
-    }
-
-    @Override
-    public int getColumnWidth()
-    {
-        return columnWidth;
-    }
-
-    @Override
-    public int getRightSeparationDistance()
-    {
-        return GuiConstants.STANDARD_SEPARATION_DISTANCE;
     }
 
     @Override
@@ -67,13 +53,20 @@ public class SnitchGroupColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void draw(Snitch snitch, int xPos, int yPos, int slotHeight, GuiButton[] buttons)
+    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons)
     {
         String text = snitch.getGroupName().isEmpty() ? "Undefined" : snitch.getGroupName();
         int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);
         int nameWidth = mc.fontRendererObj.getStringWidth(text);
         int namePos = xPos + (columnWidth /2) - (nameWidth/2);
         mc.fontRendererObj.drawString(text, namePos ,yFinal, 16777215);
+    }
+
+    @Override
+    public int getDrawWidth(Snitch snitch)
+    {
+        String text = snitch.getGroupName().isEmpty() ? "Undefined" : snitch.getGroupName();
+        return mc.fontRendererObj.getStringWidth(text);
     }
 
     @Override

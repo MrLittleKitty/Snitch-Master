@@ -22,7 +22,6 @@ public class SnitchCoordinateColumn implements TableColumn<Snitch>
     }
 
     private final Minecraft mc;
-    private final int columnWidth;
     private final CoordinateType type;
 
     public SnitchCoordinateColumn(CoordinateType type)
@@ -30,11 +29,6 @@ public class SnitchCoordinateColumn implements TableColumn<Snitch>
         mc = Minecraft.getMinecraft();
 
         this.type = type;
-
-        if(type == CoordinateType.X || type == CoordinateType.Z)
-            columnWidth = mc.fontRendererObj.getStringWidth("WWWWW");
-        else
-            columnWidth = mc.fontRendererObj.getStringWidth("WWW");
     }
 
     @Override
@@ -46,24 +40,12 @@ public class SnitchCoordinateColumn implements TableColumn<Snitch>
     @Override
     public String getColumnName()
     {
-        if(type == CoordinateType.X)
+        if (type == CoordinateType.X)
             return "X";
-        else if(type == CoordinateType.Y)
+        else if (type == CoordinateType.Y)
             return "Y";
         else
             return "Z";
-    }
-
-    @Override
-    public int getColumnWidth()
-    {
-        return columnWidth;
-    }
-
-    @Override
-    public int getRightSeparationDistance()
-    {
-        return GuiConstants.STANDARD_SEPARATION_DISTANCE;
     }
 
     @Override
@@ -85,19 +67,20 @@ public class SnitchCoordinateColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void draw(Snitch snitch, int xPos, int yPos, int slotHeight, GuiButton[] buttons)
+    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons)
     {
-        String text;
-        if(type == CoordinateType.X)
-            text = ""+snitch.getLocation().getX();
-        else if(type == CoordinateType.Y)
-            text = ""+snitch.getLocation().getY();
-        else
-            text = ""+snitch.getLocation().getZ();
+        String text = ""+getCoordinate(snitch,type);
         int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);
         int nameWidth = mc.fontRendererObj.getStringWidth(text);
         int namePos = xPos + (columnWidth /2) - (nameWidth/2);
         mc.fontRendererObj.drawString(text, namePos ,yFinal, 16777215);
+    }
+
+    @Override
+    public int getDrawWidth(Snitch snitch)
+    {
+        String text = ""+getCoordinate(snitch,type);
+        return mc.fontRendererObj.getStringWidth(text);
     }
 
     @Override
@@ -112,5 +95,15 @@ public class SnitchCoordinateColumn implements TableColumn<Snitch>
     public int compare(Snitch o1, Snitch o2)
     {
         return 0;
+    }
+
+    private static int getCoordinate(Snitch snitch, CoordinateType type)
+    {
+        if(type == CoordinateType.X)
+            return snitch.getLocation().getX();
+        else if(type == CoordinateType.Z)
+            return snitch.getLocation().getZ();
+        else
+            return snitch.getLocation().getY();
     }
 }

@@ -18,12 +18,10 @@ import java.util.List;
 public class SnitchDistanceColumn implements TableColumn<Snitch>
 {
     private final Minecraft mc;
-    private final int columnWidth;
 
     public SnitchDistanceColumn()
     {
         mc = Minecraft.getMinecraft();
-        columnWidth = mc.fontRendererObj.getStringWidth("WWWWW");
     }
 
     @Override
@@ -36,18 +34,6 @@ public class SnitchDistanceColumn implements TableColumn<Snitch>
     public String getColumnName()
     {
         return "Distance";
-    }
-
-    @Override
-    public int getColumnWidth()
-    {
-        return columnWidth;
-    }
-
-    @Override
-    public int getRightSeparationDistance()
-    {
-        return GuiConstants.STANDARD_SEPARATION_DISTANCE;
     }
 
     @Override
@@ -69,7 +55,7 @@ public class SnitchDistanceColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void draw(Snitch snitch, int xPos, int yPos, int slotHeight, GuiButton[] buttons)
+    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons)
     {
         ILocation loc = snitch.getLocation();
         int distance = getDistanceFromPlayer(loc.getX(),loc.getY(),loc.getZ());
@@ -79,6 +65,15 @@ public class SnitchDistanceColumn implements TableColumn<Snitch>
         int nameWidth = mc.fontRendererObj.getStringWidth(text);
         int namePos = xPos + (columnWidth /2) - (nameWidth/2);
         mc.fontRendererObj.drawString(text, namePos ,yFinal, 16777215);
+    }
+
+    @Override
+    public int getDrawWidth(Snitch snitch)
+    {
+        ILocation loc = snitch.getLocation();
+        int distance = getDistanceFromPlayer(loc.getX(),loc.getY(),loc.getZ());
+        String text = ""+distance;
+        return mc.fontRendererObj.getStringWidth(text);
     }
 
     @Override

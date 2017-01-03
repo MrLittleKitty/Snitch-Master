@@ -18,12 +18,10 @@ public class SnitchCullTimeColumn implements TableColumn<Snitch>
 {
     private static final NumberFormat CULL_TIME_FORMAT = new DecimalFormat("#.000");
     private final Minecraft mc;
-    private final int columnWidth;
 
     public SnitchCullTimeColumn()
     {
         mc = Minecraft.getMinecraft();
-        columnWidth = mc.fontRendererObj.getStringWidth("WWW.WWWW");
     }
 
     @Override
@@ -36,18 +34,6 @@ public class SnitchCullTimeColumn implements TableColumn<Snitch>
     public String getColumnName()
     {
         return "Cull Time";
-    }
-
-    @Override
-    public int getColumnWidth()
-    {
-        return columnWidth;
-    }
-
-    @Override
-    public int getRightSeparationDistance()
-    {
-        return GuiConstants.STANDARD_SEPARATION_DISTANCE;
     }
 
     @Override
@@ -69,13 +55,20 @@ public class SnitchCullTimeColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void draw(Snitch snitch, int xPos, int yPos, int slotHeight, GuiButton[] buttons)
+    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons)
     {
         String text = SnitchMaster.CULL_TIME_ENABLED ? (Double.isNaN(snitch.getCullTime()) ? "Off" : CULL_TIME_FORMAT.format(snitch.getCullTime())) : "Off";
         int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);
         int nameWidth = mc.fontRendererObj.getStringWidth(text);
         int namePos = xPos + (columnWidth /2) - (nameWidth/2);
         mc.fontRendererObj.drawString(text, namePos ,yFinal, 16777215);
+    }
+
+    @Override
+    public int getDrawWidth(Snitch snitch)
+    {
+        String text = SnitchMaster.CULL_TIME_ENABLED ? (Double.isNaN(snitch.getCullTime()) ? "Off" : CULL_TIME_FORMAT.format(snitch.getCullTime())) : "Off";
+        return mc.fontRendererObj.getStringWidth(text);
     }
 
     @Override

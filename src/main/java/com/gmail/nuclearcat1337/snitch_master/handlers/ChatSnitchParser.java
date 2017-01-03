@@ -271,9 +271,6 @@ public class ChatSnitchParser
 
         if(save)
         {
-            //TODO----Make it save all the snitch lists (asynchronously) after its done updating from the /jalist command
-            //if(updatingSnitchList)
-            //snitchMaster.saveTheCorrectSnitchListOrSomething
             IOHandler.saveSnitches(snitchMaster.getSnitches());
             IOHandler.saveSnitchLists(snitchMaster.getSnitchLists());
         }

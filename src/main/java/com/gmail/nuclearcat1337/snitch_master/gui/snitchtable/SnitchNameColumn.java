@@ -16,11 +16,10 @@ import java.util.List;
 public class SnitchNameColumn implements TableColumn<Snitch>
 {
     private final Minecraft mc;
-    private final int columnWidth;
+
     public SnitchNameColumn()
     {
         mc = Minecraft.getMinecraft();
-        columnWidth = mc.fontRendererObj.getStringWidth(Snitch.MAX_NAME_CHARACTERS);
     }
 
     @Override
@@ -33,18 +32,6 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     public String getColumnName()
     {
         return "Snitch Name";
-    }
-
-    @Override
-    public int getColumnWidth()
-    {
-        return columnWidth;
-    }
-
-    @Override
-    public int getRightSeparationDistance()
-    {
-        return GuiConstants.STANDARD_SEPARATION_DISTANCE;
     }
 
     @Override
@@ -66,7 +53,7 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void draw(Snitch snitch, int xPos, int yPos, int slotHeight, GuiButton[] buttons)
+    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons)
     {
         String text = snitch.getSnitchName().isEmpty() ? "Undefined" : snitch.getSnitchName();
         int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);
@@ -74,6 +61,14 @@ public class SnitchNameColumn implements TableColumn<Snitch>
         int namePos = xPos + (columnWidth /2) - (nameWidth/2);
         mc.fontRendererObj.drawString(text, namePos ,yFinal, 16777215);
     }
+
+    @Override
+    public int getDrawWidth(Snitch snitch)
+    {
+        String text = snitch.getSnitchName().isEmpty() ? "Undefined" : snitch.getSnitchName();
+        return mc.fontRendererObj.getStringWidth(text);
+    }
+
 
     @Override
     public List<String> hover(Snitch snitch, int xPos, int yPos)

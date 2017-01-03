@@ -15,9 +15,9 @@ public interface TableColumn<T> extends Comparator<T>
     //Must be less than or equal to column width (this is also the header)
     String getColumnName();
 
-    int getColumnWidth();
+    //int getColumnWidth();
 
-    int getRightSeparationDistance();
+    //int getRightSeparationDistance();
 
     boolean doBoundsCheck();
 
@@ -25,7 +25,9 @@ public interface TableColumn<T> extends Comparator<T>
 
     void released(T item, int xPos, int yPos, GuiButton[] buttons);
 
-    void draw(T item, int xPos, int yPos, int slotHeight, GuiButton[] buttons);
+    void draw(T item, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons);
+
+    int getDrawWidth(T item);
 
     //Returns a list of strings to draw as hover text
     List<String> hover(T item, int xPos, int yPos);

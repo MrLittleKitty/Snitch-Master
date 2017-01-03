@@ -1,7 +1,9 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.tables;
 
+import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.util.Pair;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
@@ -14,9 +16,17 @@ import java.util.List;
  */
 public abstract class TableTopGui<T> extends GuiScreen
 {
-    private final GuiScreen parentScreen;
+    private static final int DONE_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH*3;
+
+    protected final GuiScreen parentScreen;
+    protected GuiButton doneButton;
+    protected GuiButton columnsButton;
+
     private Collection<T> items;
-    private ArrayList<TableColumn<T>> columnsToBoundsCheck;
+
+    private List<TableColumn<T>> allColumns;
+    private List<TableColumn<T>> renderColumns;
+    private List<TableColumn<T>> columnsToBoundsCheck;
 
     private final String title;
     private final int titleWidth;
@@ -31,26 +41,83 @@ public abstract class TableTopGui<T> extends GuiScreen
         this.titleWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(title);
     }
 
-    protected abstract void initializeButtons();
+    protected abstract void initializeButtons(int firstId);
 
-    protected abstract Collection<TableColumn<T>> initializeColumns();
+    protected abstract Collection<Pair<TableColumn<T>,Boolean>> initializeColumns();
 
     @Override
     public void initGui()
     {
-        Collection<TableColumn<T>> columns = initializeColumns();
-        tableGui = new TableGui<T>(this,items,columns);
+        Collection<Pair<TableColumn<T>,Boolean>> initialColumns = initializeColumns();
 
+        assert initialColumns != null && !initialColumns.isEmpty();
+
+        allColumns = new ArrayList<>();
+        renderColumns = new ArrayList<>();
         columnsToBoundsCheck = new ArrayList<>();
-        for(TableColumn<T> col : columns)
+
+        for(Pair<TableColumn<T>,Boolean> pair : initialColumns)
+        {
+            allColumns.add(pair.getOne());
+
+            if(pair.getTwo())
+            {
+                renderColumns.add(pair.getOne());
+
+                if(pair.getOne().doBoundsCheck())
+                    columnsToBoundsCheck.add(pair.getOne());
+            }
+        }
+
+        tableGui = new TableGui<T>(this,items,renderColumns);
+
+        buttonList.clear();
+
+        int xPos = (this.width/2)- DONE_BUTTON_WIDTH - (GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
+        int yPos = this.height - GuiConstants.STANDARD_BUTTON_HEIGHT - GuiConstants.STANDARD_SEPARATION_DISTANCE;
+
+        doneButton = new GuiButton(0, xPos , yPos, DONE_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Back");
+
+        int buttonWidth = mc.fontRendererObj.getStringWidth("--Columns--");
+        xPos -= ((GuiConstants.STANDARD_SEPARATION_DISTANCE*4) + buttonWidth);
+
+        columnsButton = new GuiButton(1, xPos, yPos, buttonWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "Columns");
+
+        buttonList.add(doneButton);
+        buttonList.add(columnsButton);
+
+        initializeButtons(2);
+
+        super.initGui();
+    }
+
+    public void setRenderColumns(List<TableColumn<T>> allColumns, List<TableColumn<T>> renderColumns)
+    {
+        //We need both columns lists so that the column order can be changed
+        this.allColumns = allColumns;
+        this.renderColumns = renderColumns;
+
+        columnsToBoundsCheck.clear();
+        for(TableColumn<T> col : renderColumns)
             if(col.doBoundsCheck())
                 columnsToBoundsCheck.add(col);
 
-        assert columns != null && !columns.isEmpty();
+        tableGui = new TableGui<T>(this,items,this.renderColumns);
+    }
 
-        initializeButtons();
-
-        super.initGui();
+    @Override
+    public void actionPerformed(GuiButton button)
+    {
+        if (!button.enabled) return;
+        switch (button.id)
+        {
+            case 0: //Done
+                this.mc.displayGuiScreen(parentScreen);
+                break;
+            case 1:
+                this.mc.displayGuiScreen(new TableColumnSelectorTop<T>(this,allColumns,renderColumns,"Select Columns"));
+                break;
+        }
     }
 
     @Override
@@ -68,29 +135,25 @@ public abstract class TableTopGui<T> extends GuiScreen
         //Draw the title
         mc.fontRendererObj.drawString(title, xPos ,yPos, 16777215);
 
-        int index = tableGui.getSlotIndexFromScreenCoords(mouseX,mouseY);
-        if(index >= 0)
+        if(mouseY >= tableGui.top && mouseY <= tableGui.bottom)
         {
-            for(TableColumn<T> col : columnsToBoundsCheck)
+            int index = tableGui.getSlotIndexFromScreenCoords(mouseX, mouseY);
+            if (index >= 0)
             {
-                Pair<Integer,Integer> bounds = tableGui.getBoundsForColumn(col);
-                if(mouseX >= bounds.getOne() && mouseX <= bounds.getTwo())
+                for (TableColumn<T> col : columnsToBoundsCheck)
                 {
-                    List<String> text = col.hover(tableGui.getItemForSlotIndex(index),xPos,yPos);
-                    if(text != null && !text.isEmpty())
-                        drawHoveringText(text,mouseX,mouseY);
-                    break;
+                    Pair<Integer, Integer> bounds = tableGui.getBoundsForColumn(col);
+                    if (mouseX >= bounds.getOne() && mouseX <= bounds.getTwo())
+                    {
+                        List<String> text = col.hover(tableGui.getItemForSlotIndex(index), xPos, yPos);
+                        if (text != null && !text.isEmpty())
+                            drawHoveringText(text, mouseX, mouseY);
+                        break;
+                    }
                 }
             }
         }
     }
-
-//    @Override
-//    public void drawHoveringText(List<String> text, int xPos, int yPos)
-//    {
-//        //We override this method with a public implementation so that it can be seen by the table GUI
-//        super.drawHoveringText(text,xPos,yPos);
-//    }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseEvent)

@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.tables;
 
+import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.util.Pair;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -14,13 +15,14 @@ import java.util.*;
  */
 public class TableGui<T> extends GuiListExtended
 {
-    private final TableTopGui<T> tableTop;
+    //private final TableTopGui<T> tableTop;
     private final int entryWidth;
 
     private Collection<TableColumn<T>> columns;
 
     private List<TableEntry> entries;
     private HashMap<TableColumn<T>,Pair<Integer,Integer>> columnBounds;
+    private HashMap<TableColumn<T>,Integer> columnWidths;
 
     private boolean setOffset = false;
 
@@ -33,29 +35,50 @@ public class TableGui<T> extends GuiListExtended
                 tableTop.height - 32,
                 20);
 
-        this.tableTop = tableTop;
+        //this.tableTop = tableTop;
         this.columns = columns;
 
         this.setHasListHeader(true, (int) ( (float) mc.fontRendererObj.FONT_HEIGHT * 1.5));
 
+        columnBounds = new HashMap<>(columns.size());
+        columnWidths = new HashMap<>(columns.size());
+
         //Populate the entries list using the passed item
         entries = new ArrayList<>(items.size());
         for(T item : items)
+        {
             entries.add(new TableEntry(item));
+            for(TableColumn<T> col : columns)
+            {
+                int width = col.getDrawWidth(item);
+                if(!columnWidths.containsKey(col))
+                    columnWidths.put(col,width);
+                else if(width > columnWidths.get(col))
+                    columnWidths.put(col,width);
+            }
+        }
+
+        String root = ChatFormatting.UNDERLINE + "" + ChatFormatting.BOLD;
+        for(TableColumn<T> col : columns)
+        {
+            int headerWidth = mc.fontRendererObj.getStringWidth(root + col.getColumnName());
+            if(!columnWidths.containsKey(col) || headerWidth > columnWidths.get(col))
+                columnWidths.put(col,headerWidth);
+        }
 
         //Calculate all the column bounds
-        columnBounds = new HashMap<>(columns.size());
+
         int totalWidth = 0;
 
         for(TableColumn<T> col : columns)
         {
             int leftBound = totalWidth;
-            totalWidth += col.getColumnWidth();
+            totalWidth += columnWidths.get(col);
 
             if(col.doBoundsCheck())
                 columnBounds.put(col,new Pair<>(leftBound,totalWidth));
 
-            totalWidth += col.getRightSeparationDistance();
+            totalWidth += GuiConstants.STANDARD_SEPARATION_DISTANCE;
         }
 
         entryWidth = totalWidth;
@@ -81,11 +104,12 @@ public class TableGui<T> extends GuiListExtended
 
         for(TableColumn<T> col : columns)
         {
+            int columnWidth = columnWidths.get(col);
             String text = root + col.getColumnName();
             int textWidth = mc.fontRendererObj.getStringWidth(text);
-            int drawXPos =  xPos + (col.getColumnWidth()/2) - (textWidth/2);
+            int drawXPos =  xPos + (columnWidth/2) - (textWidth/2);
             this.mc.fontRendererObj.drawString(text, drawXPos, yPosition, 16777215);
-            xPos += (col.getColumnWidth() + col.getRightSeparationDistance());
+            xPos += (columnWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
         }
     }
 
@@ -155,8 +179,9 @@ public class TableGui<T> extends GuiListExtended
 
             for(TableColumn<T> col : columns)
             {
-                col.draw(item,xPos,yPosition,slotHeight,buttons.get(col.getColumnName()));
-                xPos += (col.getColumnWidth() + col.getRightSeparationDistance());
+                int columnWidth = columnWidths.get(col);
+                col.draw(item,xPos,yPosition,columnWidth,slotHeight,buttons.get(col.getColumnName()));
+                xPos += (columnWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
             }
         }
 
