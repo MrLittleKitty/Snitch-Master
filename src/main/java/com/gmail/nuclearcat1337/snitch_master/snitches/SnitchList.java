@@ -106,6 +106,12 @@ public class SnitchList
         return listQualifier;
     }
 
+    @Override
+    public int hashCode()
+    {
+        return listName.hashCode();
+    }
+
     private static final SnitchListQualifier friendly = new SnitchListQualifier("origin == 'jalist'");
     //private static final SnitchListQualifier hostile = new SnitchListQualifier("qualifier == 'hostile'");
     private static final SnitchListQualifier neutral = new SnitchListQualifier("origin == 'manual'");

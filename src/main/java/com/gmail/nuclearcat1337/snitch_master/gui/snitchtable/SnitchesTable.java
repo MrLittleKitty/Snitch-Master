@@ -39,6 +39,8 @@ public class SnitchesTable extends TableTopGui<Snitch>
     protected Collection<Pair<TableColumn<Snitch>,Boolean>> initializeColumns()
     {
         ArrayList<Pair<TableColumn<Snitch>,Boolean>> columns = new ArrayList<>();
+        columns.add(packageValues(new SnitchRemoveColumn(snitchMaster),false));
+
         columns.add(packageValues(new SnitchNameColumn(),true));
         columns.add(packageValues(new SnitchGroupColumn(),true));
         columns.add(packageValues(new SnitchCullTimeColumn(),false));

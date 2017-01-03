@@ -89,6 +89,8 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
     {
         ArrayList<Pair<TableColumn<SnitchList>,Boolean>> columns = new ArrayList<>();
 
+        columns.add(packageValues(new SnitchListRemoveColumn(snitchMaster),false));
+
         columns.add(packageValues(new SnitchListControlsColumn(this),true));
         columns.add(packageValues(new SnitchListNameColumn(snitchMaster.getSnitchLists()),true));
 
