@@ -15,6 +15,8 @@ import java.util.*;
  */
 public class TableGui<T> extends GuiListExtended
 {
+    private static final int SEPARATION_DISTANCE = GuiConstants.STANDARD_SEPARATION_DISTANCE*2;
+
     private final TableTopGui<T> tableTop;
     private final int entryWidth;
 
@@ -78,7 +80,7 @@ public class TableGui<T> extends GuiListExtended
             if(col.doBoundsCheck())
                 columnBounds.put(col,new Pair<>(leftBound,totalWidth));
 
-            totalWidth += GuiConstants.STANDARD_SEPARATION_DISTANCE;
+            totalWidth += SEPARATION_DISTANCE;
         }
 
         entryWidth = totalWidth;
@@ -119,7 +121,7 @@ public class TableGui<T> extends GuiListExtended
             int textWidth = mc.fontRendererObj.getStringWidth(text);
             int drawXPos =  xPos + (columnWidth/2) - (textWidth/2);
             this.mc.fontRendererObj.drawString(text, drawXPos, yPosition, 16777215);
-            xPos += (columnWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
+            xPos += (columnWidth + SEPARATION_DISTANCE);
         }
     }
 
@@ -191,7 +193,7 @@ public class TableGui<T> extends GuiListExtended
             {
                 int columnWidth = columnWidths.get(col);
                 col.draw(item,xPos,yPosition,columnWidth,slotHeight,buttons.get(col.getColumnName()),slotIndex,mouseX,mouseY);
-                xPos += (columnWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
+                xPos += (columnWidth + SEPARATION_DISTANCE);
             }
         }
 

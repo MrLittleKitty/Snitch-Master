@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.snitchtable;
 
+import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
@@ -59,8 +60,15 @@ public class SnitchDistanceColumn implements TableColumn<Snitch>
     public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
     {
         ILocation loc = snitch.getLocation();
-        int distance = getDistanceFromPlayer(loc.getX(),loc.getY(),loc.getZ());
-        String text = ""+distance;
+
+        String text;
+        if(!SnitchMaster.instance.getCurrentWorld().equalsIgnoreCase(loc.getWorld()))
+            text = "NA";
+        else
+        {
+            int distance = getDistanceFromPlayer(loc.getX(), loc.getY(), loc.getZ());
+            text = "" + distance;
+        }
 
         int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);
         int nameWidth = mc.fontRendererObj.getStringWidth(text);
@@ -72,6 +80,10 @@ public class SnitchDistanceColumn implements TableColumn<Snitch>
     public int getDrawWidth(Snitch snitch)
     {
         ILocation loc = snitch.getLocation();
+
+        if(!SnitchMaster.instance.getCurrentWorld().equalsIgnoreCase(loc.getWorld()))
+            return mc.fontRendererObj.getStringWidth("NA");
+
         int distance = getDistanceFromPlayer(loc.getX(),loc.getY(),loc.getZ());
         String text = ""+distance;
         return mc.fontRendererObj.getStringWidth(text);

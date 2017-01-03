@@ -70,7 +70,7 @@ public class MainGui extends GuiScreen
                 break;
             case 3: //"View Snitches"
                 //this.mc.displayGuiScreen(new EditSnitchesGui(this,snitchMaster.getSnitches(),"All Snitches"));
-                this.mc.displayGuiScreen(new SnitchesTable(this,snitchMaster.getSnitches(),"All Snitches"));
+                this.mc.displayGuiScreen(new SnitchesTable(this,snitchMaster.getSnitches(),"All Snitches",snitchMaster));
                 break;
             case 4: //"Done"
                 this.mc.displayGuiScreen((GuiScreen) null);

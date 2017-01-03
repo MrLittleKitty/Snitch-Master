@@ -1,24 +1,21 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.snitchtable;
 
-import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Mr_Little_Kitty on 12/31/2016.
+ * Created by Mr_Little_Kitty on 1/3/2017.
  */
-public class SnitchNameColumn implements TableColumn<Snitch>
+public class SnitchWorldColumn implements TableColumn<Snitch>
 {
     private static Minecraft mc;
 
-    public SnitchNameColumn()
+    public SnitchWorldColumn()
     {
         mc = Minecraft.getMinecraft();
     }
@@ -32,7 +29,7 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     @Override
     public String getColumnName()
     {
-        return "Snitch Name";
+        return "World";
     }
 
     @Override
@@ -42,7 +39,7 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
 
     }
@@ -56,7 +53,7 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     @Override
     public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
     {
-        String text = snitch.getSnitchName().isEmpty() ? "Undefined" : snitch.getSnitchName();
+        String text = snitch.getLocation().getWorld();
         int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);
         int nameWidth = mc.fontRendererObj.getStringWidth(text);
         int namePos = xPos + (columnWidth /2) - (nameWidth/2);
@@ -66,7 +63,7 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     @Override
     public int getDrawWidth(Snitch snitch)
     {
-        String text = snitch.getSnitchName().isEmpty() ? "Undefined" : snitch.getSnitchName();
+        String text = snitch.getWorld();
         return mc.fontRendererObj.getStringWidth(text);
     }
 
@@ -74,12 +71,6 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     @Override
     public List<String> hover(Snitch snitch, int xPos, int yPos)
     {
-        //Were no longer going to show the attached snitch lists on hover. Instead we will have a button in a different column
-//        List<String> temp = new ArrayList<>(snitch.getAttachedSnitchLists().size()+1);
-//        temp.add("Snitch Lists:");
-//        for(SnitchList list : snitch.getAttachedSnitchLists())
-//            temp.add(list.getListName());
-//        return temp;
         return null;
     }
 
