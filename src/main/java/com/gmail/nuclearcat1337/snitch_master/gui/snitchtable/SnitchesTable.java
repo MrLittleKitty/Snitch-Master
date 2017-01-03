@@ -16,7 +16,7 @@ public class SnitchesTable extends TableTopGui<Snitch>
 {
     public SnitchesTable(GuiScreen parentScreen, Collection<Snitch> items, String title)
     {
-        super(parentScreen, items, "View Snitches");
+        super(parentScreen, items, title);
     }
 
     @Override

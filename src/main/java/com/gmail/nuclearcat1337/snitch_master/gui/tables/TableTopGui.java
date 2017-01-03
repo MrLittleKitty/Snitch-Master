@@ -91,6 +91,26 @@ public abstract class TableTopGui<T> extends GuiScreen
         super.initGui();
     }
 
+    protected Collection<T> getItems()
+    {
+        return items;
+    }
+
+    public int getTableSize()
+    {
+        return tableGui.getSize();
+    }
+
+    public T getTableItem(int tableIndex)
+    {
+        return tableGui.getItemForSlotIndex(tableIndex);
+    }
+
+    public void swapTableItems(int tableIndex, int nextTableIndex)
+    {
+        tableGui.swapItems(tableIndex,nextTableIndex);
+    }
+
     public void setRenderColumns(List<TableColumn<T>> allColumns, List<TableColumn<T>> renderColumns)
     {
         //We need both columns lists so that the column order can be changed

@@ -1,6 +1,7 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListsTable;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchtable.SnitchesTable;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -63,8 +64,9 @@ public class MainGui extends GuiScreen
                 this.mc.displayGuiScreen(new SettingsGui(this));
                 break;
             case 2: //"View Snitch Lists"
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true, "All Snitch Lists"));
+                this.mc.gameSettings.saveOptions(); //wtf? Why is this here? What does this do?
+                //this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true, "All Snitch Lists"));
+                this.mc.displayGuiScreen(new SnitchListsTable(this,snitchMaster.getSnitchLists().asCollection(),"All Snitch Lists",true,snitchMaster));
                 break;
             case 3: //"View Snitches"
                 //this.mc.displayGuiScreen(new EditSnitchesGui(this,snitchMaster.getSnitches(),"All Snitches"));

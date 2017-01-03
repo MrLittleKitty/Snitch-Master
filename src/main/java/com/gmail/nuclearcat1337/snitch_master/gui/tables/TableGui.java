@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class TableGui<T> extends GuiListExtended
 {
-    //private final TableTopGui<T> tableTop;
+    private final TableTopGui<T> tableTop;
     private final int entryWidth;
 
     private Collection<TableColumn<T>> columns;
@@ -35,7 +35,7 @@ public class TableGui<T> extends GuiListExtended
                 tableTop.height - 32,
                 20);
 
-        //this.tableTop = tableTop;
+        this.tableTop = tableTop;
         this.columns = columns;
 
         this.setHasListHeader(true, (int) ( (float) mc.fontRendererObj.FONT_HEIGHT * 1.5));
@@ -92,6 +92,16 @@ public class TableGui<T> extends GuiListExtended
     public T getItemForSlotIndex(int index)
     {
         return entries.get(index).item;
+    }
+
+    public void swapItems(int index, int nextIndex)
+    {
+        if(index >= entries.size() || nextIndex >= entries.size() || index < 0 || nextIndex  < 0)
+            return;
+
+        TableEntry entry = entries.get(index);
+        entries.set(index,entries.get(nextIndex));
+        entries.set(nextIndex,entry);
     }
 
     @Override
@@ -180,7 +190,7 @@ public class TableGui<T> extends GuiListExtended
             for(TableColumn<T> col : columns)
             {
                 int columnWidth = columnWidths.get(col);
-                col.draw(item,xPos,yPosition,columnWidth,slotHeight,buttons.get(col.getColumnName()));
+                col.draw(item,xPos,yPosition,columnWidth,slotHeight,buttons.get(col.getColumnName()),slotIndex,mouseX,mouseY);
                 xPos += (columnWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
             }
         }
@@ -192,7 +202,7 @@ public class TableGui<T> extends GuiListExtended
             {
                 if(xPos >= entry.getValue().getOne() && xPos <= entry.getValue().getTwo())
                 {
-                    entry.getKey().clicked(item,mouseEvent == 0,xPos,yPos,buttons.get(entry.getKey().getColumnName()));
+                    entry.getKey().clicked(item,mouseEvent == 0,xPos,yPos,buttons.get(entry.getKey().getColumnName()),tableTop,index);
                     return true;
                 }
             }
@@ -206,7 +216,7 @@ public class TableGui<T> extends GuiListExtended
             {
                 if(xPos >= entry.getValue().getOne() && xPos <= entry.getValue().getTwo())
                 {
-                    entry.getKey().released(item,xPos,yPos,buttons.get(entry.getKey().getColumnName()));
+                    entry.getKey().released(item,xPos,yPos,buttons.get(entry.getKey().getColumnName()),tableTop,index);
                     break;
                 }
             }

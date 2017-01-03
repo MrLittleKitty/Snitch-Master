@@ -5,6 +5,7 @@ import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class SnitchCoordinateColumn implements TableColumn<Snitch>
         Z;
     }
 
-    private final Minecraft mc;
+    private static Minecraft mc;
     private final CoordinateType type;
 
     public SnitchCoordinateColumn(CoordinateType type)
@@ -55,19 +56,19 @@ public class SnitchCoordinateColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons)
+    public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
     {
 
     }
 
     @Override
-    public void released(Snitch item, int xPos, int yPos, GuiButton[] buttons)
+    public void released(Snitch item, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
     {
 
     }
 
     @Override
-    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons)
+    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
     {
         String text = ""+getCoordinate(snitch,type);
         int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);

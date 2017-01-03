@@ -8,6 +8,7 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public class SnitchDistanceColumn implements TableColumn<Snitch>
 {
-    private final Minecraft mc;
+    private static Minecraft mc;
 
     public SnitchDistanceColumn()
     {
@@ -43,19 +44,19 @@ public class SnitchDistanceColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons)
+    public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
     {
 
     }
 
     @Override
-    public void released(Snitch item, int xPos, int yPos, GuiButton[] buttons)
+    public void released(Snitch item, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
     {
 
     }
 
     @Override
-    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons)
+    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
     {
         ILocation loc = snitch.getLocation();
         int distance = getDistanceFromPlayer(loc.getX(),loc.getY(),loc.getZ());

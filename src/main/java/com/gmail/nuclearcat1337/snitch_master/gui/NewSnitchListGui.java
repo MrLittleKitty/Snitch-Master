@@ -3,6 +3,7 @@ package com.gmail.nuclearcat1337.snitch_master.gui;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
 import com.gmail.nuclearcat1337.snitch_master.gui.controls.TextBox;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListsTable;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
@@ -227,7 +228,8 @@ public class NewSnitchListGui extends GuiScreen
                 //Handles any things that need to happen when lists change. (saving, etc)
                 lists.snitchListChanged();
 
-                Minecraft.getMinecraft().displayGuiScreen(new EditSnitchListsGui(null,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true, "All Snitch Lists"));
+                //Minecraft.getMinecraft().displayGuiScreen(new EditSnitchListsGui(null,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true, "All Snitch Lists"));
+                this.mc.displayGuiScreen(new SnitchListsTable(null,snitchMaster.getSnitchLists().asCollection(),"All Snitch Lists",true,snitchMaster));
                 break;
         }
     }

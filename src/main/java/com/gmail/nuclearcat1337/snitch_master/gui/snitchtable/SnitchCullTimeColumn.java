@@ -6,6 +6,7 @@ import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -17,7 +18,7 @@ import java.util.List;
 public class SnitchCullTimeColumn implements TableColumn<Snitch>
 {
     private static final NumberFormat CULL_TIME_FORMAT = new DecimalFormat("#.000");
-    private final Minecraft mc;
+    private static Minecraft mc;
 
     public SnitchCullTimeColumn()
     {
@@ -43,19 +44,19 @@ public class SnitchCullTimeColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons)
+    public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
     {
 
     }
 
     @Override
-    public void released(Snitch item, int xPos, int yPos, GuiButton[] buttons)
+    public void released(Snitch item, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
     {
 
     }
 
     @Override
-    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons)
+    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
     {
         String text = SnitchMaster.CULL_TIME_ENABLED ? (Double.isNaN(snitch.getCullTime()) ? "Off" : CULL_TIME_FORMAT.format(snitch.getCullTime())) : "Off";
         int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);
