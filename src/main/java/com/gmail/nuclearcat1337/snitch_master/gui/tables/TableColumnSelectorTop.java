@@ -73,6 +73,7 @@ public class TableColumnSelectorTop<T> extends GuiScreen
                 renderColumns = selectorGui.getRenderColumns();
                 this.mc.displayGuiScreen(tableTop);
                 tableTop.setRenderColumns(allColumns,renderColumns);
+                tableTop.saveColumns(allColumns,renderColumns);
                 break;
         }
     }

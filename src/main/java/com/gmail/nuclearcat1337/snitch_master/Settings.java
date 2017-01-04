@@ -39,6 +39,11 @@ public class Settings
             values.put(key,value);
     }
 
+    public boolean hasValue(String key)
+    {
+        return values.containsKey(key);
+    }
+
     public void setValue(String key, Object value)
     {
         values.put(key,value);

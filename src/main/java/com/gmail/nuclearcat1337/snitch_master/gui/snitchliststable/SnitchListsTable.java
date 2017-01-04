@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable;
 
+import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
 import com.gmail.nuclearcat1337.snitch_master.gui.EditColorGui;
@@ -21,12 +22,15 @@ import net.minecraft.client.gui.GuiScreen;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Mr_Little_Kitty on 1/2/2017.
  */
 public class SnitchListsTable extends TableTopGui<SnitchList>
 {
+    private static final String SNITCH_LIST_COLUMNS_KEY = "snitch-list-table-columns";
+
     private static final int EDIT_COLOR_BUTTON_WIDTH = 60;
     private static final int EDIT_QUALIFIER_BUTTON_WIDTH = 60;
     private static final int VIEW_SNITCHES_BUTTON_WIDTH = 60;
@@ -63,6 +67,21 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
         this.buttonList.add(new GuiButton(firstId+2, xPos, yPos, RENDER_OFF_BUTTON_WIDTH, 18, "All Off"));
     }
 
+    @Override
+    public void saveColumns(List<TableColumn<SnitchList>> allColumns, List<TableColumn<SnitchList>> renderColumns)
+    {
+        Settings settings = snitchMaster.getSettings();
+
+        String saveString = "";
+        for(TableColumn<SnitchList> col : allColumns)
+        {
+            String entry = col.getColumnName()+","+renderColumns.contains(col);
+            saveString += entry+";";
+        }
+        settings.setValue(SNITCH_LIST_COLUMNS_KEY,saveString.substring(0,saveString.length()-1));
+        settings.saveSettings();
+    }
+
     public void actionPerformed(GuiButton button)
     {
         if (!button.enabled)
@@ -87,8 +106,9 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
     @Override
     protected Collection<Pair<TableColumn<SnitchList>,Boolean>> initializeColumns()
     {
-        ArrayList<Pair<TableColumn<SnitchList>,Boolean>> columns = new ArrayList<>();
+        Settings settings = snitchMaster.getSettings();
 
+        ArrayList<Pair<TableColumn<SnitchList>,Boolean>> columns = new ArrayList<>();
         columns.add(packageValues(new SnitchListRemoveColumn(snitchMaster),false));
 
         columns.add(packageValues(new SnitchListControlsColumn(this),true));
@@ -98,6 +118,41 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
         columns.add(packageValues(new TableButtonColumn<>("Qualifier","Edit",EDIT_QUALIFIER_BUTTON_WIDTH,qualifierClick),true));
         columns.add(packageValues(new TableButtonColumn<>("Snitches","View",VIEW_SNITCHES_BUTTON_WIDTH,viewSnitchesClick),true));
 
+        if(!settings.hasValue(SNITCH_LIST_COLUMNS_KEY))
+        {
+            String saveString = "";
+            for(Pair<TableColumn<SnitchList>,Boolean> pair : columns)
+            {
+                String entry = pair.getOne().getColumnName()+","+pair.getTwo().toString();
+                saveString += entry+";";
+            }
+            settings.setValue(SNITCH_LIST_COLUMNS_KEY,saveString.substring(0,saveString.length()-1));
+            settings.saveSettings();
+        }
+        else
+        {
+            String[] entries = settings.getValue(SNITCH_LIST_COLUMNS_KEY).toString().split(";");
+            for(int entryIndex = 0; entryIndex < entries.length; entryIndex++)
+            {
+                String[] vals = entries[entryIndex].split(",");
+                for(int colIndex = 0; colIndex < columns.size(); colIndex++)
+                {
+                    Pair<TableColumn<SnitchList>, Boolean> pair = columns.get(colIndex);
+                    //Find the column with this name
+                    if (pair.getOne().getColumnName().equalsIgnoreCase(vals[0]))
+                    {
+                        pair.setValues(pair.getOne(),Boolean.parseBoolean(vals[1]));
+
+                        //Swap the columns in the list so they are in their proper place
+                        Pair<TableColumn<SnitchList>, Boolean> temp = columns.get(entryIndex);
+                        columns.set(entryIndex,pair);
+                        columns.set(colIndex,temp);
+
+                        break;
+                    }
+                }
+            }
+        }
         return columns;
     }
 

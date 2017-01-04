@@ -25,7 +25,7 @@ public class SnitchRemoveColumn implements TableColumn<Snitch>
 
     private final int buttonWidth;
     private final SnitchMaster snitchMaster;
-    private final HashSet<ILocation> removedSnitches;
+    public static final HashSet<ILocation> removedSnitches = new HashSet<>();
 
     public SnitchRemoveColumn(SnitchMaster snitchMaster)
     {
@@ -33,7 +33,7 @@ public class SnitchRemoveColumn implements TableColumn<Snitch>
 
         buttonWidth = mc.fontRendererObj.getStringWidth(BUTTON_TEXT+"---");
         this.snitchMaster = snitchMaster;
-        removedSnitches = new HashSet<>();
+        //removedSnitches = new HashSet<>();
     }
 
     @Override

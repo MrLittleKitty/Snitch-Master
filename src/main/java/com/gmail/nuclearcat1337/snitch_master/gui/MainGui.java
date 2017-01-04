@@ -1,7 +1,9 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListRemoveColumn;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListsTable;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchtable.SnitchRemoveColumn;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchtable.SnitchesTable;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -16,6 +18,8 @@ public class MainGui extends GuiScreen
     public MainGui(SnitchMaster snitchMaster)
     {
         this.snitchMaster = snitchMaster;
+        SnitchListRemoveColumn.removedSnitchLists.clear();
+        SnitchRemoveColumn.removedSnitches.clear();
     }
 
     public void initGui()
@@ -50,6 +54,8 @@ public class MainGui extends GuiScreen
 
     public void actionPerformed(GuiButton button)
     {
+        SnitchListRemoveColumn.removedSnitchLists.clear();
+        SnitchRemoveColumn.removedSnitches.clear();
         switch (button.id)
         {
             case 0: //"Full Snitch Update" or "Cancel Snitch Update"

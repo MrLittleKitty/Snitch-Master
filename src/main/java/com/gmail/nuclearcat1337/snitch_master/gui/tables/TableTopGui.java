@@ -45,6 +45,11 @@ public abstract class TableTopGui<T> extends GuiScreen
 
     protected abstract Collection<Pair<TableColumn<T>,Boolean>> initializeColumns();
 
+    public void saveColumns(List<TableColumn<T>> allColumns, List<TableColumn<T>> renderColumns)
+    {
+
+    }
+
     @Override
     public void initGui()
     {

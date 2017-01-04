@@ -218,8 +218,8 @@ public class SnitchMaster
                 return Boolean.parseBoolean(value);
             else if(key.equalsIgnoreCase(Settings.CHAT_SPAM_KEY))
                 return Settings.ChatSpamState.valueOf(value);
-
-            return null;
+            else
+                return value;
         }
     }
 }

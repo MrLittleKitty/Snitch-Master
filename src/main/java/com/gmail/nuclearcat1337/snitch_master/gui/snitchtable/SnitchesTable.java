@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.snitchtable;
 
+import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListsTable;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableButtonColumn;
@@ -9,15 +10,18 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.util.Pair;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.settings.GameSettings;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Mr_Little_Kitty on 12/31/2016.
  */
 public class SnitchesTable extends TableTopGui<Snitch>
 {
+    private static final String SNITCHES_COLUMNS_KEY = "snitches-table-columns";
     private static final int VIEW_LISTS_BUTTON_WIDTH = 60;
 
     private final SnitchMaster snitchMaster;
@@ -34,24 +38,77 @@ public class SnitchesTable extends TableTopGui<Snitch>
 
     }
 
+    @Override
+    public void saveColumns(List<TableColumn<Snitch>> allColumns, List<TableColumn<Snitch>> renderColumns)
+    {
+        Settings settings = snitchMaster.getSettings();
+
+        String saveString = "";
+        for(TableColumn<Snitch> col : allColumns)
+        {
+            String entry = col.getColumnName()+","+renderColumns.contains(col);
+            saveString += entry+";";
+        }
+        settings.setValue(SNITCHES_COLUMNS_KEY,saveString.substring(0,saveString.length()-1));
+        settings.saveSettings();
+    }
+
 
     @Override
     protected Collection<Pair<TableColumn<Snitch>,Boolean>> initializeColumns()
     {
+        Settings settings = snitchMaster.getSettings();
+
         ArrayList<Pair<TableColumn<Snitch>,Boolean>> columns = new ArrayList<>();
-        columns.add(packageValues(new SnitchRemoveColumn(snitchMaster),false));
+        columns.add(packageValues(new SnitchRemoveColumn(snitchMaster), false));
 
-        columns.add(packageValues(new SnitchNameColumn(),true));
-        columns.add(packageValues(new SnitchGroupColumn(),true));
-        columns.add(packageValues(new SnitchCullTimeColumn(),false));
+        columns.add(packageValues(new SnitchNameColumn(), true));
+        columns.add(packageValues(new SnitchGroupColumn(), true));
+        columns.add(packageValues(new SnitchCullTimeColumn(), false));
 
-        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.X),true));
-        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.Y),true));
-        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.Z),true));
-        columns.add(packageValues(new SnitchWorldColumn(),true));
+        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.X), true));
+        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.Y), true));
+        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.Z), true));
+        columns.add(packageValues(new SnitchWorldColumn(), true));
 
-        columns.add(packageValues(new SnitchDistanceColumn(),true));
-        columns.add(packageValues(new TableButtonColumn<>("Lists","View",VIEW_LISTS_BUTTON_WIDTH,viewListsClick),true));
+        columns.add(packageValues(new SnitchDistanceColumn(), true));
+        columns.add(packageValues(new TableButtonColumn<>("Lists", "View", VIEW_LISTS_BUTTON_WIDTH, viewListsClick), true));
+
+        if(!settings.hasValue(SNITCHES_COLUMNS_KEY))
+        {
+            String saveString = "";
+            for(Pair<TableColumn<Snitch>,Boolean> pair : columns)
+            {
+                String entry = pair.getOne().getColumnName()+","+pair.getTwo().toString();
+                saveString += entry+";";
+            }
+            settings.setValue(SNITCHES_COLUMNS_KEY,saveString.substring(0,saveString.length()-1));
+            settings.saveSettings();
+        }
+        else
+        {
+            String[] entries = settings.getValue(SNITCHES_COLUMNS_KEY).toString().split(";");
+            for(int entryIndex = 0; entryIndex < entries.length; entryIndex++)
+            {
+                String[] vals = entries[entryIndex].split(",");
+                for(int colIndex = 0; colIndex < columns.size(); colIndex++)
+                {
+                    Pair<TableColumn<Snitch>, Boolean> pair = columns.get(colIndex);
+                    //Find the column with this name
+                    if (pair.getOne().getColumnName().equalsIgnoreCase(vals[0]))
+                    {
+                        pair.setValues(pair.getOne(),Boolean.parseBoolean(vals[1]));
+
+                        //Swap the columns in the list so they are in their proper place
+                        Pair<TableColumn<Snitch>, Boolean> temp = columns.get(entryIndex);
+                        columns.set(entryIndex,pair);
+                        columns.set(colIndex,temp);
+
+                        break;
+                    }
+                }
+            }
+        }
         return columns;
     }
 
@@ -69,4 +126,6 @@ public class SnitchesTable extends TableTopGui<Snitch>
     {
         return new Pair<>(col,render);
     }
+
+
 }
