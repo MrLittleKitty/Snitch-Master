@@ -77,8 +77,17 @@ public class SnitchGroupColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public int compare(Snitch o1, Snitch o2)
+    public boolean canSort()
     {
-        return 0;
+        return true;
+    }
+
+    @Override
+    public int compare(Snitch snitch, Snitch other)
+    {
+        String one = snitch.getGroupName().isEmpty() ? "Undefined" : snitch.getGroupName();
+        String two = other.getGroupName().isEmpty() ? "Undefined" : other.getGroupName();
+
+        return one.compareTo(two);
     }
 }

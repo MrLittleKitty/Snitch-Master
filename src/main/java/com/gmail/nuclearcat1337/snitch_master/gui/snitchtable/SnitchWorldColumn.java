@@ -75,8 +75,14 @@ public class SnitchWorldColumn implements TableColumn<Snitch>
     }
 
     @Override
+    public boolean canSort()
+    {
+        return true;
+    }
+
+    @Override
     public int compare(Snitch o1, Snitch o2)
     {
-        return 0;
+        return o1.getWorld().compareTo(o2.getWorld());
     }
 }

@@ -113,6 +113,12 @@ public class SnitchRemoveColumn implements TableColumn<Snitch>
     }
 
     @Override
+    public boolean canSort()
+    {
+        return false;
+    }
+
+    @Override
     public int compare(Snitch o1, Snitch o2)
     {
         return 0;

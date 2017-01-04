@@ -96,6 +96,12 @@ public class TableButtonColumn<T> implements TableColumn<T>
     }
 
     @Override
+    public boolean canSort()
+    {
+        return false;
+    }
+
+    @Override
     public int compare(T o1, T o2)
     {
         return 0;

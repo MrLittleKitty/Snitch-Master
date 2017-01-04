@@ -81,9 +81,15 @@ public class SnitchListNameColumn implements TableColumn<SnitchList>
     }
 
     @Override
-    public int compare(SnitchList o1, SnitchList o2)
+    public boolean canSort()
     {
-        return 0;
+        return true;
+    }
+
+    @Override
+    public int compare(SnitchList list, SnitchList other)
+    {
+        return list.getListName().compareTo(other.getListName());
     }
 
     private class EditNameAcceptor implements Acceptor<String>

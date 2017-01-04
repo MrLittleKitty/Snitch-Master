@@ -184,6 +184,21 @@ public abstract class TableTopGui<T> extends GuiScreen
     protected void mouseClicked(int mouseX, int mouseY, int mouseEvent)
     {
         tableGui.mouseClicked(mouseX, mouseY, mouseEvent);
+
+        //Hopefully this determines if they clicked in the header area
+        if(mouseY >= tableGui.top && mouseY <= tableGui.top + tableGui.headerPadding && tableGui.getSlotIndexFromScreenCoords(mouseX,mouseY) < 0)
+        {
+            for (TableColumn<T> col : renderColumns)
+            {
+                Pair<Integer, Integer> bounds = tableGui.getBoundsForColumn(col);
+                if (mouseX >= bounds.getOne() && mouseX <= bounds.getTwo())
+                {
+                    tableGui.sortByColumn(col);
+                    break;
+                }
+            }
+        }
+
         try
         {
             super.mouseClicked(mouseX, mouseY, mouseEvent);

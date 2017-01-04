@@ -96,9 +96,31 @@ public class SnitchDistanceColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public int compare(Snitch o1, Snitch o2)
+    public boolean canSort()
     {
-        return 0;
+        return true;
+    }
+
+    @Override
+    public int compare(Snitch snitch, Snitch other)
+    {
+        ILocation snitchLoc = snitch.getLocation();
+        ILocation otherLoc = other.getLocation();
+        String world = SnitchMaster.instance.getCurrentWorld();
+        boolean b1 = snitchLoc.getWorld().equalsIgnoreCase(world);
+        boolean b2 = otherLoc.getWorld().equalsIgnoreCase(world);
+
+        //The first snitch is in the correct world and the other snitch isn't
+        if(b1 && !b2)
+            return 1; //The first snitch is greater than the second
+        else if(!b1 && b2)
+            return -1; //Second snitch is greater if its in the correct world and the first one isnt
+        else if(!b1 && !b2) //If they both arent in the correct world then they are equal
+            return 0;
+        else
+            //Both snitches are in the correct world so we compare their actual distances
+            return Integer.compare(getDistanceFromPlayer(snitchLoc.getX(), snitchLoc.getY(), snitchLoc.getZ()),
+                    getDistanceFromPlayer(otherLoc.getX(), otherLoc.getY(), otherLoc.getZ()));
     }
 
     private int getDistanceFromPlayer(int x, int y, int z)

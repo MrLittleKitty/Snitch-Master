@@ -79,8 +79,14 @@ public class SnitchCullTimeColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public int compare(Snitch o1, Snitch o2)
+    public boolean canSort()
     {
-        return 0;
+        return true;
+    }
+
+    @Override
+    public int compare(Snitch snitch, Snitch other)
+    {
+        return Double.compare(snitch.getCullTime(),other.getCullTime());
     }
 }

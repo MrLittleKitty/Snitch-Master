@@ -32,4 +32,6 @@ public interface TableColumn<T> extends Comparator<T>
 
     //Returns a list of strings to draw as hover text
     List<String> hover(T item, int xPos, int yPos);
+
+    boolean canSort();
 }

@@ -84,8 +84,17 @@ public class SnitchNameColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public int compare(Snitch o1, Snitch o2)
+    public boolean canSort()
     {
-        return 0;
+        return true;
+    }
+
+    @Override
+    public int compare(Snitch snitch, Snitch other)
+    {
+        String one = snitch.getSnitchName().isEmpty() ? "Undefined" : snitch.getSnitchName();
+        String two = other.getSnitchName().isEmpty() ? "Undefined" : other.getSnitchName();
+
+        return one.compareTo(two);
     }
 }

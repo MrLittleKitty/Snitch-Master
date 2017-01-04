@@ -28,6 +28,9 @@ public class TableGui<T> extends GuiListExtended
 
     private boolean setOffset = false;
 
+    private TableColumn<T> sortColumn = null;
+    private boolean sortAscending = true;
+
     public TableGui(TableTopGui<T> tableTop, Collection<T> items, Collection<TableColumn<T>> columns)
     {
         super(Minecraft.getMinecraft(),
@@ -63,7 +66,7 @@ public class TableGui<T> extends GuiListExtended
         String root = ChatFormatting.UNDERLINE + "" + ChatFormatting.BOLD;
         for(TableColumn<T> col : columns)
         {
-            int headerWidth = mc.fontRendererObj.getStringWidth(root + col.getColumnName());
+            int headerWidth = mc.fontRendererObj.getStringWidth(root + col.getColumnName() + (col.canSort() ? "vv" : ""));
             if(!columnWidths.containsKey(col) || headerWidth > columnWidths.get(col))
                 columnWidths.put(col,headerWidth);
         }
@@ -77,13 +80,65 @@ public class TableGui<T> extends GuiListExtended
             int leftBound = totalWidth;
             totalWidth += columnWidths.get(col);
 
-            if(col.doBoundsCheck())
+            //if(col.doBoundsCheck())
                 columnBounds.put(col,new Pair<>(leftBound,totalWidth));
 
             totalWidth += SEPARATION_DISTANCE;
         }
 
         entryWidth = totalWidth;
+    }
+
+    public void sortByColumn(TableColumn<T> column)
+    {
+        //If we can't sort by this column then just don't do anything
+        if(!column.canSort())
+            return;
+
+        if(sortColumn != null && sortColumn.getColumnName().equalsIgnoreCase(column.getColumnName()))
+            sortAscending = !sortAscending;
+        else
+        {
+            sortColumn = column;
+            sortAscending = true;
+        }
+
+        sortEntries(0,entries.size()-1,sortColumn,sortAscending);
+    }
+
+    private void sortEntries(int lowerIndex, int higherIndex, Comparator<T> comparator, boolean ascending)
+    {
+        int i = lowerIndex;
+        int j = higherIndex;
+        // calculate pivot number, I am taking pivot as middle index number
+        T pivot = getItemForSlotIndex(lowerIndex+(higherIndex-lowerIndex)/2);
+        // Divide into two arrays
+        while (i <= j) {
+            /**
+             * In each iteration, we will identify a number from left side which
+             * is greater then the pivot value, and also we will identify a number
+             * from right side which is less then the pivot value. Once the search
+             * is done, then we exchange both numbers.
+             */
+            //while (array[i] < pivot) {
+            while ((!ascending ? comparator.compare(getItemForSlotIndex(i),pivot) : comparator.compare(getItemForSlotIndex(i),pivot)*-1) < 0) {
+                i++;
+            }
+            while ((!ascending ? comparator.compare(getItemForSlotIndex(j), pivot) : comparator.compare(getItemForSlotIndex(j), pivot)*-1) > 0) {
+                j--;
+            }
+            if (i <= j) {
+                swapItems(i, j);
+                //move index to next position on both sides
+                i++;
+                j--;
+            }
+        }
+        // call quickSort() method recursively
+        if (lowerIndex < j)
+            sortEntries(lowerIndex, j,comparator,ascending);
+        if (i < higherIndex)
+            sortEntries(i, higherIndex,comparator,ascending);
     }
 
     public Pair<Integer,Integer> getBoundsForColumn(TableColumn<T> column)
@@ -118,6 +173,10 @@ public class TableGui<T> extends GuiListExtended
         {
             int columnWidth = columnWidths.get(col);
             String text = root + col.getColumnName();
+
+            if(sortColumn != null && sortColumn.getColumnName().equalsIgnoreCase(col.getColumnName()))
+                text += (sortAscending ? " ^" : " v");
+
             int textWidth = mc.fontRendererObj.getStringWidth(text);
             int drawXPos =  xPos + (columnWidth/2) - (textWidth/2);
             this.mc.fontRendererObj.drawString(text, drawXPos, yPosition, 16777215);
