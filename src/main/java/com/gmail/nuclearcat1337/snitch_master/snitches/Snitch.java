@@ -33,7 +33,7 @@ public class Snitch extends LocatableObject<Snitch>
     /**
      * The default name used for populating Snitch names and Citadel group names when not specified.
      */
-    public static final String DEFAULT_NAME = "Undefined";
+    public static final String DEFAULT_NAME = "[Undefined]";
 
     /**
      * The cull time amount that Snitches are reset to when a player walks through them.
@@ -175,7 +175,8 @@ public class Snitch extends LocatableObject<Snitch>
 
     public void setSnitchName(String name)
     {
-        this.name = name;
+        if(!name.isEmpty())
+            this.name = name;
     }
 
     public void setGroupName(String groupName)
@@ -326,6 +327,10 @@ public class Snitch extends LocatableObject<Snitch>
             String origin = args[index++];
             String groupName = args[index++];
             String snitchName = args[index++];
+
+            if(snitchName.isEmpty())
+                snitchName = DEFAULT_NAME;
+
             double cullTime = Double.parseDouble(args[index++]);
 
             Snitch snitch = new Snitch(new Location(x, y, z, world), origin, cullTime, groupName, snitchName);

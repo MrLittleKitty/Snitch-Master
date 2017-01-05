@@ -17,6 +17,7 @@ public class SettingsGui extends GuiScreen
 
     private GuiButton chatSpamButton;
     private GuiButton quietTimeButton;
+    private GuiButton renderTextButton;
 
     public SettingsGui(GuiScreen backToScreen)
     {
@@ -32,17 +33,21 @@ public class SettingsGui extends GuiScreen
         int xPos = (this.width/2) - (GuiConstants.LONG_BUTTON_WIDTH / 2);
         int yPos = (this.height/2) - ( ((GuiConstants.STANDARD_BUTTON_HEIGHT*3) + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2))/2 );
 
+        int drawXPos = xPos;
         int halfWidth = (GuiConstants.LONG_BUTTON_WIDTH/2) - (GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
-        quietTimeButton = new GuiButton(1, xPos, yPos, halfWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
+        quietTimeButton = new GuiButton(1, drawXPos, yPos, halfWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
         updateQuietTimeButton();
-
         this.buttonList.add(quietTimeButton);
+
+        drawXPos += (halfWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
+        renderTextButton = new GuiButton(2, drawXPos, yPos, halfWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
+        updateRenderTextButton();
+        this.buttonList.add(renderTextButton);
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
         chatSpamButton = new GuiButton(3, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
         updateChatSpamButton();
-
         this.buttonList.add(chatSpamButton);
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
@@ -62,8 +67,10 @@ public class SettingsGui extends GuiScreen
                 updateQuietTimeButton();
                 settings.saveSettings();
                 break;
-            case 2:
-
+            case 2: //"Render Text"
+                nextRenderTextState();
+                updateRenderTextButton();
+                settings.saveSettings();
                 break;
             case 3: //"Updating Snitches Spam: "
                 nextChatSpamState();
@@ -73,10 +80,24 @@ public class SettingsGui extends GuiScreen
         }
     }
 
+    private void nextRenderTextState()
+    {
+        Boolean state = (Boolean)settings.getValue(Settings.RENDER_TEXT_KEY);
+        state = state ? Boolean.FALSE : Boolean.TRUE;
+        settings.setValue(Settings.RENDER_TEXT_KEY,state);
+    }
+
+    private void updateRenderTextButton()
+    {
+        Boolean state = (Boolean)settings.getValue(Settings.RENDER_TEXT_KEY);
+        String text =  state ? "Render Text On" : "Render Text Off";
+        renderTextButton.displayString = text;
+    }
+
     private void nextQuietTimeState()
     {
         Boolean state = (Boolean)settings.getValue(Settings.QUIET_TIME_KEY);
-        state = state.booleanValue() ? Boolean.FALSE : Boolean.TRUE;
+        state = state ? Boolean.FALSE : Boolean.TRUE;
         settings.setValue(Settings.QUIET_TIME_KEY,state);
     }
 

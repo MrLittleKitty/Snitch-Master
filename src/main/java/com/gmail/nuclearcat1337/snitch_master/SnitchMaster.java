@@ -105,6 +105,7 @@ public class SnitchMaster
 
         settings.setValueIfNotSet(Settings.QUIET_TIME_KEY, Boolean.FALSE);
         settings.setValueIfNotSet(Settings.CHAT_SPAM_KEY, Settings.ChatSpamState.ON);
+        settings.setValueIfNotSet(Settings.RENDER_TEXT_KEY, Boolean.TRUE);
 
         settings.saveSettings();
     }
@@ -214,7 +215,7 @@ public class SnitchMaster
         @Override
         public Object parse(String key, String value)
         {
-            if(key.equalsIgnoreCase(Settings.QUIET_TIME_KEY))
+            if(key.equalsIgnoreCase(Settings.QUIET_TIME_KEY) || key.equalsIgnoreCase(Settings.RENDER_TEXT_KEY))
                 return Boolean.parseBoolean(value);
             else if(key.equalsIgnoreCase(Settings.CHAT_SPAM_KEY))
                 return Settings.ChatSpamState.valueOf(value);

@@ -20,6 +20,8 @@ public class Settings
 
     public static final String QUIET_TIME_KEY = "quiet-time";
     public static final String CHAT_SPAM_KEY = "chat-spam";
+    public static final String RENDER_TEXT_KEY = "render-text";
+
 
     private final File file;
     private final ValueParser parser;
