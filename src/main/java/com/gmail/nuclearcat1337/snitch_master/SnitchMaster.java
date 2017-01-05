@@ -226,7 +226,14 @@ public class SnitchMaster
             else if(key.equalsIgnoreCase(Settings.CHAT_SPAM_KEY))
                 return Settings.ChatSpamState.valueOf(value);
             else if(key.equalsIgnoreCase(Settings.QUIET_TIME_KEY))
-                return Settings.QuietTimeState.valueOf(value);
+            {
+                if(value.equalsIgnoreCase(Boolean.FALSE.toString()))
+                    return Settings.QuietTimeState.OFF;
+                else if(value.equalsIgnoreCase(Boolean.TRUE.toString()))
+                    return Settings.QuietTimeState.HIDE_COORDINATES;
+                else
+                    return Settings.QuietTimeState.valueOf(value);
+            }
             else
                 return value;
         }
