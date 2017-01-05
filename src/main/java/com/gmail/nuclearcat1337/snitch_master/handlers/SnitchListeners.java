@@ -12,6 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -54,6 +55,24 @@ public class SnitchListeners
                     IOHandler.saveSnitches(snitchMaster.getSnitches());
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onSnitchBreak(BlockEvent.BreakEvent event)
+    {
+        BlockPos pos = event.getPos();
+        Location loc = new Location(pos.getX(),pos.getY(),pos.getZ(),snitchMaster.getCurrentWorld());
+
+        Snitch snitch = snitchMaster.getSnitches().remove(loc);
+        if(snitch != null)
+        {
+            if(SnitchMaster.jmInterface != null)
+                SnitchMaster.jmInterface.refresh(snitchMaster.getSnitches());
+
+            IOHandler.saveSnitches(snitchMaster.getSnitches());
+
+            SnitchMaster.SendMessageToPlayer("Removed snitch at "+loc.toString());
         }
     }
 }

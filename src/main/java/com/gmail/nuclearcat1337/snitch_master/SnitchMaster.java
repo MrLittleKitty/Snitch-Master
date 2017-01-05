@@ -9,6 +9,7 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import com.gmail.nuclearcat1337.snitch_master.util.ValueParser;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -205,6 +206,11 @@ public class SnitchMaster
     {
         for(Snitch snitch : getSnitches())
             snitch.sortSnitchLists();
+    }
+
+    public static void SendMessageToPlayer(String message)
+    {
+        mc.thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] "+message));
     }
 
     private static class ObjectParser implements ValueParser

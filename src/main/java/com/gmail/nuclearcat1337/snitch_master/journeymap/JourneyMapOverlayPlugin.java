@@ -50,7 +50,7 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
         if(renderJourneyMapOverlay.isPressed())
         {
             toggleRender();
-            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("[SnitchMaster] JourneyMap Overlay: "+(renderOverlay ? "On" : "Off")));
+            SnitchMaster.SendMessageToPlayer("JourneyMap Overlay: "+(renderOverlay ? "On" : "Off"));
         }
     }
 

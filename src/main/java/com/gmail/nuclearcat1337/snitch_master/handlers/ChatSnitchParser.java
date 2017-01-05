@@ -84,7 +84,7 @@ public class ChatSnitchParser
                 //Save the snitches now that we loaded a new one from chat
                 IOHandler.saveSnitches(snitchMaster.getSnitches());
 
-                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] Saved snitch from chat message"));
+                SnitchMaster.SendMessageToPlayer("Saved snitch from chat message");
                 return;
             }
         }
@@ -95,7 +95,7 @@ public class ChatSnitchParser
             if (containsAny(msgText, resetSequences)) //Check if this is any of the reset messages (this is kind of quick)
             {
                 resetUpdatingSnitchList(true);
-                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] Finished full snitch update"));
+                SnitchMaster.SendMessageToPlayer("Finished full snitch update");
                 return;
             }
 
@@ -213,7 +213,7 @@ public class ChatSnitchParser
                     snitchMaster.submitSnitch(snitch);
                 }
             } catch (IllegalStateException e) {
-                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("No match on /jalist hover text " + hoverText));
+                SnitchMaster.SendMessageToPlayer("No match on /jalist hover text " + hoverText);
                 e.printStackTrace();
             }
         }
@@ -261,7 +261,7 @@ public class ChatSnitchParser
                     nextUpdate = System.currentTimeMillis() + (long) (waitTime * 1000);
 
                     if(((Settings.ChatSpamState)snitchMaster.getSettings().getValue(Settings.CHAT_SPAM_KEY)) == Settings.ChatSpamState.PAGENUMBERS)
-                        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] Parsed snitches from /jalist "+(jaListIndex-1)));
+                        SnitchMaster.SendMessageToPlayer("Parsed snitches from /jalist "+(jaListIndex-1));
                 }
                 else
                     resetUpdatingSnitchList(true);
@@ -288,7 +288,7 @@ public class ChatSnitchParser
         nextUpdate = System.currentTimeMillis() + 2000;
         updatingSnitchList = true;
 
-        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("The current world is: "+snitchMaster.getCurrentWorld()));
+        SnitchMaster.SendMessageToPlayer("The current world is: "+snitchMaster.getCurrentWorld());
     }
 
     private void parseTPS(String message)
@@ -318,7 +318,7 @@ public class ChatSnitchParser
         else
             waitTime = 4.0;
 
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString("Timeout between commands is " + waitTime + " seconds."));
+        SnitchMaster.SendMessageToPlayer("Timeout between commands is " + waitTime + " seconds.");
     }
 
     /**
