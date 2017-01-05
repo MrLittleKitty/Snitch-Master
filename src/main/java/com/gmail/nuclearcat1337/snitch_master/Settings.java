@@ -11,6 +11,13 @@ import java.util.Map;
  */
 public class Settings
 {
+    public enum QuietTimeState
+    {
+        OFF,
+        HIDE_COORDINATES,
+        HIDE_NAME_AND_COORDINATES
+    }
+
     public enum ChatSpamState
     {
         ON,

@@ -33,20 +33,26 @@ public class SettingsGui extends GuiScreen
         int xPos = (this.width/2) - (GuiConstants.LONG_BUTTON_WIDTH / 2);
         int yPos = (this.height/2) - ( ((GuiConstants.STANDARD_BUTTON_HEIGHT*3) + (GuiConstants.STANDARD_SEPARATION_DISTANCE*2))/2 );
 
+        //Set the drawXPos variable for drawing 2 half sized buttons
         int drawXPos = xPos;
         int halfWidth = (GuiConstants.LONG_BUTTON_WIDTH/2) - (GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
-        quietTimeButton = new GuiButton(1, drawXPos, yPos, halfWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
-        updateQuietTimeButton();
-        this.buttonList.add(quietTimeButton);
 
-        drawXPos += (halfWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
-        renderTextButton = new GuiButton(2, drawXPos, yPos, halfWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
+        renderTextButton = new GuiButton(1, drawXPos, yPos, halfWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
         updateRenderTextButton();
         this.buttonList.add(renderTextButton);
 
+        //Increment it for drawing the second button
+        //drawXPos += (halfWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
+
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        chatSpamButton = new GuiButton(3, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
+        quietTimeButton = new GuiButton(3, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
+        updateQuietTimeButton();
+        this.buttonList.add(quietTimeButton);
+
+        yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
+
+        chatSpamButton = new GuiButton(4, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
         updateChatSpamButton();
         this.buttonList.add(chatSpamButton);
 
@@ -62,17 +68,20 @@ public class SettingsGui extends GuiScreen
             case 0: //"Done"
                 this.mc.displayGuiScreen(backToScreen);
                 break;
-            case 1: //"Quiet Time"
-                nextQuietTimeState();
-                updateQuietTimeButton();
-                settings.saveSettings();
-                break;
-            case 2: //"Render Text"
+            case 1: //"Render Text"
                 nextRenderTextState();
                 updateRenderTextButton();
                 settings.saveSettings();
                 break;
-            case 3: //"Updating Snitches Spam: "
+            case 2:
+                break;
+            case 3: //"Quiet Time"
+                nextQuietTimeState();
+                updateQuietTimeButton();
+                settings.saveSettings();
+                break;
+
+            case 4: //"Updating Snitches Spam: "
                 nextChatSpamState();
                 updateChatSpamButton();
                 settings.saveSettings();
@@ -96,16 +105,27 @@ public class SettingsGui extends GuiScreen
 
     private void nextQuietTimeState()
     {
-        Boolean state = (Boolean)settings.getValue(Settings.QUIET_TIME_KEY);
-        state = state ? Boolean.FALSE : Boolean.TRUE;
-        settings.setValue(Settings.QUIET_TIME_KEY,state);
+        Settings.QuietTimeState quietTimeState = (Settings.QuietTimeState) settings.getValue(Settings.QUIET_TIME_KEY);
+        if(quietTimeState == Settings.QuietTimeState.OFF)
+            quietTimeState = Settings.QuietTimeState.HIDE_COORDINATES;
+        else if(quietTimeState == Settings.QuietTimeState.HIDE_COORDINATES)
+            quietTimeState = Settings.QuietTimeState.HIDE_NAME_AND_COORDINATES;
+        else if(quietTimeState == Settings.QuietTimeState.HIDE_NAME_AND_COORDINATES)
+            quietTimeState = Settings.QuietTimeState.OFF;
+        settings.setValue(Settings.QUIET_TIME_KEY,quietTimeState);
     }
 
     private void updateQuietTimeButton()
     {
-        Boolean state = (Boolean)settings.getValue(Settings.QUIET_TIME_KEY);
-        String text =  state ? "Quiet Time On" : "Quiet Time Off";
-        quietTimeButton.displayString = text;
+        String quietTimeText = "Quiet Time: ";
+        Settings.QuietTimeState quietTimeState = (Settings.QuietTimeState) settings.getValue(Settings.QUIET_TIME_KEY);
+        if(quietTimeState == Settings.QuietTimeState.OFF)
+            quietTimeText += "Off";
+        else if(quietTimeState == Settings.QuietTimeState.HIDE_COORDINATES)
+            quietTimeText += "Hide Location";
+        else if(quietTimeState == Settings.QuietTimeState.HIDE_NAME_AND_COORDINATES)
+            quietTimeText += "Hide Location & Name";
+        quietTimeButton.displayString = quietTimeText;
     }
 
     private void nextChatSpamState()

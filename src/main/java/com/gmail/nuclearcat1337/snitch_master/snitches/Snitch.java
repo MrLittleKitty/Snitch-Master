@@ -98,7 +98,7 @@ public class Snitch extends LocatableObject<Snitch>
         this(location,origin);
         this.cullTime = culltime;
         this.ctGroup = ctGroup == null ? DEFAULT_NAME : ctGroup;
-        this.name = snitchName == null ? DEFAULT_NAME : snitchName;
+        this.name = snitchName == null || snitchName.isEmpty()? DEFAULT_NAME : snitchName;
         attachedSnitchLists = new ArrayList<>();
     }
 
