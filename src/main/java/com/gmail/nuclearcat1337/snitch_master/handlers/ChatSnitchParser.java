@@ -76,6 +76,19 @@ public class ChatSnitchParser
             return;
         }
 
+        //Start of the chat message for creating a snitch block from /ctf or /ctr
+        if(msgText.contains("You've created"))
+        {
+            if(tryParsePlaceMessage(msg))
+            {
+                //Save the snitches now that we loaded a new one from chat
+                IOHandler.saveSnitches(snitchMaster.getSnitches());
+
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] Saved snitch from chat message"));
+                return;
+            }
+        }
+
         //Only check for reset sequences or /jalist messages if we are updating
         if(updatingSnitchList)
         {
@@ -114,6 +127,53 @@ public class ChatSnitchParser
         event.setMessage(alert.getRawMessage());
     }
 
+    private boolean tryParsePlaceMessage(ITextComponent msg)
+    {
+        List<ITextComponent> siblings = msg.getSiblings();
+        if(siblings.size() <= 0)
+            return false;
+
+        ITextComponent hoverComponent = siblings.get(0);
+        HoverEvent hover = hoverComponent.getStyle().getHoverEvent();
+        if(hover != null)
+        {
+            String text = hover.getValue().getUnformattedComponentText();
+            Snitch snitch = parseSnitchFromChat(text);
+            if(snitch != null)
+            {
+                snitchMaster.submitSnitch(snitch);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private Snitch parseSnitchFromChat(String text)
+    {
+        try
+        {
+            String[] args = text.split("\n");
+            String[] worldArgs = args[0].split(" ");
+            String[] locationArgs = args[1].split(":")[1].split(" ");
+            String[] groupArgs = args[2].split(" ");
+
+            int x, y, z;
+            x = Integer.parseInt(locationArgs[0].substring(2));
+            y = Integer.parseInt(locationArgs[1]);
+            z = Integer.parseInt(locationArgs[2].substring(0, locationArgs[2].length() - 1));
+            String world = worldArgs.length > 1 ? worldArgs[1] : snitchMaster.getCurrentWorld();
+
+            Location loc = new Location(x, y, z, world);
+            String group = groupArgs.length > 1 ? groupArgs[1] : Snitch.DEFAULT_NAME;
+
+            return new Snitch(loc, "chat", SnitchMaster.CULL_TIME_ENABLED ? Snitch.MAX_CULL_TIME : Double.NaN, group, Snitch.DEFAULT_NAME);
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
+    }
     /**
      * Attempt parsing a chat message as a /jalist message, fails quickly returning false,
      * or submits all contained snitches for processing.
