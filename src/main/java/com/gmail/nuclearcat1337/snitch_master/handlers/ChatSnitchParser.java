@@ -38,6 +38,8 @@ public class ChatSnitchParser
     private final List<IAlertRecipient> alertRecipients;
 
     private int jaListIndex = 1;
+    private int maxJaListIndex = -1;
+
     private boolean updatingSnitchList = false;
 
     private double waitTime = 4;
@@ -256,6 +258,13 @@ public class ChatSnitchParser
                 //If they disconnect while updating is running we dont want the game to crash
                 if(Minecraft.getMinecraft().thePlayer != null)
                 {
+                    if(maxJaListIndex != -1 && jaListIndex-1 >= maxJaListIndex)
+                    {
+                        resetUpdatingSnitchList(true);
+                        SnitchMaster.SendMessageToPlayer("Finished targeted snitch update");
+                        return;
+                    }
+
                     Minecraft.getMinecraft().thePlayer.sendChatMessage("/jalist " + jaListIndex);
                     jaListIndex++;
                     nextUpdate = System.currentTimeMillis() + (long) (waitTime * 1000);
@@ -288,7 +297,21 @@ public class ChatSnitchParser
         nextUpdate = System.currentTimeMillis() + 2000;
         updatingSnitchList = true;
 
-        SnitchMaster.SendMessageToPlayer("The current world is: "+snitchMaster.getCurrentWorld());
+        //SnitchMaster.SendMessageToPlayer("The current world is: "+snitchMaster.getCurrentWorld());
+    }
+
+    public void updateSnitchList(int startIndex, int stopIndex)
+    {
+        resetUpdatingSnitchList(false);
+
+        jaListIndex = startIndex;
+        maxJaListIndex = stopIndex;
+
+        Minecraft.getMinecraft().thePlayer.sendChatMessage("/tps");
+        nextUpdate = System.currentTimeMillis() + 2000;
+        updatingSnitchList = true;
+
+        //SnitchMaster.SendMessageToPlayer("The current world is: "+snitchMaster.getCurrentWorld());
     }
 
     private void parseTPS(String message)
@@ -328,6 +351,7 @@ public class ChatSnitchParser
     public void resetUpdatingSnitchList(boolean save)
     {
         jaListIndex = 1;
+        maxJaListIndex = -1;
 
         if(save)
         {
