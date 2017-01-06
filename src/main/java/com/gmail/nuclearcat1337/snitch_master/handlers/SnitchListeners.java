@@ -3,17 +3,14 @@ package com.gmail.nuclearcat1337.snitch_master.handlers;
 import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
-import com.gmail.nuclearcat1337.snitch_master.util.Color;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
-import com.gmail.nuclearcat1337.snitch_master.util.PointLocation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -63,17 +60,18 @@ public class SnitchListeners
     public void onSnitchBreak(BlockEvent.BreakEvent event)
     {
         BlockPos pos = event.getPos();
-        Location loc = new Location(pos.getX(),pos.getY(),pos.getZ(),snitchMaster.getCurrentWorld());
+        Location loc = new Location(pos.getX(), pos.getY(), pos.getZ(), snitchMaster.getCurrentWorld());
 
         Snitch snitch = snitchMaster.getSnitches().remove(loc);
-        if(snitch != null)
+        if (snitch != null)
         {
-            if(SnitchMaster.jmInterface != null)
+            if (SnitchMaster.jmInterface != null)
                 SnitchMaster.jmInterface.refresh(snitchMaster.getSnitches());
 
             IOHandler.saveSnitches(snitchMaster.getSnitches());
 
-            SnitchMaster.SendMessageToPlayer("Removed snitch at "+loc.toString());
+            SnitchMaster.SendMessageToPlayer("Removed snitch at " + loc.toString());
         }
+
     }
 }

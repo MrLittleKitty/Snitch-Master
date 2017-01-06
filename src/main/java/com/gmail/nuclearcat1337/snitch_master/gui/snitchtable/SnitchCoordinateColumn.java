@@ -103,7 +103,7 @@ public class SnitchCoordinateColumn implements TableColumn<Snitch>
     @Override
     public int compare(Snitch snitch, Snitch other)
     {
-        return Integer.compare(getCoordinate(snitch,type),getCoordinate(snitch,type));
+        return Integer.compare(getCoordinate(snitch,type),getCoordinate(other,type));
     }
 
     private static int getCoordinate(Snitch snitch, CoordinateType type)

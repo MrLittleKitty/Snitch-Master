@@ -33,9 +33,9 @@ public class SnitchListControlsColumn implements TableColumn<SnitchList>
     public GuiButton[] prepareEntry(SnitchList list)
     {
         GuiButton[] buttons = new GuiButton[3];
-        buttons[0] = new GuiButton(0, 0, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "^");
+        buttons[0] = new GuiButton(0, 0, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "/\\");
         buttons[1] = new GuiButton(1, 0, 0, ON_OFF_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, list.shouldRenderSnitches() ? "On" : "Off");
-        buttons[2] = new GuiButton(2,0, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "v");
+        buttons[2] = new GuiButton(2,0, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "\\/");
         return buttons;
     }
 

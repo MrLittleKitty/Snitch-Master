@@ -175,7 +175,7 @@ public class TableGui<T> extends GuiListExtended
             String text = root + col.getColumnName();
 
             if(sortColumn != null && sortColumn.getColumnName().equalsIgnoreCase(col.getColumnName()))
-                text += (sortAscending ? " ^" : " v");
+                text += (sortAscending ? " /\\" : " \\/");
 
             int textWidth = mc.fontRendererObj.getStringWidth(text);
             int drawXPos =  xPos + (columnWidth/2) - (textWidth/2);

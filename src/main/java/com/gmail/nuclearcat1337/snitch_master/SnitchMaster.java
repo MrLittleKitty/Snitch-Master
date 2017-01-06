@@ -46,6 +46,7 @@ public class SnitchMaster
     /**
      * The static instance of this SnitchMaster class
      */
+    @Mod.Instance(MODID)
     public static SnitchMaster instance;
 
     private Settings settings;
@@ -95,8 +96,6 @@ public class SnitchMaster
         {
             e.printStackTrace();
         }
-
-        instance = this;
     }
 
     private void initializeSettings()
@@ -236,7 +235,15 @@ public class SnitchMaster
                     return Settings.QuietTimeState.valueOf(value);
             }
             else
-                return value;
+            {
+                if(value.equalsIgnoreCase(Boolean.FALSE.toString()))
+                    return Boolean.FALSE;
+                else if(value.equalsIgnoreCase(Boolean.TRUE.toString()))
+                    return Boolean.TRUE;
+                else
+                    return value;
+            }
+
         }
     }
 }

@@ -162,8 +162,8 @@ public class TableColumnSelector<T> extends GuiListExtended
             this.column = column;
             this.render = render;
 
-            this.upButton = new GuiButton(0, width - 60, 0, renderLength/2 - GuiConstants.SMALL_SEPARATION_DISTANCE/2, GuiConstants.STANDARD_BUTTON_HEIGHT, "^");
-            this.downButton = new GuiButton(1, width - 60, 0, renderLength/2 - GuiConstants.SMALL_SEPARATION_DISTANCE/2, GuiConstants.STANDARD_BUTTON_HEIGHT, "v");
+            this.upButton = new GuiButton(0, width - 60, 0, renderLength/2 - GuiConstants.SMALL_SEPARATION_DISTANCE/2, GuiConstants.STANDARD_BUTTON_HEIGHT, "/\\");
+            this.downButton = new GuiButton(1, width - 60, 0, renderLength/2 - GuiConstants.SMALL_SEPARATION_DISTANCE/2, GuiConstants.STANDARD_BUTTON_HEIGHT, "\\/");
             this.renderButton = new GuiButton(2, width - 60, 0, renderLength-2, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
             setRenderText();
         }
