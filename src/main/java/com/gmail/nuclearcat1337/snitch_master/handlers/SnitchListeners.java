@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.handlers;
 
+import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
@@ -36,23 +37,23 @@ public class SnitchListeners
     {
         if (event instanceof PlayerInteractEvent.RightClickBlock)
         {
-            PlayerInteractEvent.RightClickBlock event1 = (PlayerInteractEvent.RightClickBlock) event;
-            BlockPos pos = event1.getPos();
-            if (pos != null)
+            //If manual mode is enabled...
+            if((Boolean)snitchMaster.getSettings().getValue(Settings.MANUAL_MODE_KEY))
             {
-                IBlockState state = event1.getWorld().getBlockState(pos);
-//                if (state.getBlock().equals(Blocks.SPONGE))
-//                {
-//                    block = new Block(pos.getX(), pos.getY(), pos.getZ(), 10, new Color(0.86, 0.08, 0.24, 0.25));
-//                }
-                if (state.getBlock().equals(Blocks.JUKEBOX) || state.getBlock().equals(Blocks.NOTEBLOCK))
+                PlayerInteractEvent.RightClickBlock event1 = (PlayerInteractEvent.RightClickBlock) event;
+                BlockPos pos = event1.getPos();
+                if (pos != null)
                 {
-                    Location loc = new Location(pos.getX(),pos.getY(),pos.getZ(),snitchMaster.getCurrentWorld());
-                    Snitch snitch = new Snitch(loc,"manual");
+                    IBlockState state = event1.getWorld().getBlockState(pos);
+                    if (state.getBlock().equals(Blocks.JUKEBOX) || state.getBlock().equals(Blocks.NOTEBLOCK))
+                    {
+                        Location loc = new Location(pos.getX(), pos.getY(), pos.getZ(), snitchMaster.getCurrentWorld());
+                        Snitch snitch = new Snitch(loc, "manual");
 
-                    snitchMaster.submitSnitch(snitch);
+                        snitchMaster.submitSnitch(snitch);
 
-                    IOHandler.saveSnitches(snitchMaster.getSnitches());
+                        IOHandler.saveSnitches(snitchMaster.getSnitches());
+                    }
                 }
             }
         }

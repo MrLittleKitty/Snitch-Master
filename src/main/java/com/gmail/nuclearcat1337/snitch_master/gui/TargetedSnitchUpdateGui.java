@@ -1,12 +1,7 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
-import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
 import com.gmail.nuclearcat1337.snitch_master.gui.controls.TextBox;
-import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListsTable;
 import com.gmail.nuclearcat1337.snitch_master.handlers.ChatSnitchParser;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
-import com.gmail.nuclearcat1337.snitch_master.util.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

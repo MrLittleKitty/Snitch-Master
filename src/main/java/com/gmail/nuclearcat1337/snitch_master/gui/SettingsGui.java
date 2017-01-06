@@ -18,6 +18,7 @@ public class SettingsGui extends GuiScreen
     private GuiButton chatSpamButton;
     private GuiButton quietTimeButton;
     private GuiButton renderTextButton;
+    private GuiButton manualModeButton;
 
     public SettingsGui(GuiScreen backToScreen)
     {
@@ -42,7 +43,10 @@ public class SettingsGui extends GuiScreen
         this.buttonList.add(renderTextButton);
 
         //Increment it for drawing the second button
-        //drawXPos += (halfWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
+        drawXPos += (halfWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
+        manualModeButton = new GuiButton(2, drawXPos, yPos, halfWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
+        updateManualModeButton();
+        this.buttonList.add(manualModeButton);
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
@@ -73,14 +77,16 @@ public class SettingsGui extends GuiScreen
                 updateRenderTextButton();
                 settings.saveSettings();
                 break;
-            case 2:
+            case 2: //Manual Mode
+                nextManualModeState();
+                updateManualModeButton();
+                settings.saveSettings();
                 break;
             case 3: //"Quiet Time"
                 nextQuietTimeState();
                 updateQuietTimeButton();
                 settings.saveSettings();
                 break;
-
             case 4: //"Updating Snitches Spam: "
                 nextChatSpamState();
                 updateChatSpamButton();
@@ -89,10 +95,24 @@ public class SettingsGui extends GuiScreen
         }
     }
 
+    private void nextManualModeState()
+    {
+        Boolean state = (Boolean)settings.getValue(Settings.MANUAL_MODE_KEY);
+        state = state ? Boolean.FALSE : Boolean.TRUE; //Invert the state
+        settings.setValue(Settings.MANUAL_MODE_KEY,state);
+    }
+
+    private void updateManualModeButton()
+    {
+        Boolean state = (Boolean)settings.getValue(Settings.MANUAL_MODE_KEY);
+        String text =  state ? "Manual Mode On" : "Manual Mode Off";
+        manualModeButton.displayString = text;
+    }
+
     private void nextRenderTextState()
     {
         Boolean state = (Boolean)settings.getValue(Settings.RENDER_TEXT_KEY);
-        state = state ? Boolean.FALSE : Boolean.TRUE;
+        state = state ? Boolean.FALSE : Boolean.TRUE; //Invert the state
         settings.setValue(Settings.RENDER_TEXT_KEY,state);
     }
 

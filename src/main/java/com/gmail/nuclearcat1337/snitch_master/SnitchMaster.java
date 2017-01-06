@@ -107,6 +107,7 @@ public class SnitchMaster
         settings.setValueIfNotSet(Settings.QUIET_TIME_KEY, Settings.QuietTimeState.OFF);
         settings.setValueIfNotSet(Settings.CHAT_SPAM_KEY, Settings.ChatSpamState.ON);
         settings.setValueIfNotSet(Settings.RENDER_TEXT_KEY, Boolean.TRUE);
+        settings.setValueIfNotSet(Settings.MANUAL_MODE_KEY, Boolean.TRUE);
 
         settings.saveSettings();
     }
