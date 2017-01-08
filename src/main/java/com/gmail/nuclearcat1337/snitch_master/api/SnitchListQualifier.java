@@ -8,6 +8,8 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
  */
 public class SnitchListQualifier
 {
+    public static final int MAX_QUALIFIER_TEXT_LENGTH = Integer.MAX_VALUE;
+
     private static final String CULL_TIME_TOKEN = "cull_time";
     private static final String WORLD_TOKEN = "world";
     private static final String GROUP_TOKEN = "group";

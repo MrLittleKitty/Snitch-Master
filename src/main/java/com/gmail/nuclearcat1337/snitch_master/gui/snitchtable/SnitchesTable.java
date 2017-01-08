@@ -64,12 +64,13 @@ public class SnitchesTable extends TableTopGui<Snitch>
 
         columns.add(packageValues(new SnitchNameColumn(), true));
         columns.add(packageValues(new SnitchGroupColumn(), true));
+        columns.add(packageValues(new SnitchDescriptionColumn(), true));
         columns.add(packageValues(new SnitchCullTimeColumn(), false));
 
-        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.X), true));
-        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.Y), true));
-        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.Z), true));
-        columns.add(packageValues(new SnitchWorldColumn(), true));
+        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.X), false));
+        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.Y), false));
+        columns.add(packageValues(new SnitchCoordinateColumn(SnitchCoordinateColumn.CoordinateType.Z), false));
+        columns.add(packageValues(new SnitchWorldColumn(), false));
 
         columns.add(packageValues(new SnitchDistanceColumn(), true));
         columns.add(packageValues(new TableButtonColumn<>("Lists", "View", VIEW_LISTS_BUTTON_WIDTH, viewListsClick), true));

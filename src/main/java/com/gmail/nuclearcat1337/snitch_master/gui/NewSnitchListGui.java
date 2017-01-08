@@ -44,6 +44,9 @@ public class NewSnitchListGui extends GuiScreen
         this.snitchMaster = snitchMaster;
     }
 
+    private static final int MAX_NAME_TEXT_LENGTH = 20;
+    private static final int MAX_COLOR_TEXT_LENGTH = 3;
+
     public void initGui()
     {
         qualifierBoxWidth = mc.fontRendererObj.getStringWidth(SnitchList.MAX_NAME_CHARACTERS+"WWW"); //TODO---Idk this is kind of just an arbitrary width
@@ -56,33 +59,28 @@ public class NewSnitchListGui extends GuiScreen
         int yPos = (this.height / 2) - (GuiConstants.STANDARD_BUTTON_HEIGHT*3) - (GuiConstants.STANDARD_SEPARATION_DISTANCE) ;
         int xPos = (this.width/2) - (nameBoxWidth/2);
 
-        nameBox = new TextBox("",fontRendererObj,xPos,yPos,nameBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,false,false);
-        nameBox.setMaxStringLength(20);
+        nameBox = new TextBox("",fontRendererObj,xPos,yPos,nameBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,false,false,MAX_NAME_TEXT_LENGTH);
         nameBox.setFocused(true);
 
         yPos += (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.SMALL_SEPARATION_DISTANCE);
         xPos = nameBox.xPosition;
 
-        this.qualifierBox = new TextBox("",fontRendererObj,xPos,yPos,qualifierBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,false,false);
-        qualifierBox.setMaxStringLength(100);
+        this.qualifierBox = new TextBox("",fontRendererObj,xPos,yPos,qualifierBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,false,false,SnitchListQualifier.MAX_QUALIFIER_TEXT_LENGTH);
 
         yPos += (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.SMALL_SEPARATION_DISTANCE);
 
-        this.redBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false);
+        this.redBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,MAX_COLOR_TEXT_LENGTH);
         redBox.setClamp(0,255);
-        redBox.setMaxStringLength(3);
 
         yPos += (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.SMALL_SEPARATION_DISTANCE);
 
-        this.greenBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false);
+        this.greenBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,MAX_COLOR_TEXT_LENGTH);
         greenBox.setClamp(0,255);
-        greenBox.setMaxStringLength(3);
 
         yPos += (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.SMALL_SEPARATION_DISTANCE);
 
-        this.blueBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false);
+        this.blueBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,MAX_COLOR_TEXT_LENGTH);
         blueBox.setClamp(0,255);
-        blueBox.setMaxStringLength(3);
 
         this.buttonList.clear();
 

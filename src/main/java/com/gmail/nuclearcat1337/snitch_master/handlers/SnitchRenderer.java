@@ -100,6 +100,12 @@ public class SnitchRenderer
         }
     }
 
+    private static final float MIN_TEXT_RENDER_SCALE = 0.0075f;
+    private static final float MAX_TEXT_RENDER_SCALE = 0.04f;
+
+    private static final float SCALE_STEP = (MAX_TEXT_RENDER_SCALE-MIN_TEXT_RENDER_SCALE)/TEXT_RENDER_DISTANCE;
+
+
     private static void RenderFloatingText(String[] text, float x, float y, float z, int color, boolean renderBlackBackground, float partialTickTime)
     {
         //Thanks to Electric-Expansion mod for the majority of this code
@@ -114,8 +120,8 @@ public class SnitchRenderer
         float dx = x-playerX;
         float dy = y-playerY;
         float dz = z-playerZ;
-        //float distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
-        float scale = 0.03f;
+        float distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
+        float scale = MIN_TEXT_RENDER_SCALE + (distance*SCALE_STEP);//.01f; //Min font scale for max text render distance
 
         GL11.glColor4f(1f, 1f, 1f, 0.5f);
         GL11.glPushMatrix();
@@ -147,19 +153,7 @@ public class SnitchRenderer
             Tessellator tessellator = Tessellator.getInstance();
             VertexBuffer worldrenderer = tessellator.getBuffer();
 
-            //GL11.glDisable(GL11.GL_TEXTURE_2D);
             GlStateManager.disableTexture2D();
-
-            /* OLD 1.8 rendering code
-            //worldrenderer.startDrawingQuads();
-            worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181709_i);	//field_181707_g maybe?
-
-            GlStateManager.color(0.0F, 0.0F, 0.0F, 0.5F);
-            worldrenderer.putPosition(-stringMiddle - 1, -1 + 0, 0.0D);
-            worldrenderer.putPosition(-stringMiddle - 1, 8 + lineHeight*text.length-lineHeight, 0.0D);
-            worldrenderer.putPosition(stringMiddle + 1, 8 + lineHeight*text.length-lineHeight, 0.0D);
-            worldrenderer.putPosition(stringMiddle + 1, -1 + 0, 0.0D);
-            */
 
             //This code taken from 1.8.8 net.minecraft.client.renderer.entity.Render.renderLivingLabel()
             worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
@@ -169,7 +163,7 @@ public class SnitchRenderer
             worldrenderer.pos((double) (stringMiddle + 1), (double) (-1), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 
             tessellator.draw();
-            //GL11.glEnable(GL11.GL_TEXTURE_2D);
+
             GlStateManager.enableTexture2D();
         }
 
@@ -200,7 +194,6 @@ public class SnitchRenderer
 
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glLineWidth(5.0F);
-        //GL11.glDisable(GL11.GL_LIGHTING);
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);
@@ -237,7 +230,6 @@ public class SnitchRenderer
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL13.GL_MULTISAMPLE);
-        //GL11.glEnable(GL11.GL_LIGHTING);
 
         GL11.glPopMatrix();
 

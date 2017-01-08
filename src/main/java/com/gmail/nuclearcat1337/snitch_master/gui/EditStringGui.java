@@ -40,8 +40,7 @@ public class EditStringGui extends GuiScreen
         int xPos = (this.width/2) - (GuiConstants.LARGE_TEXBOX_LENGTH/2);
         int yPos = (this.height/2) - (GuiConstants.STANDARD_TEXTBOX_HEIGHT) - (GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
 
-        stringBox = new TextBox(editString,fontRendererObj,xPos,yPos,GuiConstants.LARGE_TEXBOX_LENGTH,GuiConstants.STANDARD_TEXTBOX_HEIGHT,false,false);
-        stringBox.setMaxStringLength(maxStringLength);
+        stringBox = new TextBox(editString,fontRendererObj,xPos,yPos,GuiConstants.LARGE_TEXBOX_LENGTH,GuiConstants.STANDARD_TEXTBOX_HEIGHT,false,false,maxStringLength);
         stringBox.setFocused(true);
 
         this.buttonList.clear();

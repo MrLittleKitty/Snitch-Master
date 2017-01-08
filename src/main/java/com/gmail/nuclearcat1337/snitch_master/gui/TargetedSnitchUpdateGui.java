@@ -44,15 +44,13 @@ public class TargetedSnitchUpdateGui extends GuiScreen
         int yPos = (this.height / 2) - (GuiConstants.STANDARD_TEXTBOX_HEIGHT/2);
         int xPos = (this.width/2) - GuiConstants.STANDARD_SEPARATION_DISTANCE/2 - BOX_AND_BUTTON_WIDTH;
 
-        startIndexBox = new TextBox("",fontRendererObj,xPos,yPos, BOX_AND_BUTTON_WIDTH,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false);
-        startIndexBox.setMaxStringLength(3);
+        startIndexBox = new TextBox("",fontRendererObj,xPos,yPos, BOX_AND_BUTTON_WIDTH,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,3);
         startIndexBox.setClamp(0,999);
         startIndexBox.setFocused(true);
 
         xPos += (startIndexBox.width + GuiConstants.STANDARD_SEPARATION_DISTANCE);
 
-        stopIndexBox = new TextBox("",fontRendererObj,xPos,yPos, BOX_AND_BUTTON_WIDTH,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false);
-        stopIndexBox.setMaxStringLength(3);
+        stopIndexBox = new TextBox("",fontRendererObj,xPos,yPos, BOX_AND_BUTTON_WIDTH,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,3);
         stopIndexBox.setClamp(0,999);
 
         yPos += GuiConstants.STANDARD_TEXTBOX_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;

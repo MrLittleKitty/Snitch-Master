@@ -13,9 +13,10 @@ public class TextBox extends GuiTextField
     private Integer clampedMinimum;
     private Integer clampedMaximum;
 
-    public TextBox(String text, FontRenderer renderer, int x, int y, int width, int height, boolean numeric, boolean allowNegative)
+    public TextBox(String text, FontRenderer renderer, int x, int y, int width, int height, boolean numeric, boolean allowNegative, int maxStringLength)
     {
         super(0,renderer,x,y,width,height);
+        super.setMaxStringLength(maxStringLength);
         super.setText(text);
         this.number = numeric;
         this.allowNegative = allowNegative;
