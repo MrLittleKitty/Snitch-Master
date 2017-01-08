@@ -3,8 +3,26 @@ Snitch Master --- A Minecraft Forge mod for rendering and managing JukeAlert sni
 
 Current supported Minecraft version: **Minecraft 1.10.2**
 
+#Screenshots
+![Rendered Snitch Field](http://i.imgur.com/WrwgsBy.png)
+
+![Rendered Snitch Field with text](http://imgur.com/sA1XS4g.png)
+
+![Snitch master main menu](http://imgur.com/8vfan9x.png)
+
+![Snitch master settings](http://imgur.com/bSsuO4c.png)
+
+![Snitches table](http://imgur.com/oMNlq3u.png)
+
+![Snitch lists table](http://imgur.com/sX8K29c.png)
+
+![Journey map overlay](http://imgur.com/omp8zZk.png)
+
+
 #Releases
-Minecraft 1.10.2 --- [Release v1.0.8](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.0.8) (NEW!)
+Minecraft 1.10.2 --- [Release v1.0.9-pre](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.0.9-pre) (NEW!)
+
+Minecraft 1.10.2 --- [Release v1.0.8](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.0.8)
 
 Minecraft 1.10.2 --- [Release v1.0.7](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.0.7)
 
@@ -25,7 +43,10 @@ Minecraft 1.10.2 --- [Release v1.0.3](https://github.com/MrLittleKitty/Snitch-Ma
 5. The result can be found at `build/libs/*.jar`
 
 #Credits
-Thanks to all the contributors over at the [Snitch Visualizer Mod](https://github.com/Scuwr/Snitch-Visualizer) who started the idea of a mod to render snitches in-game.
+Mr_Little_Kitty - Main manager and creator of the mod
+Gjum            - Code, ideas, bug reports, and general help
+
+Special thanks to all the contributors over at the [Snitch Visualizer Mod](https://github.com/Scuwr/Snitch-Visualizer) who started the idea of a mod to render snitches in-game.
 
 #License
 This mod is licensed under the [MIT License](https://github.com/MrLittleKitty/Snitch-Master/blob/master/LICENSE.txt)
