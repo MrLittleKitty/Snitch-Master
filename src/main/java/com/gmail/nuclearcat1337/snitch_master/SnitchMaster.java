@@ -14,10 +14,10 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * Created by Mr_Little_Kitty on 6/25/2016.
@@ -34,7 +34,7 @@ public class SnitchMaster
     /**
      * The Logger instance to use to print to the console
      */
-    public static final Logger logger = Logger.getLogger(MODID);
+    public static final Logger logger = LogManager.getLogger(MODID);
     public static final boolean CULL_TIME_ENABLED = true;
 
     /**
