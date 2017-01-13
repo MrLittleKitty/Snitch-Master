@@ -1,7 +1,8 @@
 # Snitch Master
 Snitch Master --- A Minecraft Forge mod for rendering and managing JukeAlert snitches on servers powered by the [Citadel](https://github.com/Civcraft/Citadel) plugin.
 
-Current supported Minecraft version: **Minecraft 1.10.2**
+#Current Version
+Minecraft 1.10.2 --- [Release v1.0.9-pre](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.0.9-pre)
 
 #Screenshots
 ![Rendered Snitch Field](http://i.imgur.com/WrwgsBy.png)
@@ -19,8 +20,8 @@ Current supported Minecraft version: **Minecraft 1.10.2**
 ![Journey map overlay](http://imgur.com/omp8zZk.png)
 
 
-#Releases
-Minecraft 1.10.2 --- [Release v1.0.9-pre](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.0.9-pre) (NEW!)
+#All Downloads
+Minecraft 1.10.2 --- [Release v1.0.9-pre](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.0.9-pre)
 
 Minecraft 1.10.2 --- [Release v1.0.8](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.0.8)
 
@@ -43,8 +44,9 @@ Minecraft 1.10.2 --- [Release v1.0.3](https://github.com/MrLittleKitty/Snitch-Ma
 5. The result can be found at `build/libs/*.jar`
 
 #Credits
-Mr_Little_Kitty - Main manager and creator of the mod
-Gjum            - Code, ideas, bug reports, and general help
+[Mr_Little_Kitty](https://github.com/MrLittleKitty) - Main manager and creator of the mod
+
+[Gjum](https://github.com/Gjum) - Code, ideas, bug reports, and general help
 
 Special thanks to all the contributors over at the [Snitch Visualizer Mod](https://github.com/Scuwr/Snitch-Visualizer) who started the idea of a mod to render snitches in-game.
 
