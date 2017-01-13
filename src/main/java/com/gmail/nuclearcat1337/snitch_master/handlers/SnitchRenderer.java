@@ -2,9 +2,7 @@ package com.gmail.nuclearcat1337.snitch_master.handlers;
 
 import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-import com.gmail.nuclearcat1337.snitch_master.gui.SettingsGui;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.IReadOnlyLocatableObjectList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
@@ -17,15 +15,10 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.SortedSet;
 
 /**
  * Created by Mr_Little_Kitty on 6/26/2016.
@@ -86,7 +79,7 @@ public class SnitchRenderer
                             text[1] = "Group: " + snitch.getGroupName();
                             text[2] = "Location: " + location.toString();
 
-                            RenderFloatingText(text, (float) location.getX() + 0.5f, location.getY() + 2f, location.getZ() + 0.5f, 0xFFFFFF, true, event.getPartialTicks());
+                            RenderFloatingText(text, (float) location.getX() + 0.5f, location.getY() + 1.01f, location.getZ() + 0.5f, 0xFFFFFF, true, event.getPartialTicks());
                         }
                     }
 
@@ -145,22 +138,23 @@ public class SnitchRenderer
         }
 
         int lineHeight = 10;
+        int initialValue = lineHeight*text.length;
 
         if(renderBlackBackground)
         {
             int stringMiddle = textWidth / 2;
 
             Tessellator tessellator = Tessellator.getInstance();
-            VertexBuffer worldrenderer = tessellator.getBuffer();
+            VertexBuffer vertexBuffer = tessellator.getBuffer();
 
             GlStateManager.disableTexture2D();
 
             //This code taken from 1.8.8 net.minecraft.client.renderer.entity.Render.renderLivingLabel()
-            worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            worldrenderer.pos((double) (-stringMiddle - 1), (double) (-1), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            worldrenderer.pos((double) (-stringMiddle - 1), (double) (8 + lineHeight*(text.length-1)), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            worldrenderer.pos((double) (stringMiddle + 1), (double) (8 + lineHeight*(text.length-1)), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            worldrenderer.pos((double) (stringMiddle + 1), (double) (-1), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            vertexBuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+            vertexBuffer.pos((double) (-stringMiddle - 1), (double) (-1)-initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            vertexBuffer.pos((double) (-stringMiddle - 1), (double) (8 + lineHeight*(text.length-1))-initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            vertexBuffer.pos((double) (stringMiddle + 1), (double) (8 + lineHeight*(text.length-1))-initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            vertexBuffer.pos((double) (stringMiddle + 1), (double) (-1)-initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 
             tessellator.draw();
 
@@ -171,7 +165,7 @@ public class SnitchRenderer
         for(String message : text)
         {
             int messageWidth = mc.fontRendererObj.getStringWidth(message);
-            mc.fontRendererObj.drawString(message,  0-(messageWidth / 2), i*lineHeight, color);
+            mc.fontRendererObj.drawString(message,  0-(messageWidth / 2), (i*lineHeight)-initialValue, color);
             i++;
         }
 

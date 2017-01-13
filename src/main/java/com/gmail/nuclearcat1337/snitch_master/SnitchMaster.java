@@ -7,7 +7,6 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
-import com.gmail.nuclearcat1337.snitch_master.util.ValueParser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
@@ -213,7 +212,7 @@ public class SnitchMaster
         mc.thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] "+message));
     }
 
-    private static class ObjectParser implements ValueParser
+    private static class ObjectParser implements Settings.ValueParser
     {
 //        settings.setValueIfNotSet("quiet-time", Boolean.FALSE.toString());
 //        settings.setValueIfNotSet("chat-spam", 1);

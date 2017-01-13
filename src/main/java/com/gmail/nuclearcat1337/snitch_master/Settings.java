@@ -1,7 +1,5 @@
 package com.gmail.nuclearcat1337.snitch_master;
 
-import com.gmail.nuclearcat1337.snitch_master.util.ValueParser;
-
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -114,5 +112,10 @@ public class Settings
         {
             e.printStackTrace();
         }
+    }
+
+    public interface ValueParser
+    {
+        Object parse(String key, String value);
     }
 }
