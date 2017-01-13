@@ -1,6 +1,10 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListRemoveColumn;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListsTable;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchtable.SnitchRemoveColumn;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchtable.SnitchesTable;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -14,6 +18,8 @@ public class MainGui extends GuiScreen
     public MainGui(SnitchMaster snitchMaster)
     {
         this.snitchMaster = snitchMaster;
+        SnitchListRemoveColumn.removedSnitchLists.clear();
+        SnitchRemoveColumn.removedSnitches.clear();
     }
 
     public void initGui()
@@ -29,25 +35,31 @@ public class MainGui extends GuiScreen
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        this.buttonList.add(new GuiButton(1, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "View Settings"));
+        String targetedUpdateButtonMessage = snitchMaster.getChatSnitchParser().isUpdatingSnitchList() ? "Cancel Snitch Update" : "Targeted Snitch Update";
+
+        this.buttonList.add(new GuiButton(1, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, targetedUpdateButtonMessage));
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
-
-        this.buttonList.add(new GuiButton(2, xPos, yPos, "View Snitch Lists"));
+        this.buttonList.add(new GuiButton(2, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "View Settings"));
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        this.buttonList.add(new GuiButton(3, xPos, yPos, "View Snitches"));
+        this.buttonList.add(new GuiButton(3, xPos, yPos, "View Snitch Lists"));
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        this.buttonList.add(new GuiButton(4, xPos,yPos, "Done"));
+        this.buttonList.add(new GuiButton(4, xPos, yPos, "View Snitches"));
+
+        yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
+
+        this.buttonList.add(new GuiButton(5, xPos,yPos, "Done"));
     }
 
     public void actionPerformed(GuiButton button)
     {
+        SnitchListRemoveColumn.removedSnitchLists.clear();
+        SnitchRemoveColumn.removedSnitches.clear();
         switch (button.id)
         {
             case 0: //"Full Snitch Update" or "Cancel Snitch Update"
@@ -58,17 +70,29 @@ public class MainGui extends GuiScreen
                 this.mc.displayGuiScreen((GuiScreen) null);
                 this.mc.setIngameFocus();
                 break;
-            case 1: //"View Settings"
+            case 1:
+                if(snitchMaster.getChatSnitchParser().isUpdatingSnitchList())
+                {
+                    snitchMaster.getChatSnitchParser().resetUpdatingSnitchList(true);
+                    this.mc.displayGuiScreen((GuiScreen) null);
+                    this.mc.setIngameFocus();
+                }
+                else
+                    this.mc.displayGuiScreen(new TargetedSnitchUpdateGui(this,snitchMaster.getChatSnitchParser()));
+                break;
+            case 2: //"View Settings"
                 this.mc.displayGuiScreen(new SettingsGui(this));
                 break;
-            case 2: //"View Snitch Lists"
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true, "All Snitch Lists"));
+            case 3: //"View Snitch Lists"
+                this.mc.gameSettings.saveOptions(); //wtf? Why is this here? What does this do?
+                //this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true, "All Snitch Lists"));
+                this.mc.displayGuiScreen(new SnitchListsTable(this,snitchMaster.getSnitchLists().asCollection(),"All Snitch Lists",true,snitchMaster));
                 break;
-            case 3: //"View Snitches"
-                this.mc.displayGuiScreen(new EditSnitchesGui(this,snitchMaster.getSnitches(),"All Snitches"));
+            case 4: //"View Snitches"
+                //this.mc.displayGuiScreen(new EditSnitchesGui(this,snitchMaster.getSnitches(),"All Snitches"));
+                this.mc.displayGuiScreen(new SnitchesTable(this,snitchMaster.getSnitches(),"All Snitches",snitchMaster));
                 break;
-            case 4: //"Done"
+            case 5: //"Done"
                 this.mc.displayGuiScreen((GuiScreen) null);
                 this.mc.setIngameFocus();
                 break;

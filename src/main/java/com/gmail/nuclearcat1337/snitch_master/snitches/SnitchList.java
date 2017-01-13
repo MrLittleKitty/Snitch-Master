@@ -106,7 +106,13 @@ public class SnitchList
         return listQualifier;
     }
 
-    private static final SnitchListQualifier friendly = new SnitchListQualifier("origin == 'jalist'");
+    @Override
+    public int hashCode()
+    {
+        return listName.hashCode();
+    }
+
+    private static final SnitchListQualifier friendly = new SnitchListQualifier("origin == 'jalist' || origin == 'chat'");
     //private static final SnitchListQualifier hostile = new SnitchListQualifier("qualifier == 'hostile'");
     private static final SnitchListQualifier neutral = new SnitchListQualifier("origin == 'manual'");
 
@@ -117,6 +123,7 @@ public class SnitchList
     }
 
     private static final int NUMBER_OF_CSV_PARAMS = 5;
+    private static final String CSV_SEPARATOR = ",";
 
     /**
      * Returns a String representing the given SnitchList.
@@ -126,11 +133,11 @@ public class SnitchList
     {
         StringBuilder builder = new StringBuilder();
 
-        builder.append(list.getListName()).append(',');
-        builder.append(list.getListColor().serialize()).append(',');
-        builder.append(list.getRenderPriority()).append(',');
-        builder.append(list.shouldRenderSnitches()).append(',');
-        builder.append(list.getQualifier().toString());
+        builder.append(Scrub(list.getListName())).append(CSV_SEPARATOR);
+        builder.append(list.getListColor().serialize()).append(CSV_SEPARATOR);
+        builder.append(list.getRenderPriority()).append(CSV_SEPARATOR);
+        builder.append(list.shouldRenderSnitches()).append(CSV_SEPARATOR);
+        builder.append(Scrub(list.getQualifier().toString()));
 
         return builder.toString();
     }
@@ -140,7 +147,7 @@ public class SnitchList
      */
     public static SnitchList GetSnitchListFromCSV(String csv)
     {
-        String[] args = csv.split(",");
+        String[] args = csv.split(CSV_SEPARATOR);
         if(args.length != NUMBER_OF_CSV_PARAMS)
         {
             new NumberFormatException("The CSV string provided does not have the correct number of arguments for a Snitch List.").printStackTrace();
@@ -149,15 +156,20 @@ public class SnitchList
 
         int index = 0;
 
-        String name = args[index++];
+        String name = Scrub(args[index++]);
         Color color = new Color(args[index++]);
         int priority = Integer.parseInt(args[index++]);
         boolean shouldRender = Boolean.parseBoolean(args[index++]);
-        SnitchListQualifier qualifier = new SnitchListQualifier(args[index++]);
+        SnitchListQualifier qualifier = new SnitchListQualifier(Scrub(args[index++]));
 
         SnitchList list = new SnitchList(qualifier,shouldRender,name,color); //TODO---You need to not have null as the first parameter
         list.setRenderPriority(priority);
 
         return list;
+    }
+
+    private static String Scrub(String string)
+    {
+        return string.replace(CSV_SEPARATOR,"");
     }
 }

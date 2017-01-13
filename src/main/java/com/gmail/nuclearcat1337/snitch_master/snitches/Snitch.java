@@ -8,6 +8,7 @@ import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Mr_Little_Kitty on 6/25/2016.
@@ -33,7 +34,7 @@ public class Snitch extends LocatableObject<Snitch>
     /**
      * The default name used for populating Snitch names and Citadel group names when not specified.
      */
-    public static final String DEFAULT_NAME = "Undefined";
+    public static final String DEFAULT_NAME = "[Undefined]";
 
     /**
      * The cull time amount that Snitches are reset to when a player walks through them.
@@ -70,6 +71,8 @@ public class Snitch extends LocatableObject<Snitch>
      */
     private ArrayList<SnitchList> attachedSnitchLists;
 
+    private List<String> description;
+
     /**
      * Creates a new Snitch and populates "Name" and "Citadel Group Name" with the default name.
      * @param location The location of this Snitch block.
@@ -83,6 +86,7 @@ public class Snitch extends LocatableObject<Snitch>
         this.ctGroup = DEFAULT_NAME;
         this.name = DEFAULT_NAME;
         attachedSnitchLists = new ArrayList<>();
+        description = null;
     }
 
     /**
@@ -98,7 +102,7 @@ public class Snitch extends LocatableObject<Snitch>
         this(location,origin);
         this.cullTime = culltime;
         this.ctGroup = ctGroup == null ? DEFAULT_NAME : ctGroup;
-        this.name = snitchName == null ? DEFAULT_NAME : snitchName;
+        this.name = snitchName == null || snitchName.isEmpty()? DEFAULT_NAME : snitchName;
         attachedSnitchLists = new ArrayList<>();
     }
 
@@ -112,6 +116,15 @@ public class Snitch extends LocatableObject<Snitch>
         return cullTime;
     }
 
+    public void setDescription(List<String> description)
+    {
+        this.description = description;
+    }
+
+    public List<String> getDescription()
+    {
+        return description;
+    }
     /**
      * Returns true if the given point if within the area covered by this Snitch block.
      * Returns false otherwise.
@@ -175,7 +188,8 @@ public class Snitch extends LocatableObject<Snitch>
 
     public void setSnitchName(String name)
     {
-        this.name = name;
+        if(!name.isEmpty())
+            this.name = name;
     }
 
     public void setGroupName(String groupName)
@@ -279,7 +293,8 @@ public class Snitch extends LocatableObject<Snitch>
      * The number of parameters in a comma separated value string representing a Snitch object
      */
     private static final int NUMBER_OF_CSV_PARAMS = 8;
-
+    private static final String CSV_SEPARATOR = ",";
+    private static final String DESCRIPTION_SEPARATOR = ";";
     /**
      * Returns a string that represents the given Snitch object.
      * The returned string is in comma separated value form.
@@ -288,14 +303,22 @@ public class Snitch extends LocatableObject<Snitch>
     {
         //x, y, z, world, oring, groupName, snitchName, cullTime
         StringBuilder builder = new StringBuilder();
-        builder.append(snitch.location.getX()).append(',');
-        builder.append(snitch.location.getY()).append(',');
-        builder.append(snitch.location.getZ()).append(',');
-        builder.append(snitch.location.getWorld()).append(',');
-        builder.append(snitch.getOrigin()).append(',');
-        builder.append(snitch.getGroupName()).append(',');
-        builder.append(snitch.getSnitchName()).append(',');
-        builder.append(snitch.getCullTime()).append(',');
+        builder.append(snitch.location.getX()).append(CSV_SEPARATOR);
+        builder.append(snitch.location.getY()).append(CSV_SEPARATOR);
+        builder.append(snitch.location.getZ()).append(CSV_SEPARATOR);
+        builder.append(Scrub(snitch.location.getWorld())).append(CSV_SEPARATOR);
+        builder.append(Scrub(snitch.getOrigin())).append(CSV_SEPARATOR);
+        builder.append(Scrub(snitch.getGroupName())).append(CSV_SEPARATOR);
+        builder.append(Scrub(snitch.getSnitchName())).append(CSV_SEPARATOR);
+        builder.append(snitch.getCullTime()).append(CSV_SEPARATOR);
+
+        List<String> description = snitch.getDescription();
+        if(description != null)
+        {
+            for(String line : description)
+                builder.append(Scrub(line)).append(DESCRIPTION_SEPARATOR);
+        }
+        builder.append(CSV_SEPARATOR);
 
         return builder.toString();
     }
@@ -308,33 +331,55 @@ public class Snitch extends LocatableObject<Snitch>
     public static Snitch GetSnitchFromCSV(String csv)
     {
 
-        String[] args = csv.split(",");
-        if(args.length != NUMBER_OF_CSV_PARAMS)
+        String[] args = csv.split(CSV_SEPARATOR);
+
+        //We allow one less than the correct for when we didn't have a description
+        if(args.length == NUMBER_OF_CSV_PARAMS || args.length == NUMBER_OF_CSV_PARAMS-1)
         {
-            new NumberFormatException("The CSV string provided does not have the correct number of arguments for a Snitch.").printStackTrace();
-            return null;
+            try
+            {
+                int index = 0;
+
+                int x = Integer.parseInt(args[index++]);
+                int y = Integer.parseInt(args[index++]);
+                int z = Integer.parseInt(args[index++]);
+                String world = Scrub(args[index++]);
+                String origin = Scrub(args[index++]);
+                String groupName = Scrub(args[index++]);
+                String snitchName = Scrub(args[index++]);
+                double cullTime = Double.parseDouble(args[index++]);
+
+                if (snitchName.isEmpty())
+                    snitchName = DEFAULT_NAME;
+
+                Snitch snitch = new Snitch(new Location(x, y, z, world), origin, cullTime, groupName, snitchName);
+
+                //If there is an argument for the description
+                if(args.length > index)
+                {
+                    String descriptionCompressed = args[index++];
+                    if (!descriptionCompressed.isEmpty())
+                    {
+                        String[] lines = descriptionCompressed.split(DESCRIPTION_SEPARATOR);
+                        ArrayList<String> description = new ArrayList<>(lines.length);
+                        for (int i = 0; i < lines.length; i++)
+                             description.set(i,Scrub(lines[i]));
+                        snitch.setDescription(description);
+                    }
+                }
+
+                return snitch;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
+        return null;
+    }
 
-        try
-        {
-            int index = 0;
-
-            int x = Integer.parseInt(args[index++]);
-            int y = Integer.parseInt(args[index++]);
-            int z = Integer.parseInt(args[index++]);
-            String world = args[index++];
-            String origin = args[index++];
-            String groupName = args[index++];
-            String snitchName = args[index++];
-            double cullTime = Double.parseDouble(args[index++]);
-
-            Snitch snitch = new Snitch(new Location(x, y, z, world), origin, cullTime, groupName, snitchName);
-
-            return snitch;
-        }
-        catch(Exception e)
-        {
-            return null;
-        }
+    private static String Scrub(String string)
+    {
+        return string.replace(CSV_SEPARATOR,"").replace(DESCRIPTION_SEPARATOR,"");
     }
 }

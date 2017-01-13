@@ -7,8 +7,8 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
-import com.gmail.nuclearcat1337.snitch_master.util.ValueParser;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +28,7 @@ public class SnitchMaster
 {
     public static final String MODID = "snitchmaster";
     public static final String MODNAME = "Snitch Master";
-    public static final String MODVERSION = "1.0.8";
+    public static final String MODVERSION = "1.0.9";
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     /**
@@ -45,6 +45,7 @@ public class SnitchMaster
     /**
      * The static instance of this SnitchMaster class
      */
+    @Mod.Instance(MODID)
     public static SnitchMaster instance;
 
     private Settings settings;
@@ -94,8 +95,6 @@ public class SnitchMaster
         {
             e.printStackTrace();
         }
-
-        instance = this;
     }
 
     private void initializeSettings()
@@ -103,8 +102,10 @@ public class SnitchMaster
         settings = new Settings(IOHandler.getSettingsFile(),new ObjectParser());
         settings.loadSettings();
 
-        settings.setValueIfNotSet(Settings.QUIET_TIME_KEY, Boolean.FALSE);
+        settings.setValueIfNotSet(Settings.QUIET_TIME_KEY, Settings.QuietTimeState.OFF);
         settings.setValueIfNotSet(Settings.CHAT_SPAM_KEY, Settings.ChatSpamState.ON);
+        settings.setValueIfNotSet(Settings.RENDER_TEXT_KEY, Boolean.TRUE);
+        settings.setValueIfNotSet(Settings.MANUAL_MODE_KEY, Boolean.TRUE);
 
         settings.saveSettings();
     }
@@ -206,7 +207,12 @@ public class SnitchMaster
             snitch.sortSnitchLists();
     }
 
-    private static class ObjectParser implements ValueParser
+    public static void SendMessageToPlayer(String message)
+    {
+        mc.thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] "+message));
+    }
+
+    private static class ObjectParser implements Settings.ValueParser
     {
 //        settings.setValueIfNotSet("quiet-time", Boolean.FALSE.toString());
 //        settings.setValueIfNotSet("chat-spam", 1);
@@ -214,12 +220,29 @@ public class SnitchMaster
         @Override
         public Object parse(String key, String value)
         {
-            if(key.equalsIgnoreCase(Settings.QUIET_TIME_KEY))
+            if(key.equalsIgnoreCase(Settings.RENDER_TEXT_KEY))
                 return Boolean.parseBoolean(value);
             else if(key.equalsIgnoreCase(Settings.CHAT_SPAM_KEY))
                 return Settings.ChatSpamState.valueOf(value);
+            else if(key.equalsIgnoreCase(Settings.QUIET_TIME_KEY))
+            {
+                if(value.equalsIgnoreCase(Boolean.FALSE.toString()))
+                    return Settings.QuietTimeState.OFF;
+                else if(value.equalsIgnoreCase(Boolean.TRUE.toString()))
+                    return Settings.QuietTimeState.HIDE_COORDINATES;
+                else
+                    return Settings.QuietTimeState.valueOf(value);
+            }
+            else
+            {
+                if(value.equalsIgnoreCase(Boolean.FALSE.toString()))
+                    return Boolean.FALSE;
+                else if(value.equalsIgnoreCase(Boolean.TRUE.toString()))
+                    return Boolean.TRUE;
+                else
+                    return value;
+            }
 
-            return null;
         }
     }
 }

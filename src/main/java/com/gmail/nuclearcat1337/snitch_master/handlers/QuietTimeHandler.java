@@ -4,6 +4,7 @@ import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.IAlertRecipient;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchAlert;
+import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -25,23 +26,34 @@ public class QuietTimeHandler implements IAlertRecipient
     @Override
     public void receiveSnitchAlert(SnitchAlert alert)
     {
-        Boolean state = (Boolean)settings.getValue(Settings.QUIET_TIME_KEY);
+        Settings.QuietTimeState state = (Settings.QuietTimeState)settings.getValue(Settings.QUIET_TIME_KEY);
 
-        if(state.booleanValue())
+        //If it isnt off then we are going to do some sort of hiding
+        if(state != Settings.QuietTimeState.OFF)
         {
-            // by default, move the coordinates into hovertext
+            // Move the coordinates into hovertext
             String snitchLocation = alert.getLocation().toString();
             Style aqua = new Style().setColor(TextFormatting.AQUA);
 
-            HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(snitchLocation));
+            HoverEvent hoverLocation = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(snitchLocation));
 
-            ITextComponent hoverAreaComponent = new TextComponentString("[world X X X]").setStyle(new Style().setHoverEvent(hover));
+            ITextComponent hoverLocationComponent = new TextComponentString("[world X X X]").setStyle(new Style().setHoverEvent(hoverLocation));
 
-            //ITextComponent snitchNameComponent = new TextComponentString(alert.getSnitchName()).setStyle(new Style().setHoverEvent(hover));
+            String visibleText;
+            ITextComponent newMessage;
+            if(state == Settings.QuietTimeState.HIDE_NAME_AND_COORDINATES)
+            {
+                HoverEvent hoverName = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(alert.getSnitchName().isEmpty() ? Snitch.DEFAULT_NAME : alert.getSnitchName()));
+                ITextComponent hoverNameComponent = new TextComponentString("Hidden ").setStyle(new Style().setHoverEvent(hoverName));
 
-            String visibleText = String.format(" * %s %s %s ", alert.getPlayerName(), alert.getActivity(),alert.getSnitchName());
-
-            ITextComponent newMessage = new TextComponentString(visibleText).setStyle(aqua).appendSibling(hoverAreaComponent);
+                visibleText = String.format(" * %s %s ", alert.getPlayerName(), alert.getActivity());
+                newMessage = new TextComponentString(visibleText).setStyle(aqua).appendSibling(hoverNameComponent).appendSibling(hoverLocationComponent);
+            }
+            else
+            {
+                visibleText = String.format(" * %s %s %s ", alert.getPlayerName(), alert.getActivity(), alert.getSnitchName());
+                newMessage = new TextComponentString(visibleText).setStyle(aqua).appendSibling(hoverLocationComponent);
+            }
 
             SnitchMaster.logger.info("<Snitch location converted to hovertext> " + alert.getSnitchName() + " " + snitchLocation);
 

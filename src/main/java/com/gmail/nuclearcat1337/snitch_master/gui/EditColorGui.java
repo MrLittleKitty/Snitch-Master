@@ -40,6 +40,8 @@ public class EditColorGui extends GuiScreen
         this.titleWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(titleText);
     }
 
+    private static final int MAX_COLOR_TEXT_LENGTH = 3;
+
     public void initGui()
     {
         greenWidth = mc.fontRendererObj.getStringWidth("Green");
@@ -51,24 +53,21 @@ public class EditColorGui extends GuiScreen
         int rgbBoxWidth = (width-GuiConstants.STANDARD_SEPARATION_DISTANCE)/3;
         int buttonWidth = (width-GuiConstants.STANDARD_SEPARATION_DISTANCE)/3;
 
-        this.redBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false);
+        this.redBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,MAX_COLOR_TEXT_LENGTH);
         redBox.setClamp(0,255);
-        redBox.setMaxStringLength(3);
         redBox.setText(Integer.toString(baseColor.getRedInt()));
         redBox.setFocused(true);
 
         yPos += (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.SMALL_SEPARATION_DISTANCE);
 
-        this.greenBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false);
+        this.greenBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,MAX_COLOR_TEXT_LENGTH);
         greenBox.setClamp(0,255);
-        greenBox.setMaxStringLength(3);
         greenBox.setText(Integer.toString(baseColor.getGreenInt()));
 
         yPos += (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.SMALL_SEPARATION_DISTANCE);
 
-        this.blueBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false);
+        this.blueBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,MAX_COLOR_TEXT_LENGTH);
         blueBox.setClamp(0,255);
-        blueBox.setMaxStringLength(3);
         blueBox.setText(Integer.toString(baseColor.getBlueInt()));
 
         this.buttonList.clear();

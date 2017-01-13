@@ -66,6 +66,29 @@ public class SnitchLists implements Iterable<SnitchList>
         return snitches;
     }
 
+    public void removeSnitchList(String name)
+    {
+        SnitchList list = null;
+        for(SnitchList l : snitchLists)
+        {
+            if(l.getListName().equalsIgnoreCase(name))
+            {
+                list = l;
+                break;
+            }
+        }
+
+        if(list != null)
+        {
+            ArrayList<Snitch> snitches = getSnitchesInList(list);
+            for(Snitch snitch : snitches)
+                snitch.getAttachedSnitchLists().remove(list);
+
+            snitchLists.remove(list);
+            snitchListChanged();
+        }
+    }
+
     /**
      * Sorts the SnitchLists by their render priority.
      */

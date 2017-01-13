@@ -1,7 +1,5 @@
 package com.gmail.nuclearcat1337.snitch_master;
 
-import com.gmail.nuclearcat1337.snitch_master.util.ValueParser;
-
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +9,13 @@ import java.util.Map;
  */
 public class Settings
 {
+    public enum QuietTimeState
+    {
+        OFF,
+        HIDE_COORDINATES,
+        HIDE_NAME_AND_COORDINATES
+    }
+
     public enum ChatSpamState
     {
         ON,
@@ -20,6 +25,9 @@ public class Settings
 
     public static final String QUIET_TIME_KEY = "quiet-time";
     public static final String CHAT_SPAM_KEY = "chat-spam";
+    public static final String RENDER_TEXT_KEY = "render-text";
+    public static final String MANUAL_MODE_KEY = "manual-mode";
+
 
     private final File file;
     private final ValueParser parser;
@@ -37,6 +45,11 @@ public class Settings
     {
         if(!values.containsKey(key))
             values.put(key,value);
+    }
+
+    public boolean hasValue(String key)
+    {
+        return values.containsKey(key);
     }
 
     public void setValue(String key, Object value)
@@ -99,5 +112,10 @@ public class Settings
         {
             e.printStackTrace();
         }
+    }
+
+    public interface ValueParser
+    {
+        Object parse(String key, String value);
     }
 }
