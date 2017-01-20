@@ -86,7 +86,7 @@ Snitches will display with the color of the **HIGHEST** list that they are apart
 Below are tables with all the variables and operators available in the Snitch List Qualifier Language. Following the tables are some notes about the language.
 
 | Variable | Variable Description | Variable Type | Example Of Use |
-|---|
+|---| ---| ---| ---|
 | Name | The name of the Snitch | String | `name == 'Town Farm Snitch'` |
 | Group | The Namelayer group of the Snitch | String | `group == 'USA Vault'` |
 | Origin | The Origin of the Snitch | String | `origin == 'jalist'` |
@@ -97,7 +97,7 @@ Below are tables with all the variables and operators available in the Snitch Li
 | Z | The Z coordinate of the Snitch | Integer | `z >= 0 && z <= 1337` |
 
 | Operators | Description | Applicable Types |
-|---|
+|---| ---| ---| ---|
 | == | Checks if the two operands are equal | Integer, Decimal, String |
 | != | Checks if the two operands are not equal | Integer, Decimal, String |
 | > | Checks if the left operand is greater than the right operand | Integer, Decimal |
