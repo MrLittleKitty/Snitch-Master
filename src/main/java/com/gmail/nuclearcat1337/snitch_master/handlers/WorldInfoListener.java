@@ -41,7 +41,7 @@ public class WorldInfoListener
     public WorldInfoListener(SnitchMaster snitchMaster)
     {
         this.snitchMaster = snitchMaster;
-        channel = NetworkRegistry.INSTANCE.newSimpleChannel("world_identifier");
+        channel = NetworkRegistry.INSTANCE.newSimpleChannel("world_name");
         channel.registerMessage(WorldListener.class, WorldIDPacket.class, 0, Side.CLIENT);
     }
 
