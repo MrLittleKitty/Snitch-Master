@@ -136,6 +136,7 @@ public class ChatSnitchParser
             return false;
 
         ITextComponent hoverComponent = siblings.get(0);
+
         HoverEvent hover = hoverComponent.getStyle().getHoverEvent();
         if(hover != null)
         {
@@ -161,9 +162,9 @@ public class ChatSnitchParser
             String[] groupArgs = args[2].split(" ");
 
             int x, y, z;
-            x = Integer.parseInt(locationArgs[0].substring(2));
-            y = Integer.parseInt(locationArgs[1]);
-            z = Integer.parseInt(locationArgs[2].substring(0, locationArgs[2].length() - 1));
+            x = Integer.parseInt(locationArgs[1].substring(1));
+            y = Integer.parseInt(locationArgs[2]);
+            z = Integer.parseInt(locationArgs[3].substring(0, locationArgs[3].length() - 1));
             String world = worldArgs.length > 1 ? worldArgs[1] : snitchMaster.getCurrentWorld();
 
             Location loc = new Location(x, y, z, world);

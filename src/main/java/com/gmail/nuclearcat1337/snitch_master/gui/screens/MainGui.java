@@ -1,6 +1,7 @@
-package com.gmail.nuclearcat1337.snitch_master.gui;
+package com.gmail.nuclearcat1337.snitch_master.gui.screens;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
+import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListRemoveColumn;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListsTable;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchtable.SnitchRemoveColumn;

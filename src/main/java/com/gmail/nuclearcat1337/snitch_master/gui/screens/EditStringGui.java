@@ -1,5 +1,6 @@
-package com.gmail.nuclearcat1337.snitch_master.gui;
+package com.gmail.nuclearcat1337.snitch_master.gui.screens;
 
+import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.controls.TextBox;
 import com.gmail.nuclearcat1337.snitch_master.util.Acceptor;
 import net.minecraft.client.Minecraft;

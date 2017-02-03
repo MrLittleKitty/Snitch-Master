@@ -16,6 +16,7 @@ import net.minecraft.util.text.event.HoverEvent;
  */
 public class QuietTimeHandler implements IAlertRecipient
 {
+    private static final String QUIET_TIME_CONFIG_KEY = "quiet-time-config";
     private final Settings settings;
 
     public QuietTimeHandler(Settings settings)

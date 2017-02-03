@@ -1,6 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable;
 
-import com.gmail.nuclearcat1337.snitch_master.gui.EditStringGui;
+import com.gmail.nuclearcat1337.snitch_master.gui.screens.EditStringGui;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;

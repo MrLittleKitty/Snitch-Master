@@ -1,6 +1,7 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.tables;
 
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
+import com.gmail.nuclearcat1337.snitch_master.gui.controls.DropMenu;
 import com.gmail.nuclearcat1337.snitch_master.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -91,7 +92,9 @@ public abstract class TableTopGui<T> extends GuiScreen
         buttonList.add(doneButton);
         buttonList.add(columnsButton);
 
-        initializeButtons(2);
+        //buttonList.add(new DropMenu(2,20,20));
+
+        initializeButtons(3);
 
         super.initGui();
     }

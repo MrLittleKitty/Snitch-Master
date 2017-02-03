@@ -2,7 +2,7 @@
 
 The Snitch list is one of the main objects used in Snitch Master. It is a very useful tool that you can use to group together Snitches that meet certain criteria.
 
-Snitches are then displayed in the world and io JourneyMap with the color of their top Snitch list.
+Snitches are then displayed in the world and in JourneyMap with the color of their top Snitch list.
 
 This tutorial will help you with learning to use Snitch list qualifier language so you can group your Snitches together however you like.
 

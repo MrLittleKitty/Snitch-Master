@@ -1,7 +1,8 @@
-package com.gmail.nuclearcat1337.snitch_master.gui;
+package com.gmail.nuclearcat1337.snitch_master.gui.screens;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
+import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.controls.TextBox;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListsTable;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
@@ -54,7 +55,7 @@ public class NewSnitchListGui extends GuiScreen
         rgbBoxWidth = nameBoxWidth/3;
         qualifierStringWidth = mc.fontRendererObj.getStringWidth("Qualifier");
         createNewListStringWidth = mc.fontRendererObj.getStringWidth(CREATE_NEW_LIST_STRING);
-        buttonWidth = (qualifierBoxWidth-GuiConstants.STANDARD_SEPARATION_DISTANCE)/3;
+        buttonWidth = (qualifierBoxWidth- GuiConstants.STANDARD_SEPARATION_DISTANCE)/3;
 
         int yPos = (this.height / 2) - (GuiConstants.STANDARD_BUTTON_HEIGHT*3) - (GuiConstants.STANDARD_SEPARATION_DISTANCE) ;
         int xPos = (this.width/2) - (nameBoxWidth/2);

@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.gui;
 
+import com.gmail.nuclearcat1337.snitch_master.gui.screens.SettingsGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
