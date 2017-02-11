@@ -56,7 +56,7 @@ public class QuietTimeHandler implements IAlertRecipient
                 newMessage = new TextComponentString(visibleText).setStyle(aqua).appendSibling(hoverLocationComponent);
             }
 
-            SnitchMaster.logger.info("<Snitch location converted to hovertext> " + alert.getSnitchName() + " " + snitchLocation);
+            SnitchMaster.logger.info("<Snitch location converted to hovertext> " + alert.getRawMessage().getUnformattedText());
 
             alert.setRawMessage(newMessage);
         }
