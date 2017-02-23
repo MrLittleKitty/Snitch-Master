@@ -51,8 +51,7 @@ public class SettingsGui extends GuiScreen
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        quietTimeButton = new GuiButton(3, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
-        updateQuietTimeButton();
+        quietTimeButton = new GuiButton(3, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Quiet Time Config");
         this.buttonList.add(quietTimeButton);
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
@@ -84,9 +83,7 @@ public class SettingsGui extends GuiScreen
                 settings.saveSettings();
                 break;
             case 3: //"Quiet Time"
-                nextQuietTimeState();
-                updateQuietTimeButton();
-                settings.saveSettings();
+                this.mc.displayGuiScreen(new QuietTimeGui());
                 break;
             case 4: //"Updating Snitches Spam: "
                 nextChatSpamState();
@@ -122,31 +119,6 @@ public class SettingsGui extends GuiScreen
         Boolean state = (Boolean)settings.getValue(Settings.RENDER_TEXT_KEY);
         String text =  state ? "Render Text On" : "Render Text Off";
         renderTextButton.displayString = text;
-    }
-
-    private void nextQuietTimeState()
-    {
-        Settings.QuietTimeState quietTimeState = (Settings.QuietTimeState) settings.getValue(Settings.QUIET_TIME_KEY);
-        if(quietTimeState == Settings.QuietTimeState.OFF)
-            quietTimeState = Settings.QuietTimeState.HIDE_COORDINATES;
-        else if(quietTimeState == Settings.QuietTimeState.HIDE_COORDINATES)
-            quietTimeState = Settings.QuietTimeState.HIDE_NAME_AND_COORDINATES;
-        else if(quietTimeState == Settings.QuietTimeState.HIDE_NAME_AND_COORDINATES)
-            quietTimeState = Settings.QuietTimeState.OFF;
-        settings.setValue(Settings.QUIET_TIME_KEY,quietTimeState);
-    }
-
-    private void updateQuietTimeButton()
-    {
-        String quietTimeText = "Quiet Time: ";
-        Settings.QuietTimeState quietTimeState = (Settings.QuietTimeState) settings.getValue(Settings.QUIET_TIME_KEY);
-        if(quietTimeState == Settings.QuietTimeState.OFF)
-            quietTimeText += "Off";
-        else if(quietTimeState == Settings.QuietTimeState.HIDE_COORDINATES)
-            quietTimeText += "Hide Location";
-        else if(quietTimeState == Settings.QuietTimeState.HIDE_NAME_AND_COORDINATES)
-            quietTimeText += "Hide Location & Name";
-        quietTimeButton.displayString = quietTimeText;
     }
 
     private void nextChatSpamState()

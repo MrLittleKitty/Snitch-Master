@@ -9,13 +9,6 @@ import java.util.Map;
  */
 public class Settings
 {
-    public enum QuietTimeState
-    {
-        OFF,
-        HIDE_COORDINATES,
-        HIDE_NAME_AND_COORDINATES
-    }
-
     public enum ChatSpamState
     {
         ON,
@@ -23,7 +16,6 @@ public class Settings
         PAGENUMBERS;
     }
 
-    public static final String QUIET_TIME_KEY = "quiet-time";
     public static final String CHAT_SPAM_KEY = "chat-spam";
     public static final String RENDER_TEXT_KEY = "render-text";
     public static final String MANUAL_MODE_KEY = "manual-mode";

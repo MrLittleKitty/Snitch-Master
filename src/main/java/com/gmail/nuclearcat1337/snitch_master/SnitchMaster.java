@@ -7,6 +7,8 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
+import com.gmail.nuclearcat1337.snitch_master.util.Pair;
+import com.gmail.nuclearcat1337.snitch_master.util.QuietTimeConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
@@ -102,7 +104,7 @@ public class SnitchMaster
         settings = new Settings(IOHandler.getSettingsFile(),new ObjectParser());
         settings.loadSettings();
 
-        settings.setValueIfNotSet(Settings.QUIET_TIME_KEY, Settings.QuietTimeState.OFF);
+        settings.setValueIfNotSet(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, QuietTimeConfig.GetDefaultQuietTimeConfig());
         settings.setValueIfNotSet(Settings.CHAT_SPAM_KEY, Settings.ChatSpamState.ON);
         settings.setValueIfNotSet(Settings.RENDER_TEXT_KEY, Boolean.TRUE);
         settings.setValueIfNotSet(Settings.MANUAL_MODE_KEY, Boolean.TRUE);
@@ -220,29 +222,22 @@ public class SnitchMaster
         @Override
         public Object parse(String key, String value)
         {
-            if(key.equalsIgnoreCase(Settings.RENDER_TEXT_KEY))
+            if (key.equalsIgnoreCase(Settings.RENDER_TEXT_KEY))
                 return Boolean.parseBoolean(value);
-            else if(key.equalsIgnoreCase(Settings.CHAT_SPAM_KEY))
+            else if (key.equalsIgnoreCase(Settings.CHAT_SPAM_KEY))
                 return Settings.ChatSpamState.valueOf(value);
-            else if(key.equalsIgnoreCase(Settings.QUIET_TIME_KEY))
+            else if (key.equalsIgnoreCase(QuietTimeHandler.QUIET_TIME_CONFIG_KEY))
             {
-                if(value.equalsIgnoreCase(Boolean.FALSE.toString()))
-                    return Settings.QuietTimeState.OFF;
-                else if(value.equalsIgnoreCase(Boolean.TRUE.toString()))
-                    return Settings.QuietTimeState.HIDE_COORDINATES;
-                else
-                    return Settings.QuietTimeState.valueOf(value);
-            }
-            else
+                return QuietTimeConfig.FromString(value);
+            } else
             {
-                if(value.equalsIgnoreCase(Boolean.FALSE.toString()))
+                if (value.equalsIgnoreCase(Boolean.FALSE.toString()))
                     return Boolean.FALSE;
-                else if(value.equalsIgnoreCase(Boolean.TRUE.toString()))
+                else if (value.equalsIgnoreCase(Boolean.TRUE.toString()))
                     return Boolean.TRUE;
                 else
                     return value;
             }
-
         }
     }
 }
