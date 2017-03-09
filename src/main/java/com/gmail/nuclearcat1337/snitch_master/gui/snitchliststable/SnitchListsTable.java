@@ -15,6 +15,7 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.util.Acceptor;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
+import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import com.gmail.nuclearcat1337.snitch_master.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -101,6 +102,8 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
     {
         for(SnitchList list : getItems())
             list.setShouldRenderSnitches(on);
+
+        snitchMaster.saveSnitchLists();
     }
 
     @Override

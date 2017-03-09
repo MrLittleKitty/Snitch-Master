@@ -66,6 +66,7 @@ public class SnitchListControlsColumn implements TableColumn<SnitchList>
         else if(buttons[1].mousePressed(mc,xPos,yPos)) //Render toggle button
         {
             list.setShouldRenderSnitches(!list.shouldRenderSnitches());
+            SnitchMaster.instance.saveSnitchLists();
         }
         else if(buttons[2].mousePressed(mc,xPos,yPos)) //Down arrow button
         {
@@ -81,6 +82,7 @@ public class SnitchListControlsColumn implements TableColumn<SnitchList>
 
         SnitchMaster.instance.refreshSnitchListPriorities();
         SnitchMaster.instance.getSnitchLists().sortSnitchLists();
+        SnitchMaster.instance.saveSnitchLists();
     }
 
     @Override

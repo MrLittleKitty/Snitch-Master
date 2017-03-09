@@ -49,7 +49,7 @@ public class SnitchListeners
 
                         snitchMaster.submitSnitch(snitch);
 
-                        IOHandler.saveSnitches(snitchMaster.getSnitches());
+                        snitchMaster.saveSnitches();
                     }
                 }
             }
@@ -68,7 +68,7 @@ public class SnitchListeners
             if (SnitchMaster.jmInterface != null)
                 SnitchMaster.jmInterface.refresh(snitchMaster.getSnitches());
 
-            IOHandler.saveSnitches(snitchMaster.getSnitches());
+            snitchMaster.saveSnitches();
 
             SnitchMaster.SendMessageToPlayer("Removed snitch at " + loc.toString());
         }

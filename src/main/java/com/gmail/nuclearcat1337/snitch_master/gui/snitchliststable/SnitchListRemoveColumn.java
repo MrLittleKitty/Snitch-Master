@@ -73,7 +73,7 @@ public class SnitchListRemoveColumn implements TableColumn<SnitchList>
             if(SnitchMaster.jmInterface != null)
                 SnitchMaster.jmInterface.refresh(snitchMaster.getSnitches());
 
-            IOHandler.saveSnitchLists(snitchMaster.getSnitchLists());
+            snitchMaster.saveSnitchLists();
         }
     }
 

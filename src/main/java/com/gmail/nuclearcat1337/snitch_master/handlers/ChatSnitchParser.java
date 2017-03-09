@@ -84,7 +84,7 @@ public class ChatSnitchParser
             if(tryParsePlaceMessage(msg))
             {
                 //Save the snitches now that we loaded a new one from chat
-                IOHandler.saveSnitches(snitchMaster.getSnitches());
+                snitchMaster.saveSnitches();
 
                 SnitchMaster.SendMessageToPlayer("Saved snitch from chat message");
                 return;
@@ -356,8 +356,8 @@ public class ChatSnitchParser
 
         if(save)
         {
-            IOHandler.saveSnitches(snitchMaster.getSnitches());
-            IOHandler.saveSnitchLists(snitchMaster.getSnitchLists());
+            snitchMaster.saveSnitches();
+            snitchMaster.saveSnitchLists();
         }
 
         updatingSnitchList = false;

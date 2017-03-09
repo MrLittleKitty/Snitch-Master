@@ -152,6 +152,16 @@ public class SnitchMaster
         return null;
     }
 
+    public void saveSnitchLists()
+    {
+        IOHandler.saveSnitchLists(snitchLists);
+    }
+
+    public void saveSnitches()
+    {
+        IOHandler.saveSnitches(snitches);
+    }
+
     /**
      * Returns a LocateableObjectList of all the currently loaded Snitches
      */

@@ -148,7 +148,7 @@ public class SnitchLists implements Iterable<SnitchList>
         if(snitchMaster.jmInterface != null)
             snitchMaster.jmInterface.refresh(snitchMaster.getSnitches());
 
-        IOHandler.saveSnitchLists(this);
+        snitchMaster.saveSnitchLists();
     }
 
     public void requalifySnitchList(SnitchList list)
