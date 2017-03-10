@@ -65,8 +65,6 @@ public class SnitchMaster
         this.snitches = new LocatableObjectList<>();
         this.snitchLists = new SnitchLists(this);
 
-        snitchLists.addDefaultSnitchLists();
-
         worldInfoListener = new WorldInfoListener(this);
         MinecraftForge.EVENT_BUS.register(worldInfoListener);
         FMLCommonHandler.instance().bus().register(worldInfoListener);
@@ -90,6 +88,8 @@ public class SnitchMaster
         try
         {
             IOHandler.loadSnitchLists(this);
+            snitchLists.addDefaultSnitchLists();
+
             IOHandler.loadSnitches(this);
         }
         catch (IOException e)
