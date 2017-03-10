@@ -4,16 +4,12 @@ import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.IAlertRecipient;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchAlert;
-import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import com.gmail.nuclearcat1337.snitch_master.util.Pair;
 import com.gmail.nuclearcat1337.snitch_master.util.QuietTimeConfig;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.HoverEvent;
-
-import java.util.HashMap;
 
 /**
  * Created by Mr_Little_Kitty on 12/30/2016.
@@ -185,7 +181,7 @@ public class QuietTimeHandler implements IAlertRecipient
         if(instruction == B_PLAYER_NAME)
             return alert.getPlayerName();
         if(instruction == B_ACTIVITY_TEXT)
-            return alert.getActivity();
+            return alert.getActivityText();
         if(instruction == B_SNITCH_NAME)
             return alert.getSnitchName();
         if(instruction == B_LOCATION)
