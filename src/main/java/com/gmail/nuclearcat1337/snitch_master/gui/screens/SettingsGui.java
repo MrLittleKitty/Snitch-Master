@@ -83,7 +83,7 @@ public class SettingsGui extends GuiScreen
                 settings.saveSettings();
                 break;
             case 3: //"Quiet Time"
-                this.mc.displayGuiScreen(new QuietTimeGui());
+                this.mc.displayGuiScreen(new QuietTimeGui(this,settings));
                 break;
             case 4: //"Updating Snitches Spam: "
                 nextChatSpamState();

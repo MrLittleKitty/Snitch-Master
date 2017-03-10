@@ -7,7 +7,6 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
 import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
-import com.gmail.nuclearcat1337.snitch_master.util.Pair;
 import com.gmail.nuclearcat1337.snitch_master.util.QuietTimeConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
@@ -16,10 +15,10 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * Created by Mr_Little_Kitty on 6/25/2016.
@@ -36,7 +35,7 @@ public class SnitchMaster
     /**
      * The Logger instance to use to print to the console
      */
-    public static final Logger logger = Logger.getLogger(MODID);
+    public static final Logger logger = LogManager.getLogger(MODID);
     public static final boolean CULL_TIME_ENABLED = true;
 
     /**
@@ -237,9 +236,8 @@ public class SnitchMaster
             else if (key.equalsIgnoreCase(Settings.CHAT_SPAM_KEY))
                 return Settings.ChatSpamState.valueOf(value);
             else if (key.equalsIgnoreCase(QuietTimeHandler.QUIET_TIME_CONFIG_KEY))
-            {
                 return QuietTimeConfig.FromString(value);
-            } else
+            else
             {
                 if (value.equalsIgnoreCase(Boolean.FALSE.toString()))
                     return Boolean.FALSE;
