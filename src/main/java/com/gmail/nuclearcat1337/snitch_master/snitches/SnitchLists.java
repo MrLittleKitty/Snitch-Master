@@ -1,7 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.snitches;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 
 import java.util.*;
 
@@ -121,8 +120,21 @@ public class SnitchLists implements Iterable<SnitchList>
      */
     public void addDefaultSnitchLists()
     {
-        for(SnitchList list : SnitchList.getDefaultSnitchLists())
+        outer:
+        for (SnitchList list : SnitchList.getDefaultSnitchLists())
+        {
+            for (SnitchList otherList : snitchLists)
+            {
+                if (otherList.getQualifier().toString().equals(otherList.getQualifier().toString()))
+                {
+                    // found another list with the same qualifier,
+                    // so we don't need to add this default list
+                    continue outer;
+                }
+            }
+            // couldn't find any list with the same qualifier
             addSnitchList(list);
+        }
     }
 
     /**
