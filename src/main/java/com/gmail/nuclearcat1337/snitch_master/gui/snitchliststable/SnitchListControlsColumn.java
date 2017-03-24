@@ -4,6 +4,7 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -22,11 +23,13 @@ public class SnitchListControlsColumn implements TableColumn<SnitchList>
     private static Minecraft mc;
 
     private final SnitchListsTable table;
+    private final SnitchManager manager;
 
-    public SnitchListControlsColumn(SnitchListsTable table)
+    public SnitchListControlsColumn(SnitchListsTable table, SnitchManager manager)
     {
         mc = Minecraft.getMinecraft();
         this.table = table;
+        this.manager = manager;
     }
 
     @Override
@@ -61,29 +64,22 @@ public class SnitchListControlsColumn implements TableColumn<SnitchList>
         if(buttons[0].mousePressed(mc,xPos,yPos)) //Up arrow button
         {
             table.swapTableItems(slotIndex,slotIndex-1);
-            renderIndices();
+            list.increaseRenderPriority();
+            manager.saveSnitchLists();
         }
         else if(buttons[1].mousePressed(mc,xPos,yPos)) //Render toggle button
         {
             list.setShouldRenderSnitches(!list.shouldRenderSnitches());
-            SnitchMaster.instance.saveSnitchLists();
+            manager.saveSnitchLists();
         }
         else if(buttons[2].mousePressed(mc,xPos,yPos)) //Down arrow button
         {
             table.swapTableItems(slotIndex,slotIndex+1);
-            renderIndices();
+            list.decreaseRenderPriority();
+            manager.saveSnitchLists();
         }
     }
 
-    private void renderIndices()
-    {
-        for(int i = 0; i < table.getTableSize(); i++)
-            table.getTableItem(i).setRenderPriority(i+1);
-
-        SnitchMaster.instance.refreshSnitchListPriorities();
-        SnitchMaster.instance.getSnitchLists().sortSnitchLists();
-        SnitchMaster.instance.saveSnitchLists();
-    }
 
     @Override
     public void released(SnitchList list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)

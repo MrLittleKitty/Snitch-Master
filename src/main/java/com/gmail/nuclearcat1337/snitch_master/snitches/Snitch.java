@@ -69,7 +69,7 @@ public class Snitch extends LocatableObject<Snitch>
     /**
      * Array of SnitchLists that this Snitch is a part of.
      */
-    private ArrayList<SnitchList> attachedSnitchLists;
+    final List<SnitchList> attachedSnitchLists;
 
     private List<String> description;
 
@@ -103,7 +103,6 @@ public class Snitch extends LocatableObject<Snitch>
         this.cullTime = culltime;
         this.ctGroup = ctGroup == null ? DEFAULT_NAME : ctGroup;
         this.name = snitchName == null || snitchName.isEmpty()? DEFAULT_NAME : snitchName;
-        attachedSnitchLists = new ArrayList<>();
     }
 
     public void setCullTime(double cullTime)
@@ -125,6 +124,7 @@ public class Snitch extends LocatableObject<Snitch>
     {
         return description;
     }
+
     /**
      * Returns true if the given point if within the area covered by this Snitch block.
      * Returns false otherwise.
@@ -197,38 +197,6 @@ public class Snitch extends LocatableObject<Snitch>
         this.ctGroup = groupName;
     }
 
-    /**
-     * Returns all the SnitchLists that are "attached" to this Snitch.
-     * (The SnitchLists that this Snitch is in)
-     */
-    public ArrayList<SnitchList> getAttachedSnitchLists()
-    {
-        return attachedSnitchLists;
-    }
-
-    public void clearAttachedSnitchLists()
-    {
-        attachedSnitchLists.clear();
-    }
-
-    /**
-     * Attaches the given SnitchList to this Snitch object.
-     * (This Snitch is a part of that SnitchList)
-     */
-    public void attachSnitchList(SnitchList list)
-    {
-        this.attachedSnitchLists.add(list);
-        Collections.sort(attachedSnitchLists,listComparator);
-    }
-
-    /**
-     * Sorts the SnitchLists that this Snitch is in according to their render priorities.
-     */
-    public void sortSnitchLists()
-    {
-        Collections.sort(attachedSnitchLists,listComparator);
-    }
-
     @Override
     public String getWorld()
     {
@@ -299,7 +267,7 @@ public class Snitch extends LocatableObject<Snitch>
      * Returns a string that represents the given Snitch object.
      * The returned string is in comma separated value form.
      */
-    public static String ConvertSnitchToCSV(Snitch snitch)
+    static String ConvertSnitchToCSV(Snitch snitch)
     {
         //x, y, z, world, oring, groupName, snitchName, cullTime
         StringBuilder builder = new StringBuilder();
@@ -328,7 +296,7 @@ public class Snitch extends LocatableObject<Snitch>
      * The given Snitch has NO attached SnitchLists.
      * Throws a NumberFormatException if the given CSV string has the wrong number of parameters.
      */
-    public static Snitch GetSnitchFromCSV(String csv)
+    static Snitch GetSnitchFromCSV(String csv)
     {
 
         String[] args = csv.split(CSV_SEPARATOR);
@@ -378,7 +346,7 @@ public class Snitch extends LocatableObject<Snitch>
         return null;
     }
 
-    private static String Scrub(String string)
+    static String Scrub(String string)
     {
         return string.replace(CSV_SEPARATOR,"").replace(DESCRIPTION_SEPARATOR,"");
     }

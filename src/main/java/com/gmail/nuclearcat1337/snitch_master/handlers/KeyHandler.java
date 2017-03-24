@@ -7,6 +7,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 
 /**
@@ -38,7 +39,8 @@ public class KeyHandler
         }
         if(toggleAllRender.isPressed())
         {
-            snitchMaster.getSnitchLists().toggleUniversalRender();
+            snitchMaster.getManager().toggleGlobalRender();
+            SnitchMaster.SendMessageToPlayer("Global render is now: "+(snitchMaster.getManager().getGlobalRender() ? "On" : "Off"));
         }
     }
 }

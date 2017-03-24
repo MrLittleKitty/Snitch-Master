@@ -9,6 +9,8 @@ import java.util.Map;
  */
 public class Settings
 {
+	private static final String modSettingsFile = SnitchMaster.modDataFolder+"/Settings.txt";
+
     public enum ChatSpamState
     {
         ON,
@@ -26,11 +28,23 @@ public class Settings
 
     private final HashMap<String,Object> values;
 
-    public Settings(File file, ValueParser parser)
+    public Settings(ValueParser parser)
     {
-        this.file = file;
         this.parser = parser;
         values = new HashMap<>();
+
+		file = new File(modSettingsFile);
+		if(file.exists())
+		{
+			try
+			{
+				file.createNewFile();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
     }
 
     public void setValueIfNotSet(String key, Object value)

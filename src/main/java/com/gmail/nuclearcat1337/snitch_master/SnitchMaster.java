@@ -2,11 +2,9 @@ package com.gmail.nuclearcat1337.snitch_master;
 
 import com.gmail.nuclearcat1337.snitch_master.handlers.*;
 import com.gmail.nuclearcat1337.snitch_master.journeymap.JourneyMapInterface;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObjectList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
-import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.QuietTimeConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
@@ -18,7 +16,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Mr_Little_Kitty on 6/25/2016.
@@ -30,6 +30,7 @@ public class SnitchMaster
     public static final String MODID = "snitchmaster";
     public static final String MODNAME = "Snitch Master";
     public static final String MODVERSION = "1.0.9";
+	public static final String modDataFolder = "mods/Snitch-Master";
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     /**
@@ -50,22 +51,19 @@ public class SnitchMaster
     public static SnitchMaster instance;
 
     private Settings settings;
+	private SnitchManager manager;
 
     private ChatSnitchParser chatSnitchParser;
     private WorldInfoListener worldInfoListener;
 
-    private SnitchLists snitchLists;
-    private LocatableObjectList<Snitch> snitches;
-
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        IOHandler.prepareFiles();
+		File file = new File(modDataFolder);
+		if(!file.exists())
+			file.mkdir();
 
-        this.snitches = new LocatableObjectList<>();
-        this.snitchLists = new SnitchLists(this);
-
-        snitchLists.addDefaultSnitchLists();
+        manager = new SnitchManager(this);
 
         worldInfoListener = new WorldInfoListener(this);
         MinecraftForge.EVENT_BUS.register(worldInfoListener);
@@ -86,21 +84,16 @@ public class SnitchMaster
         FMLCommonHandler.instance().bus().register(new KeyHandler(this));
 
         chatSnitchParser.addAlertRecipient(new QuietTimeHandler(getSettings()));
-
-        try
-        {
-            IOHandler.loadSnitchLists(this);
-            IOHandler.loadSnitches(this);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
+
+    public SnitchManager getManager()
+	{
+		return manager;
+	}
 
     private void initializeSettings()
     {
-        settings = new Settings(IOHandler.getSettingsFile(),new ObjectParser());
+        settings = new Settings(new ObjectParser());
         settings.loadSettings();
 
         settings.setValueIfNotSet(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, QuietTimeConfig.GetDefaultQuietTimeConfig());
@@ -110,6 +103,28 @@ public class SnitchMaster
 
         settings.saveSettings();
     }
+
+    public void fullJourneyMapUpdate()
+	{
+		if(jmInterface != null)
+			jmInterface.refresh(manager.getSnitches()); //TODO---Do better
+	}
+
+	public void individualJourneyMapUpdate(Snitch snitch)
+	{
+		if(jmInterface != null)
+			jmInterface.displaySnitch(snitch); //TODO--Do better
+	}
+
+	public void snitchListJourneyMapUpdate(SnitchList list)
+	{
+		if(jmInterface != null)
+		{
+			List<Snitch> snitches = manager.getSnitchesInList(list);
+			for (Snitch snitch : snitches)
+				individualJourneyMapUpdate(snitch); //TODO---Do better
+		}
+	}
 
     public Settings getSettings()
     {
@@ -132,92 +147,6 @@ public class SnitchMaster
         return worldInfoListener.getWorldID();
     }
 
-    /**
-     * Gets the SnitchLists object that manages SnitchLists.
-     * @return
-     */
-    public SnitchLists getSnitchLists()
-    {
-        return snitchLists;
-    }
-
-    public SnitchList getSnitchListByName(String name)
-    {
-        for(SnitchList list : getSnitchLists())
-        {
-            if(list.getListName().equals(name))
-                return list;
-        }
-        return null;
-    }
-
-    public void saveSnitchLists()
-    {
-        IOHandler.saveSnitchLists(snitchLists);
-    }
-
-    public void saveSnitches()
-    {
-        IOHandler.saveSnitches(snitches);
-    }
-
-    /**
-     * Returns a LocateableObjectList of all the currently loaded Snitches
-     */
-    public LocatableObjectList<Snitch> getSnitches()
-    {
-        return snitches;
-    }
-
-    /**
-     * Submits a Snitch for processing and adding to the Snitch collection.
-     * The Snitch is added to all SnitchLists, JourneyMap, (if applicable) and then saved to a file.
-     */
-    public void submitSnitch(Snitch snitch)
-    {
-        //Check to see if there is already a snitch at this location
-        Snitch contains = snitches.get(snitch.getLocation());
-
-        //Check if the snitch that was submitted already exists
-        if(contains != null)
-        {
-            //If it does then change the cull time and group
-            contains.setCullTime(snitch.getCullTime());
-            contains.setGroupName(snitch.getGroupName());
-            contains.setSnitchName(snitch.getSnitchName());
-            //Clear the attached snitch lists because we are going to requalify the snitch because some attributes changed
-            contains.clearAttachedSnitchLists();
-        }
-        else
-        {
-            //Just some reference rearranging
-            contains = snitch;
-            //add the snitch to the collection
-            snitches.add(contains);
-        }
-
-        //Go through all the snitch lists to see if this snitch should be in them
-        for(SnitchList list : snitchLists)
-        {
-            //If it should then attach the snitch list to the snitch
-            if(list.getQualifier().isQualified(contains))
-                contains.attachSnitchList(list);
-        }
-
-        //send it to journey map if that is enabled
-        if(jmInterface != null)
-            jmInterface.displaySnitch(contains);
-    }
-
-    /**
-     * Refreshes the render priorities of all currently loaded Snitches.
-     */
-    public void refreshSnitchListPriorities()
-    {
-        for(Snitch snitch : getSnitches())
-            snitch.sortSnitchLists();
-    }
-
     public static void SendMessageToPlayer(String message)
     {
         mc.thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] "+message));
@@ -225,9 +154,6 @@ public class SnitchMaster
 
     private static class ObjectParser implements Settings.ValueParser
     {
-//        settings.setValueIfNotSet("quiet-time", Boolean.FALSE.toString());
-//        settings.setValueIfNotSet("chat-spam", 1);
-
         @Override
         public Object parse(String key, String value)
         {

@@ -5,13 +5,10 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.IAlertRecipient;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchAlert;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -35,6 +32,7 @@ public class ChatSnitchParser
     private static final String tpsMessage = "TPS from last 1m, 5m, 15m:";
 
     private final SnitchMaster snitchMaster;
+    private final SnitchManager manager;
     private final List<IAlertRecipient> alertRecipients;
 
     private int jaListIndex = 1;
@@ -49,6 +47,7 @@ public class ChatSnitchParser
     public ChatSnitchParser(SnitchMaster api)
     {
         this.snitchMaster = api;
+        this.manager = snitchMaster.getManager();
         alertRecipients = new ArrayList<>();
     }
 
@@ -84,7 +83,7 @@ public class ChatSnitchParser
             if(tryParsePlaceMessage(msg))
             {
                 //Save the snitches now that we loaded a new one from chat
-                snitchMaster.saveSnitches();
+                manager.saveSnitches();
 
                 SnitchMaster.SendMessageToPlayer("Saved snitch from chat message");
                 return;
@@ -144,7 +143,7 @@ public class ChatSnitchParser
             Snitch snitch = parseSnitchFromChat(text);
             if(snitch != null)
             {
-                snitchMaster.submitSnitch(snitch);
+				manager.submitSnitch(snitch);
                 return true;
             }
         }
@@ -213,7 +212,7 @@ public class ChatSnitchParser
                     if (!matcher.matches())
                         continue;
                     Snitch snitch = parseSnitchFromJaList(matcher);
-                    snitchMaster.submitSnitch(snitch);
+					manager.submitSnitch(snitch);
                 }
             } catch (IllegalStateException e) {
                 SnitchMaster.SendMessageToPlayer("No match on /jalist hover text " + hoverText);
@@ -356,8 +355,7 @@ public class ChatSnitchParser
 
         if(save)
         {
-            snitchMaster.saveSnitches();
-            snitchMaster.saveSnitchLists();
+			manager.saveSnitches();
         }
 
         updatingSnitchList = false;

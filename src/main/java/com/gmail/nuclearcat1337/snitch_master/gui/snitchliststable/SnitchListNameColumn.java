@@ -3,7 +3,7 @@ package com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable;
 import com.gmail.nuclearcat1337.snitch_master.gui.screens.EditStringGui;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.Acceptor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -18,12 +18,12 @@ public class SnitchListNameColumn implements TableColumn<SnitchList>
 {
     private static Minecraft mc;
 
-    private final SnitchLists lists;
+    private final SnitchManager manager;
 
-    public SnitchListNameColumn(SnitchLists lists)
+    public SnitchListNameColumn(SnitchManager manager)
     {
         mc = Minecraft.getMinecraft();
-        this.lists = lists;
+        this.manager = manager;
     }
 
     @Override
@@ -104,11 +104,13 @@ public class SnitchListNameColumn implements TableColumn<SnitchList>
         @Override
         public boolean accept(String item)
         {
-            boolean valid = !lists.doesListWithNameExist(item);
+        	//Check to make sure there isn't already a list with the name they provided
+			//Note, if they don't change the name and just click OK then this will stop us from unnecessarily updating
+            boolean valid = !manager.doesListWithNameExist(item);
             if(valid)
             {
                 list.setListName(item);
-                lists.snitchListChanged();
+                manager.saveSnitchLists();
                 return true;
             }
             return false;

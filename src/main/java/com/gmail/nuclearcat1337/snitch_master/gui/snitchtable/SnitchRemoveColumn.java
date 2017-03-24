@@ -5,7 +5,7 @@ import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -24,7 +24,7 @@ public class SnitchRemoveColumn implements TableColumn<Snitch>
     //private static final int BUTTON_WIDTH = 5;
 
     private final int buttonWidth;
-    private final SnitchMaster snitchMaster;
+    private final SnitchManager manager;
     public static final HashSet<ILocation> removedSnitches = new HashSet<>();
 
     public SnitchRemoveColumn(SnitchMaster snitchMaster)
@@ -32,7 +32,7 @@ public class SnitchRemoveColumn implements TableColumn<Snitch>
         mc = Minecraft.getMinecraft();
 
         buttonWidth = mc.fontRendererObj.getStringWidth(BUTTON_TEXT+"---");
-        this.snitchMaster = snitchMaster;
+        this.manager = snitchMaster.getManager();
         //removedSnitches = new HashSet<>();
     }
 
@@ -65,14 +65,14 @@ public class SnitchRemoveColumn implements TableColumn<Snitch>
 
         if(buttons[0].mousePressed(mc,xPos,yPos))
         {
-            snitchMaster.getSnitches().remove(item);
+            manager.getSnitches().remove(item);
 
             removedSnitches.add(item.getLocation());
 
             if(SnitchMaster.jmInterface != null)
-                SnitchMaster.jmInterface.refresh(snitchMaster.getSnitches());
+                SnitchMaster.jmInterface.refresh(manager.getSnitches());
 
-            snitchMaster.saveSnitches();
+			manager.saveSnitches();
         }
     }
 

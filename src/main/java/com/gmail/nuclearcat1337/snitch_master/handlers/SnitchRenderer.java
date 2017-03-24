@@ -5,6 +5,7 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
 import com.gmail.nuclearcat1337.snitch_master.util.GeneralUtils;
 import net.minecraft.client.Minecraft;
@@ -32,10 +33,12 @@ public class SnitchRenderer
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     private final SnitchMaster snitchMaster;
+    private final SnitchManager manager;
 
     public SnitchRenderer(SnitchMaster snitchMaster)
     {
         this.snitchMaster = snitchMaster;
+        manager = snitchMaster.getManager();
     }
 
     /**
@@ -44,53 +47,47 @@ public class SnitchRenderer
     @SubscribeEvent
     public void renderSnitches(RenderWorldLastEvent event)
     {
-        boolean renderText = (Boolean)(snitchMaster.getSettings().getValue(Settings.RENDER_TEXT_KEY));
-        for (Snitch snitch : snitchMaster.getSnitches().getItemsForWorld(snitchMaster.getCurrentWorld()))
-        {
-            SnitchList renderList = null;
-            for (SnitchList list : snitch.getAttachedSnitchLists())
-            {
-                if (!list.shouldRenderSnitches())
-                    continue;
+    	if(!manager.getGlobalRender())
+		{
+			boolean renderText = (Boolean) (snitchMaster.getSettings().getValue(Settings.RENDER_TEXT_KEY));
+			for (Snitch snitch : manager.getSnitches().getItemsForWorld(snitchMaster.getCurrentWorld()))
+			{
+				SnitchList renderList = manager.getRenderListForSnitch(snitch);
+				if (renderList != null)
+				{
+					Color renderColor = renderList.getListColor();
+					ILocation location = snitch.getLocation();
+					double distanceSquared = GeneralUtils.DistanceSquared(location.getX(), location.getZ(), (int) mc.thePlayer.posX, (int) mc.thePlayer.posZ);
 
-                renderList= list;
-                break;
-            }
+					if (distanceSquared <= BLOCK_RENDER_DISTANCE * BLOCK_RENDER_DISTANCE)
+					{
+						if (distanceSquared <= BOX_RENDER_DISTANCE * BOX_RENDER_DISTANCE)
+						{
+							renderBox(location.getX(), location.getY(), location.getZ(), Snitch.SNITCH_RADIUS, renderColor, 0.1D, 0.25D, event.getPartialTicks());
+						}
 
-            if (renderList != null)
-            {
-                Color renderColor = renderList.getListColor();
-                ILocation location = snitch.getLocation();
-                double distanceSquared = GeneralUtils.DistanceSquared(location.getX(), location.getZ(), (int) mc.thePlayer.posX, (int) mc.thePlayer.posZ);
+						if (renderText)
+						{
+							if (GeneralUtils.DistanceSquared(location.getX(), location.getZ(), location.getY(), (int) mc.thePlayer.posX, (int) mc.thePlayer.posZ, (int) mc.thePlayer.posY) <= TEXT_RENDER_DISTANCE * TEXT_RENDER_DISTANCE)
+							{
+								String[] text = new String[3];
+								text[0] = "Name: " + snitch.getSnitchName();
+								text[1] = "Group: " + snitch.getGroupName();
+								text[2] = "Location: " + location.toString();
 
-                if (distanceSquared <= BLOCK_RENDER_DISTANCE * BLOCK_RENDER_DISTANCE)
-                {
-                    if (distanceSquared <= BOX_RENDER_DISTANCE * BOX_RENDER_DISTANCE)
-                    {
-                        renderBox(location.getX(), location.getY(), location.getZ(), Snitch.SNITCH_RADIUS, renderColor, 0.1D, 0.25D, event.getPartialTicks());
-                    }
+								RenderFloatingText(text, (float) location.getX() + 0.5f, location.getY() + 1.01f, location.getZ() + 0.5f, 0xFFFFFF, true, event.getPartialTicks());
+							}
+						}
 
-                    if(renderText)
-                    {
-                        if (GeneralUtils.DistanceSquared(location.getX(), location.getZ(), location.getY(), (int) mc.thePlayer.posX, (int) mc.thePlayer.posZ, (int) mc.thePlayer.posY) <= TEXT_RENDER_DISTANCE * TEXT_RENDER_DISTANCE)
-                        {
-                            String[] text = new String[3];
-                            text[0] = "Name: " + snitch.getSnitchName();
-                            text[1] = "Group: " + snitch.getGroupName();
-                            text[2] = "Location: " + location.toString();
+						GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-                            RenderFloatingText(text, (float) location.getX() + 0.5f, location.getY() + 1.01f, location.getZ() + 0.5f, 0xFFFFFF, true, event.getPartialTicks());
-                        }
-                    }
+						renderBox(location.getX(), location.getY(), location.getZ(), 0, renderColor, 0.25D, 0.25D, event.getPartialTicks());
 
-                    GL11.glDisable(GL11.GL_DEPTH_TEST);
-
-                    renderBox(location.getX(), location.getY(), location.getZ(), 0, renderColor, 0.25D, 0.25D, event.getPartialTicks());
-
-                    GL11.glEnable(GL11.GL_DEPTH_TEST);
-                }
-            }
-        }
+						GL11.glEnable(GL11.GL_DEPTH_TEST);
+					}
+				}
+			}
+		}
     }
 
     private static final float MIN_TEXT_RENDER_SCALE = 0.0075f;

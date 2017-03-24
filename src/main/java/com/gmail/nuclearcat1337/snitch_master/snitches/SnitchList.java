@@ -19,41 +19,44 @@ public class SnitchList
     private static Color defaultColor = new Color(240, 255, 240); //"HoneyDew"
     private static String defaultName = "Undefined";
 
+    private final SnitchManager manager;
     private int renderPriority;
     private String listName;
     private Color listColor;
     private SnitchListQualifier listQualifier;
     private boolean renderSnitches;
 
-    //private final Point useablePt = new Point(0,0,0);
-
-    public SnitchList(SnitchListQualifier listQualifier,boolean render)
+    SnitchList(SnitchManager manager, SnitchListQualifier listQualifier,boolean render)
     {
+    	this.manager = manager;
         listName = defaultName;
         listColor = defaultColor;
         this.listQualifier = listQualifier;
         this.renderSnitches = render;
     }
 
-    public SnitchList(SnitchListQualifier listQualifier, boolean render, String name)
+    SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render, String name)
     {
-        setListName(name);
+		this.manager = manager;
+		this.listName = name;
         listColor = defaultColor;
         this.listQualifier = listQualifier;
         this.renderSnitches = render;
     }
 
-    public SnitchList(SnitchListQualifier listQualifier, boolean render, Color color)
+    SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render, Color color)
     {
+		this.manager = manager;
         listName = defaultName;
         listColor = color;
         this.listQualifier = listQualifier;
         this.renderSnitches = render;
     }
 
-    public SnitchList(SnitchListQualifier listQualifier, boolean render, String name, Color color)
+    SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render, String name, Color color)
     {
-        setListName(name);
+		this.manager = manager;
+        this.listName = name;
         listColor = color;
         this.listQualifier = listQualifier;
         this.renderSnitches = render;
@@ -69,6 +72,8 @@ public class SnitchList
         this.listName = name;
         if(listName.length() > 20)
             listName = listName.substring(0,19);
+
+        manager.journeyMapRedisplay(this);
     }
 
     public int getRenderPriority()
@@ -76,10 +81,20 @@ public class SnitchList
         return renderPriority;
     }
 
-    public void setRenderPriority(int newRenderPriority)
-    {
-        this.renderPriority = newRenderPriority;
-    }
+    void setRenderPriorityUnchecked(int newPriority)
+	{
+		this.renderPriority = newPriority;
+	}
+
+	public void increaseRenderPriority()
+	{
+		manager.changeListRenderPriority(this,true);
+	}
+
+	public void decreaseRenderPriority()
+	{
+		manager.changeListRenderPriority(this,false);
+	}
 
     public Color getListColor()
     {
@@ -89,6 +104,7 @@ public class SnitchList
     public void setListColor(Color newColor)
     {
         this.listColor = newColor;
+        manager.journeyMapRedisplay(this);
     }
 
     public boolean shouldRenderSnitches()
@@ -99,11 +115,36 @@ public class SnitchList
     public void setShouldRenderSnitches(boolean render)
     {
         this.renderSnitches = render;
+		manager.journeyMapRedisplay(this);
     }
 
     public SnitchListQualifier getQualifier()
     {
         return listQualifier;
+    }
+
+    public boolean updateQualifier(String newQualifier)
+	{
+		if(SnitchListQualifier.isSyntaxValid(newQualifier))
+		{
+			this.listQualifier = new SnitchListQualifier(newQualifier);
+			manager.requalifyList(this);
+			return true;
+		}
+		return false;
+	}
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        SnitchList that = (SnitchList) o;
+
+        return listName.equals(that.listName);
     }
 
     @Override
@@ -112,18 +153,8 @@ public class SnitchList
         return listName.hashCode();
     }
 
-    private static final SnitchListQualifier friendly = new SnitchListQualifier("origin == 'jalist' || origin == 'chat'");
-    //private static final SnitchListQualifier hostile = new SnitchListQualifier("qualifier == 'hostile'");
-    private static final SnitchListQualifier neutral = new SnitchListQualifier("origin == 'manual'");
-
-    public static SnitchList[] getDefaultSnitchLists()
-    {
-        return new SnitchList[]{ new SnitchList(SnitchList.friendly, true, "Friendly",new Color(0, (int)(0.56D*255D), 255)),
-                new SnitchList(SnitchList.neutral, true, "Neutral",new Color(238, 210, 2))}; //"Safety Yellow"
-    }
-
-    private static final int NUMBER_OF_CSV_PARAMS = 5;
-    private static final String CSV_SEPARATOR = ",";
+    static final int NUMBER_OF_CSV_PARAMS = 5;
+    static final String CSV_SEPARATOR = ",";
 
     /**
      * Returns a String representing the given SnitchList.
@@ -145,7 +176,7 @@ public class SnitchList
     /**
      * Returns a SnitchList built from the given comma separated value String.
      */
-    public static SnitchList GetSnitchListFromCSV(String csv)
+    static SnitchList GetSnitchListFromCSV(String csv, SnitchManager manager)
     {
         String[] args = csv.split(CSV_SEPARATOR);
         if(args.length != NUMBER_OF_CSV_PARAMS)
@@ -162,8 +193,8 @@ public class SnitchList
         boolean shouldRender = Boolean.parseBoolean(args[index++]);
         SnitchListQualifier qualifier = new SnitchListQualifier(Scrub(args[index++]));
 
-        SnitchList list = new SnitchList(qualifier,shouldRender,name,color); //TODO---You need to not have null as the first parameter
-        list.setRenderPriority(priority);
+        SnitchList list = new SnitchList(manager, qualifier,shouldRender,name,color); //TODO---You need to not have null as the first parameter
+        list.renderPriority = priority;
 
         return list;
     }

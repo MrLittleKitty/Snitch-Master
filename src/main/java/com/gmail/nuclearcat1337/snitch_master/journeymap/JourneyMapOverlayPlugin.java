@@ -45,7 +45,7 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event)
     {
-        SnitchMaster.instance.jmInterface = this;
+//        SnitchMaster.jmInterface = this;
 
         if(renderJourneyMapOverlay.isPressed())
         {
@@ -64,7 +64,7 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
             clearDisplayed();
         else
         {
-            IReadOnlyLocatableObjectList<Snitch> snitches = SnitchMaster.instance.getSnitches();
+            IReadOnlyLocatableObjectList<Snitch> snitches = SnitchMaster.instance.getManager().getSnitches();
             if(snitches != null)
             {
                 String currentWorld = SnitchMaster.instance.getCurrentWorld();
@@ -72,10 +72,7 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
                 if(worldSnitches != null)
                 {
                     for (Snitch snitch : worldSnitches)
-                    {
-                       renderedSnitches.add(snitch);
                         sendImage(snitch);
-                    }
                 }
             }
         }
@@ -86,13 +83,13 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
     {
         // Set ClientProxy.SampleModWaypointFactory with an implementation that uses the JourneyMap IClientAPI under the covers.
         this.api = jmAPI;
-        SnitchMaster.instance.jmInterface = this;
+        SnitchMaster.jmInterface = this;
 
         FMLCommonHandler.instance().bus().register(this);
         ClientRegistry.registerKeyBinding(renderJourneyMapOverlay);
 
         // Subscribe to desired ClientEvent types from JourneyMap
-        this.api.subscribe(getModId(), EnumSet.of(MAPPING_STOPPED));
+        //this.api.subscribe(getModId(), EnumSet.of(MAPPING_STOPPED));
 
         SnitchMaster.logger.info("[SnitchMaster] JourneyMap overlay initialized");
     }
@@ -106,7 +103,13 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
         return SnitchMaster.MODID;
     }
 
-    private ArrayList<Snitch> renderedSnitches = new ArrayList<>();
+	@Override
+	public void onEvent(ClientEvent clientEvent)
+	{
+
+	}
+
+	//private ArrayList<Snitch> renderedSnitches = new ArrayList<>();
 
     private void sendImage(Snitch snitch)
     {
@@ -117,7 +120,7 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
             try
             {
                 if(overlay != null)
-                    api.show(overlay);
+					api.show(overlay);
             }
             catch (Exception e)
             {
@@ -129,38 +132,31 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
     @Override
     public void displaySnitch(Snitch snitch)
     {
-        if(renderOverlay)
-        {
-            if (!renderedSnitches.contains(snitch))
-            {
-                renderedSnitches.add(snitch);
-                sendImage(snitch);
-            }
-        }
+//        if(renderOverlay)
+//			sendImage(snitch);
     }
 
     @Override
     public void refresh(Iterable<Snitch> snitches)
     {
-        clearDisplayed();
-        for(Snitch snitch : snitches)
-            displaySnitch(snitch);
+//        clearDisplayed();
+//        for(Snitch snitch : snitches)
+//            displaySnitch(snitch);
     }
 
     private void clearDisplayed()
     {
         api.removeAll(this.getModId());
-        renderedSnitches.clear();
     }
 
-    @Override
-    public void onEvent(ClientEvent clientEvent)
-    {
-        switch (clientEvent.type)
-        {
-            case MAPPING_STOPPED:
-                clearDisplayed();
-                break;
-        }
-    }
+//    @Override
+//    public void onEvent(ClientEvent clientEvent)
+//    {
+//        switch (clientEvent.type)
+//        {
+//            case MAPPING_STOPPED:
+//                clearDisplayed();
+//                break;
+//        }
+//    }
 }

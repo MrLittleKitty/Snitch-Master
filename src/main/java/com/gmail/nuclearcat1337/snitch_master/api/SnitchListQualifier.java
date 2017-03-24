@@ -52,16 +52,21 @@ public class SnitchListQualifier
      * Returns true if the qualifier was updated.
      * Returns false otherwise.
      */
-    public boolean updateQualifier(String expression)
-    {
-        if(!isSyntaxValid(expression))
-            return false;
+//    public boolean updateQualifier(String expression)
+//    {
+//        if(!isSyntaxValid(expression))
+//            return false;
+//
+//        this.expression = expression;
+//        this.tokens = expression.split(" ");
+//
+//        return true;
+//    }
 
-        this.expression = expression;
-        this.tokens = expression.split(" ");
-
-        return true;
-    }
+	public boolean equalsString(String expression)
+	{
+		return expression.equalsIgnoreCase(this.expression);
+	}
 
     /**
      * Returns true if the given Snitch meets the criteria specified by this qualifier's expression.

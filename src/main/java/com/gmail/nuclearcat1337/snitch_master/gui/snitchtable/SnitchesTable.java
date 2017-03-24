@@ -10,7 +10,6 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.util.Pair;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.settings.GameSettings;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -119,7 +118,7 @@ public class SnitchesTable extends TableTopGui<Snitch>
         public void onClick(Snitch item, GuiButton button, GuiScreen parent)
         {
             String snitchName = item.getSnitchName().isEmpty() ? "Undefined" : item.getSnitchName();
-            mc.displayGuiScreen(new SnitchListsTable(parent,item.getAttachedSnitchLists(),"Snitch Lists for Snitch "+snitchName,false,snitchMaster));
+            mc.displayGuiScreen(new SnitchListsTable(parent,snitchMaster.getManager().getSnitchListsForSnitch(item),"Snitch Lists for Snitch "+snitchName,false,snitchMaster));
         }
     };
 

@@ -6,9 +6,8 @@ import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.controls.TextBox;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListsTable;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
-import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -217,18 +216,14 @@ public class NewSnitchListGui extends GuiScreen
                 if(qualifier == null || !SnitchListQualifier.isSyntaxValid(qualifier))
                     break;
 
-                SnitchLists lists = snitchMaster.getSnitchLists();
-                if(lists.doesListWithNameExist(name))
+                SnitchManager manager = snitchMaster.getManager();
+                if(manager.doesListWithNameExist(name))
                     break;
 
-                SnitchList list = new SnitchList(new SnitchListQualifier(qualifier),true,name,new Color(red,green,blue));
-                lists.addSnitchList(list);
+                //Creating a new snitch list automatically triggers a save of all snitch lists
+                manager.createSnitchList(name,new SnitchListQualifier(qualifier),true,new Color(red,green,blue));
 
-                //Handles any things that need to happen when lists change. (saving, etc)
-                lists.snitchListChanged();
-
-                //Minecraft.getMinecraft().displayGuiScreen(new EditSnitchListsGui(null,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true, "All Snitch Lists"));
-                this.mc.displayGuiScreen(new SnitchListsTable(null,snitchMaster.getSnitchLists().asCollection(),"All Snitch Lists",true,snitchMaster));
+                this.mc.displayGuiScreen(new SnitchListsTable(null,manager.getSnitchLists(),"All Snitch Lists",true,snitchMaster));
                 break;
         }
     }

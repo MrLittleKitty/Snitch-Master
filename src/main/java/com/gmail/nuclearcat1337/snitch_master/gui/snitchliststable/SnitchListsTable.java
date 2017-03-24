@@ -13,9 +13,9 @@ import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableTopGui;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.Acceptor;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
-import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
 import com.gmail.nuclearcat1337.snitch_master.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -41,6 +41,7 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
     private static final int RENDER_OFF_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH;
 
     private final SnitchMaster snitchMaster;
+    private final SnitchManager manager;
     private final boolean fullList;
 
     public SnitchListsTable(GuiScreen parentScreen, Collection<SnitchList> items, String title, boolean fullList, SnitchMaster snitchMaster)
@@ -48,6 +49,7 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
         super(parentScreen, items, title);
         this.fullList = fullList;
         this.snitchMaster = snitchMaster;
+        this.manager = snitchMaster.getManager();
     }
 
     int firstId;
@@ -103,7 +105,7 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
         for(SnitchList list : getItems())
             list.setShouldRenderSnitches(on);
 
-        snitchMaster.saveSnitchLists();
+        manager.saveSnitchLists();
     }
 
     @Override
@@ -114,8 +116,8 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
         ArrayList<Pair<TableColumn<SnitchList>,Boolean>> columns = new ArrayList<>();
         columns.add(packageValues(new SnitchListRemoveColumn(snitchMaster),false));
 
-        columns.add(packageValues(new SnitchListControlsColumn(this),true));
-        columns.add(packageValues(new SnitchListNameColumn(snitchMaster.getSnitchLists()),true));
+        columns.add(packageValues(new SnitchListControlsColumn(this,manager),true));
+        columns.add(packageValues(new SnitchListNameColumn(manager),true));
 
         columns.add(packageValues(new TableButtonColumn<>("Color","Edit",EDIT_COLOR_BUTTON_WIDTH,colorClick),true));
         columns.add(packageValues(new TableButtonColumn<>("Qualifier","Edit",EDIT_QUALIFIER_BUTTON_WIDTH,qualifierClick),true));
@@ -182,7 +184,7 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
         @Override
         public void onClick(SnitchList list,GuiButton button, GuiScreen parentScreen)
         {
-            ArrayList<Snitch> snitches = snitchMaster.getSnitchLists().getSnitchesInList(list);
+            ArrayList<Snitch> snitches = manager.getSnitchesInList(list);
             if(snitches.isEmpty())
                 button.displayString = "None";
             else
@@ -203,7 +205,7 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
         public boolean accept(Color item)
         {
             list.setListColor(item);
-            snitchMaster.getSnitchLists().snitchListChanged();
+            manager.saveSnitchLists();
             return true;
         }
     }
@@ -220,17 +222,13 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
         @Override
         public boolean accept(String item)
         {
-            boolean valid = SnitchListQualifier.isSyntaxValid(item);
+        	//Make sure what they provide is valid syntax and it isn't what the qualifier already is
+            boolean valid = SnitchListQualifier.isSyntaxValid(item) && !list.getQualifier().equalsString(item);
             if(valid)
             {
                 //Change the qualifier to the new one
-                list.getQualifier().updateQualifier(item);
-
-                //We need to clear all links to this snitch list and requalify all snitches
-                snitchMaster.getSnitchLists().requalifySnitchList(list);
-
-                //This updates journeymap and other things now that lists/snitches have changed
-                snitchMaster.getSnitchLists().snitchListChanged();
+                list.updateQualifier(item);
+                manager.saveSnitchLists();
                 return true;
             }
             return false;

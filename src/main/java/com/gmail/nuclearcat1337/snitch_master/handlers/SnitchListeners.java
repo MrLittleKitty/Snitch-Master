@@ -3,7 +3,7 @@ package com.gmail.nuclearcat1337.snitch_master.handlers;
 import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import com.gmail.nuclearcat1337.snitch_master.util.IOHandler;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -20,10 +20,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class SnitchListeners
 {
     private final SnitchMaster snitchMaster;
+    private final SnitchManager manager;
 
     public SnitchListeners(SnitchMaster snitchMaster)
     {
         this.snitchMaster = snitchMaster;
+        manager = snitchMaster.getManager();
     }
 
     /**
@@ -47,9 +49,9 @@ public class SnitchListeners
                         Location loc = new Location(pos.getX(), pos.getY(), pos.getZ(), snitchMaster.getCurrentWorld());
                         Snitch snitch = new Snitch(loc, "manual");
 
-                        snitchMaster.submitSnitch(snitch);
+                        manager.submitSnitch(snitch);
 
-                        snitchMaster.saveSnitches();
+						manager.saveSnitches();
                     }
                 }
             }
@@ -62,13 +64,12 @@ public class SnitchListeners
         BlockPos pos = event.getPos();
         Location loc = new Location(pos.getX(), pos.getY(), pos.getZ(), snitchMaster.getCurrentWorld());
 
-        Snitch snitch = snitchMaster.getSnitches().remove(loc);
+        Snitch snitch = manager.getSnitches().remove(loc);
         if (snitch != null)
         {
-            if (SnitchMaster.jmInterface != null)
-                SnitchMaster.jmInterface.refresh(snitchMaster.getSnitches());
+            snitchMaster.individualJourneyMapUpdate(snitch);
 
-            snitchMaster.saveSnitches();
+			manager.saveSnitches();
 
             SnitchMaster.SendMessageToPlayer("Removed snitch at " + loc.toString());
         }
