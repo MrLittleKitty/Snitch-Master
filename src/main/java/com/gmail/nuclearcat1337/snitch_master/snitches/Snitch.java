@@ -241,23 +241,6 @@ public class Snitch extends LocatableObject<Snitch>
     }
 
     /**
-     * A comparator that sorts SnitchLists according to their render priorities.
-     */
-    private static class SnitchListComparator implements Comparator<SnitchList>
-    {
-        @Override
-        public int compare(SnitchList one, SnitchList two)
-        {
-            return Integer.compare(one.getRenderPriority(),two.getRenderPriority());
-        }
-    }
-
-    /**
-     * A static instance of the SnitchList comparator to use in all instances of the Snitch class.
-     */
-    private static final SnitchListComparator listComparator = new SnitchListComparator();
-
-    /**
      * The number of parameters in a comma separated value string representing a Snitch object
      */
     private static final int NUMBER_OF_CSV_PARAMS = 8;

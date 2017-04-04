@@ -6,9 +6,7 @@ import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObjec
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Mr_Little_Kitty on 3/10/2017.
@@ -230,13 +228,8 @@ public class SnitchManager
 
 			for(Snitch snitch : getSnitchesInList(list))
 			{
-				//TODO---No this doesnt work.
 				//TODO---What we need to do is just sort the attached snitch lists by their render priority
-				//We need to update the attached snitch lists to make sure they all remain in render order
-//				List<SnitchList> attached = snitch.attachedSnitchLists;
-//				int attachedIndex = attached.indexOf(list);
-//				int targetAttachedIndex = increase ? attachedIndex-1 : attachedIndex+1;
-//				swapIfPossible(attached,attachedIndex,targetAttachedIndex);
+				Collections.sort(snitch.attachedSnitchLists,listComparator);
 			}
 		}
 	}
@@ -359,4 +352,21 @@ public class SnitchManager
 
 		}
 	}
+
+	/**
+	 * A comparator that sorts SnitchLists according to their render priorities.
+	 */
+	private static class SnitchListComparator implements Comparator<SnitchList>
+	{
+		@Override
+		public int compare(SnitchList one, SnitchList two)
+		{
+			return Integer.compare(one.getRenderPriority(),two.getRenderPriority());
+		}
+	}
+
+	/**
+	 * A static instance of the SnitchList comparator to use in all instances of the Snitch class.
+	 */
+	private static final SnitchListComparator listComparator = new SnitchListComparator();
 }
