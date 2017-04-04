@@ -47,7 +47,7 @@ public class SnitchRenderer
     @SubscribeEvent
     public void renderSnitches(RenderWorldLastEvent event)
     {
-    	if(!manager.getGlobalRender())
+    	if(manager.getGlobalRender())
 		{
 			boolean renderText = (Boolean) (snitchMaster.getSettings().getValue(Settings.RENDER_TEXT_KEY));
 			for (Snitch snitch : manager.getSnitches().getItemsForWorld(snitchMaster.getCurrentWorld()))
