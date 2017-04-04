@@ -39,7 +39,7 @@ public class SnitchManager
 		snitches = new LocatableObjectList<>();
 		snitchLists = new ArrayList<>();
 
-		globalRender = false;
+		globalRender = true;
 
 		loadSnitchLists(new File(modSnitchListsFile));
 		loadSnitches(new File(modSnitchesFile));
