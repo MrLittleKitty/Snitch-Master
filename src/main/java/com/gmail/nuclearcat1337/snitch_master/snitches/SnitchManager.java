@@ -126,6 +126,7 @@ public class SnitchManager
 	{
 		this.globalRender = !this.globalRender;
 		snitchMaster.getSettings().setValue(GLOBAL_RENDER_KEY,globalRender);
+		snitchMaster.getSettings().saveSettings();
 	}
 
 	public boolean getGlobalRender()
