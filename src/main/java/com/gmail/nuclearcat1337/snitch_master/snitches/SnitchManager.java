@@ -4,6 +4,7 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObjectList;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
+import scala.tools.nsc.GlobalSymbolLoaders;
 
 import java.io.*;
 import java.util.*;
@@ -13,6 +14,7 @@ import java.util.*;
  */
 public class SnitchManager
 {
+	public static final String GLOBAL_RENDER_KEY = "global-render";
 	private static final SnitchListQualifier friendly = new SnitchListQualifier("origin == 'jalist' || origin == 'chat'");
 	private static final SnitchListQualifier neutral = new SnitchListQualifier("origin == 'manual'");
 
@@ -39,7 +41,7 @@ public class SnitchManager
 		snitches = new LocatableObjectList<>();
 		snitchLists = new ArrayList<>();
 
-		globalRender = true;
+		globalRender = (boolean)snitchMaster.getSettings().getValue(GLOBAL_RENDER_KEY);
 
 		loadSnitchLists(new File(modSnitchListsFile));
 		loadSnitches(new File(modSnitchesFile));
@@ -123,6 +125,7 @@ public class SnitchManager
 	public void toggleGlobalRender()
 	{
 		this.globalRender = !this.globalRender;
+		snitchMaster.getSettings().setValue(GLOBAL_RENDER_KEY,globalRender);
 	}
 
 	public boolean getGlobalRender()

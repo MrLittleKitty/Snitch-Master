@@ -63,6 +63,8 @@ public class SnitchMaster
 		if(!file.exists())
 			file.mkdir();
 
+		initializeSettings();
+
         manager = new SnitchManager(this);
 
         worldInfoListener = new WorldInfoListener(this);
@@ -73,8 +75,6 @@ public class SnitchMaster
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-        initializeSettings();
-
         chatSnitchParser = new ChatSnitchParser(this);
 
         MinecraftForge.EVENT_BUS.register(chatSnitchParser);
@@ -100,6 +100,7 @@ public class SnitchMaster
         settings.setValueIfNotSet(Settings.CHAT_SPAM_KEY, Settings.ChatSpamState.ON);
         settings.setValueIfNotSet(Settings.RENDER_TEXT_KEY, Boolean.TRUE);
         settings.setValueIfNotSet(Settings.MANUAL_MODE_KEY, Boolean.TRUE);
+        settings.setValueIfNotSet(SnitchManager.GLOBAL_RENDER_KEY,Boolean.TRUE);
 
         settings.saveSettings();
     }
