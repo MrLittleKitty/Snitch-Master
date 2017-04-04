@@ -45,8 +45,6 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event)
     {
-//        SnitchMaster.jmInterface = this;
-
         if(renderJourneyMapOverlay.isPressed())
         {
             toggleRender();
@@ -70,10 +68,7 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
                 String currentWorld = SnitchMaster.instance.getCurrentWorld();
                 Iterable<Snitch> worldSnitches = snitches.getItemsForWorld(currentWorld);
                 if(worldSnitches != null)
-                {
-                    for (Snitch snitch : worldSnitches)
-                        sendImage(snitch);
-                }
+                    refresh(worldSnitches);
             }
         }
     }
@@ -81,7 +76,6 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
     @Override
     public void initialize(final IClientAPI jmAPI)
     {
-        // Set ClientProxy.SampleModWaypointFactory with an implementation that uses the JourneyMap IClientAPI under the covers.
         this.api = jmAPI;
         SnitchMaster.jmInterface = this;
 
@@ -132,16 +126,16 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
     @Override
     public void displaySnitch(Snitch snitch)
     {
-//        if(renderOverlay)
-//			sendImage(snitch);
+        if(renderOverlay)
+			sendImage(snitch);
     }
 
     @Override
     public void refresh(Iterable<Snitch> snitches)
     {
-//        clearDisplayed();
-//        for(Snitch snitch : snitches)
-//            displaySnitch(snitch);
+        clearDisplayed();
+        for(Snitch snitch : snitches)
+            displaySnitch(snitch);
     }
 
     private void clearDisplayed()

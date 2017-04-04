@@ -26,7 +26,6 @@ public class SnitchImageFactory
      */
     public static ImageOverlay createSnitchOverlay(Snitch snitch)
     {
-        String listName = null;
         SnitchList renderList = SnitchMaster.instance.getManager().getRenderListForSnitch(snitch);
 
         if(renderList != null)
@@ -41,7 +40,7 @@ public class SnitchImageFactory
 
             ImageOverlay overlay = new ImageOverlay(SnitchMaster.MODID,displayID,nw,se,image);
 
-            overlay.setTitle(SNITCH_FORMAT_STRING.replace("{0}",snitch.getGroupName()).replace("{1}",snitch.getSnitchName()).replace("{2}",listName));
+            overlay.setTitle(SNITCH_FORMAT_STRING.replace("{0}",snitch.getGroupName()).replace("{1}",snitch.getSnitchName()).replace("{2}",renderList.getListName()));
 
             return overlay;
         }
@@ -52,7 +51,7 @@ public class SnitchImageFactory
     /**
      * Returns a BufferedImage object that is a square filled with the given color.
      */
-    static BufferedImage createSnitchField(float red, float green, float blue)
+    private static BufferedImage createSnitchField(float red, float green, float blue)
     {
         int snitchLength = (Snitch.SNITCH_RADIUS*2)+1;
         // oversampling to make the image less blurry
