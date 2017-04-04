@@ -13,15 +13,15 @@ public class SnitchAlert
     private final String playerName;
     private final ILocation point;
     private final String snitchName;
-    private final String activity;
+    private final SnitchActivity activity;
     private final String world;
     private ITextComponent rawMessage;
 
-    public SnitchAlert(String player, int x, int y, int z, String activity, String snitchName, String world, ITextComponent rawMessage)
+    public SnitchAlert(String player, int x, int y, int z, String activityText, String snitchName, String world, ITextComponent rawMessage)
     {
         this.playerName = player;
         this.point = new Location(x,y,z,world);
-        this.activity = activity;
+        this.activity = SnitchActivity.FromText(activityText);
         this.snitchName = snitchName;
         this.world = world;
         this.rawMessage = rawMessage;
@@ -46,7 +46,7 @@ public class SnitchAlert
     /**
      * Returns the player activity that triggered the Snitch.
      */
-    public String getActivity()
+    public SnitchActivity getActivity()
     {
         return activity;
     }

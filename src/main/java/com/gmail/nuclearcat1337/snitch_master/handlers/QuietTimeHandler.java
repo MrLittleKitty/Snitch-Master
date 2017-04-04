@@ -31,7 +31,6 @@ public class QuietTimeHandler implements IAlertRecipient
 
     private static final byte B_INSERT_SPACE = 8;
 
-
     public static final String QUIET_TIME_CONFIG_KEY = "quiet-time-config";
     private final Settings settings;
 
@@ -185,7 +184,7 @@ public class QuietTimeHandler implements IAlertRecipient
         if(instruction == B_PLAYER_NAME)
             return alert.getPlayerName();
         if(instruction == B_ACTIVITY_TEXT)
-            return alert.getActivity();
+            return alert.getActivity().getActivityText();
         if(instruction == B_SNITCH_NAME)
             return alert.getSnitchName();
         if(instruction == B_LOCATION)
