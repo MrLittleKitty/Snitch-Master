@@ -204,9 +204,13 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
         @Override
         public boolean accept(Color item)
         {
-            list.setListColor(item);
-            manager.saveSnitchLists();
-            return true;
+        	if(!Color.AreEqual(item,list.getListColor()))
+			{
+				list.setListColor(item);
+				manager.saveSnitchLists();
+				return true;
+			}
+			return false;
         }
     }
 

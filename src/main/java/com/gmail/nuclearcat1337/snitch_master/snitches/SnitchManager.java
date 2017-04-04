@@ -34,7 +34,7 @@ public class SnitchManager
 
 	public SnitchManager(SnitchMaster snitchMaster)
 	{
-		this.snitchMaster = new SnitchMaster();
+		this.snitchMaster = snitchMaster;
 
 		snitches = new LocatableObjectList<>();
 		snitchLists = new ArrayList<>();
