@@ -10,7 +10,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -37,7 +36,7 @@ public class SnitchListeners
         if (event instanceof PlayerInteractEvent.RightClickBlock)
         {
             //If manual mode is enabled...
-            if((Boolean)snitchMaster.getSettings().getValue(Settings.MANUAL_MODE_KEY))
+            if ((Boolean) snitchMaster.getSettings().getValue(Settings.MANUAL_MODE_KEY))
             {
                 PlayerInteractEvent.RightClickBlock event1 = (PlayerInteractEvent.RightClickBlock) event;
                 BlockPos pos = event1.getPos();
@@ -51,7 +50,7 @@ public class SnitchListeners
 
                         manager.submitSnitch(snitch);
 
-						manager.saveSnitches();
+                        manager.saveSnitches();
                     }
                 }
             }
@@ -69,7 +68,7 @@ public class SnitchListeners
         {
             snitchMaster.individualJourneyMapUpdate(snitch);
 
-			manager.saveSnitches();
+            manager.saveSnitches();
 
             SnitchMaster.SendMessageToPlayer("Removed snitch at " + loc.toString());
         }

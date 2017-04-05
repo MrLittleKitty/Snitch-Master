@@ -6,8 +6,6 @@ import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObjec
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -75,8 +73,9 @@ public class Snitch extends LocatableObject<Snitch>
 
     /**
      * Creates a new Snitch and populates "Name" and "Citadel Group Name" with the default name.
+     *
      * @param location The location of this Snitch block.
-     * @param origin The origin string of where this Snitch object came from.
+     * @param origin   The origin string of where this Snitch object came from.
      */
     public Snitch(ILocation location, String origin)
     {
@@ -91,18 +90,19 @@ public class Snitch extends LocatableObject<Snitch>
 
     /**
      * Creates a new Snitch with all the values specified.
-     * @param location The location of this Snitch block.
-     * @param origin The origin string of where this Snitch object came from.
-     * @param culltime The cull time remaining for this snitch. (Can be NaN)
-     * @param ctGroup The Citadel group name of the group this Snitch is reinforced under.
+     *
+     * @param location   The location of this Snitch block.
+     * @param origin     The origin string of where this Snitch object came from.
+     * @param culltime   The cull time remaining for this snitch. (Can be NaN)
+     * @param ctGroup    The Citadel group name of the group this Snitch is reinforced under.
      * @param snitchName The name of this Snitch.
      */
-    public Snitch(ILocation location, String origin,  double culltime, String ctGroup, String snitchName)
+    public Snitch(ILocation location, String origin, double culltime, String ctGroup, String snitchName)
     {
-        this(location,origin);
+        this(location, origin);
         this.cullTime = culltime;
         this.ctGroup = ctGroup == null ? DEFAULT_NAME : ctGroup;
-        this.name = snitchName == null || snitchName.isEmpty()? DEFAULT_NAME : snitchName;
+        this.name = snitchName == null || snitchName.isEmpty() ? DEFAULT_NAME : snitchName;
     }
 
     public void setCullTime(double cullTime)
@@ -131,8 +131,7 @@ public class Snitch extends LocatableObject<Snitch>
      */
     public boolean isPointInThisSnitch(int x, int y, int z)
     {
-        return x >= getFieldMinX() && x <= getFieldMaxX() && z >= getFieldMinZ() && z <= getFieldMaxZ() &&
-                y >= getFieldMinY() && y <= getFieldMaxY();
+        return x >= getFieldMinX() && x <= getFieldMaxX() && z >= getFieldMinZ() && z <= getFieldMaxZ() && y >= getFieldMinY() && y <= getFieldMaxY();
     }
 
     @Override
@@ -188,7 +187,7 @@ public class Snitch extends LocatableObject<Snitch>
 
     public void setSnitchName(String name)
     {
-        if(!name.isEmpty())
+        if (!name.isEmpty())
             this.name = name;
     }
 
@@ -210,22 +209,22 @@ public class Snitch extends LocatableObject<Snitch>
     public int compareTo(ILocation other)
     {
         int compare = location.getWorld().compareTo(other.getWorld());
-        if(compare != 0)
+        if (compare != 0)
             return compare;
 
-        if(location.getX() < other.getX())
+        if (location.getX() < other.getX())
             return -1;
-        if(location.getX() > other.getX())
+        if (location.getX() > other.getX())
             return 1;
 
-        if(location.getZ() < other.getZ())
+        if (location.getZ() < other.getZ())
             return -1;
-        if(location.getZ() > other.getZ())
+        if (location.getZ() > other.getZ())
             return 1;
 
-        if(location.getY() < other.getY())
+        if (location.getY() < other.getY())
             return -1;
-        if(location.getY() > other.getY())
+        if (location.getY() > other.getY())
             return 1;
 
         return 0;
@@ -246,6 +245,7 @@ public class Snitch extends LocatableObject<Snitch>
     private static final int NUMBER_OF_CSV_PARAMS = 8;
     private static final String CSV_SEPARATOR = ",";
     private static final String DESCRIPTION_SEPARATOR = ";";
+
     /**
      * Returns a string that represents the given Snitch object.
      * The returned string is in comma separated value form.
@@ -264,9 +264,9 @@ public class Snitch extends LocatableObject<Snitch>
         builder.append(snitch.getCullTime()).append(CSV_SEPARATOR);
 
         List<String> description = snitch.getDescription();
-        if(description != null)
+        if (description != null)
         {
-            for(String line : description)
+            for (String line : description)
                 builder.append(Scrub(line)).append(DESCRIPTION_SEPARATOR);
         }
         builder.append(CSV_SEPARATOR);
@@ -285,7 +285,7 @@ public class Snitch extends LocatableObject<Snitch>
         String[] args = csv.split(CSV_SEPARATOR);
 
         //We allow one less than the correct for when we didn't have a description
-        if(args.length == NUMBER_OF_CSV_PARAMS || args.length == NUMBER_OF_CSV_PARAMS-1)
+        if (args.length == NUMBER_OF_CSV_PARAMS || args.length == NUMBER_OF_CSV_PARAMS - 1)
         {
             try
             {
@@ -306,7 +306,7 @@ public class Snitch extends LocatableObject<Snitch>
                 Snitch snitch = new Snitch(new Location(x, y, z, world), origin, cullTime, groupName, snitchName);
 
                 //If there is an argument for the description
-                if(args.length > index)
+                if (args.length > index)
                 {
                     String descriptionCompressed = args[index++];
                     if (!descriptionCompressed.isEmpty())
@@ -314,7 +314,7 @@ public class Snitch extends LocatableObject<Snitch>
                         String[] lines = descriptionCompressed.split(DESCRIPTION_SEPARATOR);
                         ArrayList<String> description = new ArrayList<>(lines.length);
                         for (int i = 0; i < lines.length; i++)
-                             description.set(i,Scrub(lines[i]));
+                            description.set(i, Scrub(lines[i]));
                         snitch.setDescription(description);
                     }
                 }
@@ -331,6 +331,6 @@ public class Snitch extends LocatableObject<Snitch>
 
     static String Scrub(String string)
     {
-        return string.replace(CSV_SEPARATOR,"").replace(DESCRIPTION_SEPARATOR,"");
+        return string.replace(CSV_SEPARATOR, "").replace(DESCRIPTION_SEPARATOR, "");
     }
 }

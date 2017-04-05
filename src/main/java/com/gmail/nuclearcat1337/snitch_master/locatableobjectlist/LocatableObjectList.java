@@ -1,7 +1,5 @@
 package com.gmail.nuclearcat1337.snitch_master.locatableobjectlist;
 
-import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-
 import java.util.*;
 
 /**
@@ -11,7 +9,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
 {
     private int modCount = 0;
     private final ArrayList<T> wrappedList;
-    private final HashMap<String,IntPair> worldIndices;
+    private final HashMap<String, IntPair> worldIndices;
 
     public LocatableObjectList()
     {
@@ -22,21 +20,20 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     @Override
     public boolean add(T item)
     {
-        int index = Collections.binarySearch(wrappedList,item);
+        int index = Collections.binarySearch(wrappedList, item);
         //This means the item isnt in the list but the returned vault is -(insertion point) - 1 = x
-        if(index < 0)
+        if (index < 0)
         {
             //According to the documentation of the binarySearch method this solves for the insertion point of the item
-            index = (index + 1)*-1;
-        }
-        else
+            index = (index + 1) * -1;
+        } else
         {
             //If the item is already contained in the list then we do nothing
             return false;
         }
 
         //Insert the item into the list at the insertion point. Doing this for all adds guarantees the list is sorted.
-        wrappedList.add(index,item);
+        wrappedList.add(index, item);
 
         //cocurrency mod count needs to be incremented
         modCount++;
@@ -45,12 +42,12 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         IntPair minMax = worldIndices.get(item.getWorld());
 
         //This means that there were not any items with this world yet
-        if(minMax == null)
+        if (minMax == null)
         {
             //Create a new int pair with the min and max being the same index of this item
-            minMax = new IntPair(index,index);
+            minMax = new IntPair(index, index);
             //Add the pair into the hashmap
-            worldIndices.put(item.getWorld(),minMax);
+            worldIndices.put(item.getWorld(), minMax);
             //Return because we don't need to do anything else
             return true;
         }
@@ -60,16 +57,16 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         minMax.two++;
 
         //Go through all the world indices
-        for(Map.Entry<String,IntPair> entry : worldIndices.entrySet())
+        for (Map.Entry<String, IntPair> entry : worldIndices.entrySet())
         {
-            if(entry == null)
+            if (entry == null)
                 continue;
 
             //Dont do anything to the world were adding
-            if(!entry.getKey().equals(item.getWorld()))
+            if (!entry.getKey().equals(item.getWorld()))
             {
                 //For any worlds that are stored after this one, increase their indices because we inserted an item
-                if(entry.getValue().one >= index)
+                if (entry.getValue().one >= index)
                 {
                     entry.getValue().one++;
                     entry.getValue().two++;
@@ -84,8 +81,8 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     {
         boolean changed = false;
 
-        for(T value : c)
-            if(add(value))
+        for (T value : c)
+            if (add(value))
                 changed = true;
 
         return changed;
@@ -100,12 +97,12 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     {
         //Were only going to search the area in the arraylist that corresponds to the right world
         IntPair pair = worldIndices.get(location.getWorld());
-        if(pair == null)
+        if (pair == null)
             return null;
 
-        int index = LocatableObjectList.binarySearch(wrappedList,pair.one,pair.two,location);
+        int index = LocatableObjectList.binarySearch(wrappedList, pair.one, pair.two, location);
         //If the item wasn't found then we return false
-        if(index < 0)
+        if (index < 0)
             return null;
 
         T removedValue = remove(index);
@@ -116,7 +113,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
 
     public T remove(int index)
     {
-        if(index >= 0 && index < size())
+        if (index >= 0 && index < size())
         {
             //Remove the item from the list at the index it was found
             T item = wrappedList.remove(index);
@@ -158,14 +155,13 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     @Override
     public boolean remove(Object o)
     {
-        if(o instanceof ILocation)
+        if (o instanceof ILocation)
         {
-            T removedValue = remove((ILocation)o);
+            T removedValue = remove((ILocation) o);
             return removedValue != null;
-        }
-        else if(o instanceof  LocatableObject)
+        } else if (o instanceof LocatableObject)
         {
-            LocatableObject obj = (LocatableObject)o;
+            LocatableObject obj = (LocatableObject) o;
 
             return remove(obj.getLocation()) != null;
         }
@@ -177,8 +173,8 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     {
         boolean changed = false;
 
-        for(Object obj : c)
-            if(remove(obj))
+        for (Object obj : c)
+            if (remove(obj))
                 changed = true;
 
         return changed;
@@ -188,10 +184,10 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     public boolean retainAll(Collection<?> c)
     {
         boolean changed = false;
-        for(int i = wrappedList.size()-1; i >= 0; i--)
+        for (int i = wrappedList.size() - 1; i >= 0; i--)
         {
             //If the item at the current index isnt in the passed collection and we removed it, set changed
-            if(!c.contains(get(i)) && remove(i) != null)
+            if (!c.contains(get(i)) && remove(i) != null)
                 changed = true;
         }
         return changed;
@@ -221,9 +217,9 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     public boolean contains(ILocation location)
     {
         IntPair pair = worldIndices.get(location.getWorld());
-        if(pair == null)
+        if (pair == null)
             return false;
-        return LocatableObjectList.binarySearch(wrappedList,pair.one,pair.two,location) >= 0;
+        return LocatableObjectList.binarySearch(wrappedList, pair.one, pair.two, location) >= 0;
     }
 
     public boolean contains(T element)
@@ -234,18 +230,18 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     @Override
     public boolean contains(Object o)
     {
-        if(o instanceof ILocation)
-            return contains((ILocation)o);
-        else if(o instanceof LocatableObject)
-            return contains(((LocatableObject)o).getLocation());
+        if (o instanceof ILocation)
+            return contains((ILocation) o);
+        else if (o instanceof LocatableObject)
+            return contains(((LocatableObject) o).getLocation());
         return false;
     }
 
     @Override
     public boolean containsAll(Collection<?> c)
     {
-        for(Object val : c)
-            if(!contains(val))
+        for (Object val : c)
+            if (!contains(val))
                 return false;
         return true;
     }
@@ -253,7 +249,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     @Override
     public Iterator<T> iterator()
     {
-        return new HiddenIterator(0,size()-1,modCount);
+        return new HiddenIterator(0, size() - 1, modCount);
     }
 
     @Override
@@ -273,13 +269,13 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     {
         //Were only going to search the area in the arraylist that corresponds to the right world
         IntPair pair = worldIndices.get(location.getWorld());
-        if(pair == null)
+        if (pair == null)
             return null;
 
-        int index = LocatableObjectList.binarySearch(wrappedList,pair.one,pair.two,location);
+        int index = LocatableObjectList.binarySearch(wrappedList, pair.one, pair.two, location);
 
         //The index will be less than zero if the search did not find a match
-        if(index < 0)
+        if (index < 0)
             return null;
 
         return get(index);
@@ -295,7 +291,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     public int getMinIndexForWorld(String world)
     {
         IntPair pair = worldIndices.get(world);
-        if(pair == null)
+        if (pair == null)
             return -1;
         return pair.one;
     }
@@ -304,7 +300,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     public int getMaxIndexForWorld(String world)
     {
         IntPair pair = worldIndices.get(world);
-        if(pair == null)
+        if (pair == null)
             return -1;
         return pair.two;
     }
@@ -313,7 +309,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
     public Iterable<T> getItemsForWorld(String world)
     {
         final IntPair pair = worldIndices.get(world);
-        if(pair == null)
+        if (pair == null)
         {
             return new Iterable<T>()
             {
@@ -329,18 +325,17 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
             @Override
             public Iterator<T> iterator()
             {
-                return new HiddenIterator(pair.one,pair.two,modCount);
+                return new HiddenIterator(pair.one, pair.two, modCount);
             }
         };
     }
-
 
     private static int binarySearch(ArrayList<? extends LocatableObject> list, int low, int high, ILocation location)
     {
         while (low <= high)
         {
             int mid = (low + high) >>> 1;
-            LocatableObject  midVal = list.get(mid);
+            LocatableObject midVal = list.get(mid);
             int cmp = midVal.compareTo(location);
 
             if (cmp < 0)
@@ -352,7 +347,6 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         }
         return -(low + 1);  // key not found
     }
-
 
     private class EmptyIterator implements Iterator<T>
     {
@@ -380,7 +374,6 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         private final int max, expectedModCount;
         private int index;
 
-
         public HiddenIterator(int min, int max, int expectedModCount)
         {
             this.max = max;
@@ -399,7 +392,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         {
             checkForConcurrentModification();
             //Increment the index after getting the value at the current index
-            if(hasNext())
+            if (hasNext())
                 return get(index++);
             throw new IndexOutOfBoundsException("Exceeded the maximum index for this iterator");
         }
@@ -414,14 +407,14 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
 
         private void checkForConcurrentModification()
         {
-            if(expectedModCount != modCount)
+            if (expectedModCount != modCount)
                 throw new ConcurrentModificationException("The Locatable Object List was modified while using an iterator.");
         }
     }
 
     private static class IntPair
     {
-        public int one,two;
+        public int one, two;
 
         public IntPair()
         {

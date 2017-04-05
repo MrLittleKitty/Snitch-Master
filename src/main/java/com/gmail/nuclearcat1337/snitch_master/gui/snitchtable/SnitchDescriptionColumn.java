@@ -45,19 +45,19 @@ public class SnitchDescriptionColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void released(Snitch item, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void released(Snitch item, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
 
     }
 
     @Override
-    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
+    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY)
     {
         String text = snitch.getDescription() == null ? "No Description" : "Hover to view";
-        int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);
+        int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) / 2);
         int nameWidth = mc.fontRendererObj.getStringWidth(text);
-        int namePos = xPos + (columnWidth /2) - (nameWidth/2);
-        mc.fontRendererObj.drawString(text, namePos ,yFinal, 16777215);
+        int namePos = xPos + (columnWidth / 2) - (nameWidth / 2);
+        mc.fontRendererObj.drawString(text, namePos, yFinal, 16777215);
     }
 
     @Override
@@ -66,7 +66,6 @@ public class SnitchDescriptionColumn implements TableColumn<Snitch>
         String text = snitch.getDescription() == null ? "No Description" : "Hover to view";
         return mc.fontRendererObj.getStringWidth(text);
     }
-
 
     @Override
     public List<String> hover(Snitch snitch, int xPos, int yPos)

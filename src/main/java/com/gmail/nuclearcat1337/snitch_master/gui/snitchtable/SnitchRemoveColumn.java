@@ -31,7 +31,7 @@ public class SnitchRemoveColumn implements TableColumn<Snitch>
     {
         mc = Minecraft.getMinecraft();
 
-        buttonWidth = mc.fontRendererObj.getStringWidth(BUTTON_TEXT+"---");
+        buttonWidth = mc.fontRendererObj.getStringWidth(BUTTON_TEXT + "---");
         this.manager = snitchMaster.getManager();
         //removedSnitches = new HashSet<>();
     }
@@ -60,44 +60,44 @@ public class SnitchRemoveColumn implements TableColumn<Snitch>
     public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
         //Don't allow right clicks on the button
-        if(!leftClick || removedSnitches.contains(item.getLocation()))
+        if (!leftClick || removedSnitches.contains(item.getLocation()))
             return;
 
-        if(buttons[0].mousePressed(mc,xPos,yPos))
+        if (buttons[0].mousePressed(mc, xPos, yPos))
         {
             manager.getSnitches().remove(item);
 
             removedSnitches.add(item.getLocation());
 
-            if(SnitchMaster.jmInterface != null)
+            if (SnitchMaster.jmInterface != null)
                 SnitchMaster.jmInterface.refresh(manager.getSnitches());
 
-			manager.saveSnitches();
+            manager.saveSnitches();
         }
     }
 
     @Override
-    public void released(Snitch list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void released(Snitch list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
-        if(removedSnitches.contains(list.getLocation()))
+        if (removedSnitches.contains(list.getLocation()))
             return;
 
-        buttons[0].mouseReleased(xPos,yPos);
+        buttons[0].mouseReleased(xPos, yPos);
     }
 
     @Override
-    public void draw(Snitch list, int xPosition, int yPosition, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
+    public void draw(Snitch list, int xPosition, int yPosition, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY)
     {
-        if(removedSnitches.contains(list.getLocation()))
+        if (removedSnitches.contains(list.getLocation()))
             return;
 
-        yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) /2);
-        int xPos = xPosition + (columnWidth/2) - (buttonWidth/2);
+        yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) / 2);
+        int xPos = xPosition + (columnWidth / 2) - (buttonWidth / 2);
 
         buttons[0].yPosition = yPosition;
         buttons[0].xPosition = xPos;
 
-        buttons[0].drawButton(mc,mouseX,mouseY);
+        buttons[0].drawButton(mc, mouseX, mouseY);
     }
 
     @Override

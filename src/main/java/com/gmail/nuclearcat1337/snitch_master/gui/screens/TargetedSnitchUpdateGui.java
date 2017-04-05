@@ -42,26 +42,26 @@ public class TargetedSnitchUpdateGui extends GuiScreen
 
     public void initGui()
     {
-        int yPos = (this.height / 2) - (GuiConstants.STANDARD_TEXTBOX_HEIGHT/2);
-        int xPos = (this.width/2) - GuiConstants.STANDARD_SEPARATION_DISTANCE/2 - BOX_AND_BUTTON_WIDTH;
+        int yPos = (this.height / 2) - (GuiConstants.STANDARD_TEXTBOX_HEIGHT / 2);
+        int xPos = (this.width / 2) - GuiConstants.STANDARD_SEPARATION_DISTANCE / 2 - BOX_AND_BUTTON_WIDTH;
 
-        startIndexBox = new TextBox("",fontRendererObj,xPos,yPos, BOX_AND_BUTTON_WIDTH,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,3);
-        startIndexBox.setClamp(0,999);
+        startIndexBox = new TextBox("", fontRendererObj, xPos, yPos, BOX_AND_BUTTON_WIDTH, GuiConstants.STANDARD_TEXTBOX_HEIGHT, true, false, 3);
+        startIndexBox.setClamp(0, 999);
         startIndexBox.setFocused(true);
 
         xPos += (startIndexBox.width + GuiConstants.STANDARD_SEPARATION_DISTANCE);
 
-        stopIndexBox = new TextBox("",fontRendererObj,xPos,yPos, BOX_AND_BUTTON_WIDTH,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,3);
-        stopIndexBox.setClamp(0,999);
+        stopIndexBox = new TextBox("", fontRendererObj, xPos, yPos, BOX_AND_BUTTON_WIDTH, GuiConstants.STANDARD_TEXTBOX_HEIGHT, true, false, 3);
+        stopIndexBox.setClamp(0, 999);
 
         yPos += GuiConstants.STANDARD_TEXTBOX_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
         xPos -= (startIndexBox.width + GuiConstants.STANDARD_SEPARATION_DISTANCE);
 
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(1,xPos,yPos, BOX_AND_BUTTON_WIDTH,GuiConstants.STANDARD_BUTTON_HEIGHT,"Cancel"));
+        this.buttonList.add(new GuiButton(1, xPos, yPos, BOX_AND_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Cancel"));
 
         xPos += (startIndexBox.width + GuiConstants.STANDARD_SEPARATION_DISTANCE);
-        this.buttonList.add(new GuiButton(2,xPos,yPos, BOX_AND_BUTTON_WIDTH,GuiConstants.STANDARD_BUTTON_HEIGHT,"Update"));
+        this.buttonList.add(new GuiButton(2, xPos, yPos, BOX_AND_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Update"));
 
         super.initGui();
     }
@@ -75,27 +75,24 @@ public class TargetedSnitchUpdateGui extends GuiScreen
 
     public void keyTyped(char par1, int par2) throws IOException
     {
-        if(startIndexBox.isFocused())
+        if (startIndexBox.isFocused())
         {
-            if(par2 == Keyboard.KEY_TAB)
+            if (par2 == Keyboard.KEY_TAB)
             {
                 stopIndexBox.setFocused(true);
                 startIndexBox.setFocused(false);
-            }
-            else
+            } else
                 startIndexBox.textboxKeyTyped(par1, par2);
-        }
-        else if(stopIndexBox.isFocused())
+        } else if (stopIndexBox.isFocused())
         {
-            if(par2 == Keyboard.KEY_TAB)
+            if (par2 == Keyboard.KEY_TAB)
             {
                 startIndexBox.setFocused(true);
                 stopIndexBox.setFocused(false);
-            }
-            else
+            } else
                 stopIndexBox.textboxKeyTyped(par1, par2);
         }
-        super.keyTyped(par1,par2);
+        super.keyTyped(par1, par2);
     }
 
     @Override
@@ -103,13 +100,13 @@ public class TargetedSnitchUpdateGui extends GuiScreen
     {
         this.drawDefaultBackground();
 
-        int textYHeight = (GuiConstants.STANDARD_TEXTBOX_HEIGHT/2) - (mc.fontRendererObj.FONT_HEIGHT/2) - GuiConstants.STANDARD_TEXTBOX_HEIGHT;
+        int textYHeight = (GuiConstants.STANDARD_TEXTBOX_HEIGHT / 2) - (mc.fontRendererObj.FONT_HEIGHT / 2) - GuiConstants.STANDARD_TEXTBOX_HEIGHT;
 
         //Draw the text above the start index text box
-        mc.fontRendererObj.drawString(START_BOX_TEXT,startIndexBox.xPosition + (startIndexBox.width/2) - (startTextWidth/2), startIndexBox.yPosition + textYHeight,16777215);
+        mc.fontRendererObj.drawString(START_BOX_TEXT, startIndexBox.xPosition + (startIndexBox.width / 2) - (startTextWidth / 2), startIndexBox.yPosition + textYHeight, 16777215);
 
         //Draw the text above the stop index text box
-        mc.fontRendererObj.drawString(STOP_BOX_TEXT,stopIndexBox.xPosition + (stopIndexBox.width/2) - (stopTextWidth/2),startIndexBox.yPosition + textYHeight,16777215);
+        mc.fontRendererObj.drawString(STOP_BOX_TEXT, stopIndexBox.xPosition + (stopIndexBox.width / 2) - (stopTextWidth / 2), startIndexBox.yPosition + textYHeight, 16777215);
 
         this.startIndexBox.drawTextBox();
         this.stopIndexBox.drawTextBox();
@@ -118,9 +115,9 @@ public class TargetedSnitchUpdateGui extends GuiScreen
 
     public void mouseClicked(int one, int two, int three) throws IOException
     {
-        this.startIndexBox.mouseClicked(one,two,three);
-        this.stopIndexBox.mouseClicked(one,two,three);
-        super.mouseClicked(one,two,three);
+        this.startIndexBox.mouseClicked(one, two, three);
+        this.stopIndexBox.mouseClicked(one, two, three);
+        super.mouseClicked(one, two, three);
     }
 
     public void actionPerformed(GuiButton button)
@@ -132,14 +129,14 @@ public class TargetedSnitchUpdateGui extends GuiScreen
                 break;
             case 2:
                 Integer minIndex = startIndexBox.clamp();
-                if(minIndex == null)
+                if (minIndex == null)
                     return;
 
                 Integer maxIndex = stopIndexBox.clamp();
-                if(maxIndex == null)
+                if (maxIndex == null)
                     maxIndex = -1;
 
-                chatParser.updateSnitchList(minIndex,maxIndex);
+                chatParser.updateSnitchList(minIndex, maxIndex);
 
                 Minecraft.getMinecraft().displayGuiScreen(null);
                 break;

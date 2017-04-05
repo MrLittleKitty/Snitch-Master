@@ -47,39 +47,39 @@ public class EditColorGui extends GuiScreen
     {
         greenWidth = mc.fontRendererObj.getStringWidth("Green");
 
-        int width = mc.fontRendererObj.getStringWidth(SnitchList.MAX_NAME_CHARACTERS+"WWW");
-        int xPos = (this.width/2) - (GuiConstants.LARGE_TEXBOX_LENGTH/2);
-        int yPos = (this.height/2) - (GuiConstants.STANDARD_TEXTBOX_HEIGHT) - (GuiConstants.STANDARD_SEPARATION_DISTANCE/2);
+        int width = mc.fontRendererObj.getStringWidth(SnitchList.MAX_NAME_CHARACTERS + "WWW");
+        int xPos = (this.width / 2) - (GuiConstants.LARGE_TEXBOX_LENGTH / 2);
+        int yPos = (this.height / 2) - (GuiConstants.STANDARD_TEXTBOX_HEIGHT) - (GuiConstants.STANDARD_SEPARATION_DISTANCE / 2);
 
-        int rgbBoxWidth = (width-GuiConstants.STANDARD_SEPARATION_DISTANCE)/3;
-        int buttonWidth = (width-GuiConstants.STANDARD_SEPARATION_DISTANCE)/3;
+        int rgbBoxWidth = (width - GuiConstants.STANDARD_SEPARATION_DISTANCE) / 3;
+        int buttonWidth = (width - GuiConstants.STANDARD_SEPARATION_DISTANCE) / 3;
 
-        this.redBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,MAX_COLOR_TEXT_LENGTH);
-        redBox.setClamp(0,255);
+        this.redBox = new TextBox("", fontRendererObj, xPos, yPos, rgbBoxWidth, GuiConstants.STANDARD_TEXTBOX_HEIGHT, true, false, MAX_COLOR_TEXT_LENGTH);
+        redBox.setClamp(0, 255);
         redBox.setText(Integer.toString(baseColor.getRedInt()));
         redBox.setFocused(true);
 
         yPos += (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.SMALL_SEPARATION_DISTANCE);
 
-        this.greenBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,MAX_COLOR_TEXT_LENGTH);
-        greenBox.setClamp(0,255);
+        this.greenBox = new TextBox("", fontRendererObj, xPos, yPos, rgbBoxWidth, GuiConstants.STANDARD_TEXTBOX_HEIGHT, true, false, MAX_COLOR_TEXT_LENGTH);
+        greenBox.setClamp(0, 255);
         greenBox.setText(Integer.toString(baseColor.getGreenInt()));
 
         yPos += (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.SMALL_SEPARATION_DISTANCE);
 
-        this.blueBox = new TextBox("",fontRendererObj,xPos,yPos,rgbBoxWidth,GuiConstants.STANDARD_TEXTBOX_HEIGHT,true,false,MAX_COLOR_TEXT_LENGTH);
-        blueBox.setClamp(0,255);
+        this.blueBox = new TextBox("", fontRendererObj, xPos, yPos, rgbBoxWidth, GuiConstants.STANDARD_TEXTBOX_HEIGHT, true, false, MAX_COLOR_TEXT_LENGTH);
+        blueBox.setClamp(0, 255);
         blueBox.setText(Integer.toString(baseColor.getBlueInt()));
 
         this.buttonList.clear();
 
         xPos += (blueBox.width + GuiConstants.SMALL_SEPARATION_DISTANCE);
 
-        this.buttonList.add(new GuiButton(1,xPos,yPos,buttonWidth,GuiConstants.STANDARD_BUTTON_HEIGHT,"Cancel"));
+        this.buttonList.add(new GuiButton(1, xPos, yPos, buttonWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "Cancel"));
 
         xPos += (buttonWidth + GuiConstants.SMALL_SEPARATION_DISTANCE);
 
-        this.buttonList.add(new GuiButton(2,xPos,yPos,buttonWidth,GuiConstants.STANDARD_BUTTON_HEIGHT,"Save"));
+        this.buttonList.add(new GuiButton(2, xPos, yPos, buttonWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "Save"));
 
         super.initGui();
     }
@@ -94,34 +94,32 @@ public class EditColorGui extends GuiScreen
 
     public void keyTyped(char par1, int par2) throws IOException
     {
-        if(redBox.isFocused())
+        if (redBox.isFocused())
         {
-            if(par2 == Keyboard.KEY_TAB)
+            if (par2 == Keyboard.KEY_TAB)
             {
                 greenBox.setFocused(true);
                 redBox.setFocused(false);
             }
             redBox.textboxKeyTyped(par1, par2);
-        }
-        else if(greenBox.isFocused())
+        } else if (greenBox.isFocused())
         {
-            if(par2 == Keyboard.KEY_TAB)
+            if (par2 == Keyboard.KEY_TAB)
             {
                 blueBox.setFocused(true);
                 greenBox.setFocused(false);
             }
             greenBox.textboxKeyTyped(par1, par2);
-        }
-        else if(blueBox.isFocused())
+        } else if (blueBox.isFocused())
         {
-            if(par2 == Keyboard.KEY_TAB)
+            if (par2 == Keyboard.KEY_TAB)
             {
                 redBox.setFocused(true);
                 blueBox.setFocused(false);
             }
             blueBox.textboxKeyTyped(par1, par2);
         }
-        super.keyTyped(par1,par2);
+        super.keyTyped(par1, par2);
     }
 
     @Override
@@ -132,37 +130,37 @@ public class EditColorGui extends GuiScreen
         this.greenBox.drawTextBox();
         this.blueBox.drawTextBox();
 
-        int constYValue = (GuiConstants.STANDARD_TEXTBOX_HEIGHT/2) - mc.fontRendererObj.FONT_HEIGHT/2;
+        int constYValue = (GuiConstants.STANDARD_TEXTBOX_HEIGHT / 2) - mc.fontRendererObj.FONT_HEIGHT / 2;
         int constXValue = GuiConstants.SMALL_SEPARATION_DISTANCE + greenWidth;
 
-        mc.fontRendererObj.drawString("Blue",blueBox.xPosition-constXValue,blueBox.yPosition + constYValue,16777215);
-        mc.fontRendererObj.drawString("Green",greenBox.xPosition-constXValue,greenBox.yPosition + constYValue,16777215);
-        mc.fontRendererObj.drawString("Red",redBox.xPosition-constXValue,redBox.yPosition + constYValue,16777215);
+        mc.fontRendererObj.drawString("Blue", blueBox.xPosition - constXValue, blueBox.yPosition + constYValue, 16777215);
+        mc.fontRendererObj.drawString("Green", greenBox.xPosition - constXValue, greenBox.yPosition + constYValue, 16777215);
+        mc.fontRendererObj.drawString("Red", redBox.xPosition - constXValue, redBox.yPosition + constYValue, 16777215);
 
-        int xPos = redBox.xPosition + (redBox.width/2) - (titleWidth/2);
+        int xPos = redBox.xPosition + (redBox.width / 2) - (titleWidth / 2);
         int yPos = redBox.yPosition - mc.fontRendererObj.FONT_HEIGHT - GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        mc.fontRendererObj.drawString(titleText,xPos,yPos,16777215);
+        mc.fontRendererObj.drawString(titleText, xPos, yPos, 16777215);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     public void mouseClicked(int one, int two, int three) throws IOException
     {
-        this.redBox.mouseClicked(one,two,three);
-        this.greenBox.mouseClicked(one,two,three);
-        this.blueBox.mouseClicked(one,two,three);
-        super.mouseClicked(one,two,three);
+        this.redBox.mouseClicked(one, two, three);
+        this.greenBox.mouseClicked(one, two, three);
+        this.blueBox.mouseClicked(one, two, three);
+        super.mouseClicked(one, two, three);
     }
 
     public void actionPerformed(GuiButton button)
     {
         //If they press the "save" button, we check if we need to save changes
-        if(button.id == 2)
+        if (button.id == 2)
         {
             //If there is not a correct red value don't go back to old screen
             Integer red = redBox.clamp();
-            if(red == null)
+            if (red == null)
                 return;
 
             //If there is not a correct green value don't go back to old screen
@@ -173,7 +171,7 @@ public class EditColorGui extends GuiScreen
             //If there is not a correct blue value don't go back to old screen
             Integer blue = blueBox.clamp();
             if (blue == null)
-            return;
+                return;
 
             Color newColor = new Color(red, green, blue);
             //We only need to save changes if they actually changed the color

@@ -8,9 +8,7 @@ import journeymap.client.api.IClientPlugin;
 import journeymap.client.api.display.DisplayType;
 import journeymap.client.api.display.ImageOverlay;
 import journeymap.client.api.event.ClientEvent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,11 +16,6 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-
-import static journeymap.client.api.event.ClientEvent.Type.*;
 
 /**
  * Created by Mr_Little_Kitty on 9/20/2016.
@@ -32,7 +25,7 @@ import static journeymap.client.api.event.ClientEvent.Type.*;
 @journeymap.client.api.ClientPlugin
 public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterface
 {
-    private final KeyBinding renderJourneyMapOverlay = new KeyBinding("Journey Map Overlay", Keyboard.KEY_Y,"Snitch Master");
+    private final KeyBinding renderJourneyMapOverlay = new KeyBinding("Journey Map Overlay", Keyboard.KEY_Y, "Snitch Master");
     private boolean renderOverlay;
 
     private IClientAPI api = null;
@@ -45,10 +38,10 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event)
     {
-        if(renderJourneyMapOverlay.isPressed())
+        if (renderJourneyMapOverlay.isPressed())
         {
             toggleRender();
-            SnitchMaster.SendMessageToPlayer("JourneyMap Overlay: "+(renderOverlay ? "On" : "Off"));
+            SnitchMaster.SendMessageToPlayer("JourneyMap Overlay: " + (renderOverlay ? "On" : "Off"));
         }
     }
 
@@ -58,16 +51,16 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
     private void toggleRender()
     {
         renderOverlay = !renderOverlay;
-        if(!renderOverlay)
+        if (!renderOverlay)
             clearDisplayed();
         else
         {
             IReadOnlyLocatableObjectList<Snitch> snitches = SnitchMaster.instance.getManager().getSnitches();
-            if(snitches != null)
+            if (snitches != null)
             {
                 String currentWorld = SnitchMaster.instance.getCurrentWorld();
                 Iterable<Snitch> worldSnitches = snitches.getItemsForWorld(currentWorld);
-                if(worldSnitches != null)
+                if (worldSnitches != null)
                     refresh(worldSnitches);
             }
         }
@@ -97,24 +90,24 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
         return SnitchMaster.MODID;
     }
 
-	@Override
-	public void onEvent(ClientEvent clientEvent)
-	{
+    @Override
+    public void onEvent(ClientEvent clientEvent)
+    {
 
-	}
+    }
 
-	//private ArrayList<Snitch> renderedSnitches = new ArrayList<>();
+    //private ArrayList<Snitch> renderedSnitches = new ArrayList<>();
 
     private void sendImage(Snitch snitch)
     {
-        if(api.playerAccepts(getModId(), DisplayType.Image))
+        if (api.playerAccepts(getModId(), DisplayType.Image))
         {
             //renderedSnitches.add(snitch.getLocation());
             ImageOverlay overlay = SnitchImageFactory.createSnitchOverlay(snitch);
             try
             {
-                if(overlay != null)
-					api.show(overlay);
+                if (overlay != null)
+                    api.show(overlay);
             }
             catch (Exception e)
             {
@@ -126,15 +119,15 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
     @Override
     public void displaySnitch(Snitch snitch)
     {
-        if(renderOverlay)
-			sendImage(snitch);
+        if (renderOverlay)
+            sendImage(snitch);
     }
 
     @Override
     public void refresh(Iterable<Snitch> snitches)
     {
         clearDisplayed();
-        for(Snitch snitch : snitches)
+        for (Snitch snitch : snitches)
             displaySnitch(snitch);
     }
 
@@ -143,14 +136,14 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
         api.removeAll(this.getModId());
     }
 
-//    @Override
-//    public void onEvent(ClientEvent clientEvent)
-//    {
-//        switch (clientEvent.type)
-//        {
-//            case MAPPING_STOPPED:
-//                clearDisplayed();
-//                break;
-//        }
-//    }
+    //    @Override
+    //    public void onEvent(ClientEvent clientEvent)
+    //    {
+    //        switch (clientEvent.type)
+    //        {
+    //            case MAPPING_STOPPED:
+    //                clearDisplayed();
+    //                break;
+    //        }
+    //    }
 }

@@ -7,7 +7,6 @@ import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -17,9 +16,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.collection.parallel.ParIterableLike;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -48,9 +45,9 @@ public class WorldInfoListener
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event)
     {
-        if(!mc.isSingleplayer() && mc.thePlayer != null && !mc.thePlayer.isDead)
+        if (!mc.isSingleplayer() && mc.thePlayer != null && !mc.thePlayer.isDead)
         {
-            if(mc.thePlayer.getDisplayName().equals(event.getEntity().getDisplayName()))
+            if (mc.thePlayer.getDisplayName().equals(event.getEntity().getDisplayName()))
             {
                 worldID = null;
                 if (this.channel != null)
@@ -59,10 +56,11 @@ public class WorldInfoListener
             }
         }
     }
+
     private void requestWorldID()
     {
         long now = System.currentTimeMillis();
-        if(lastRequest + MIN_DELAY_MS < now)
+        if (lastRequest + MIN_DELAY_MS < now)
         {
             channel.sendToServer(new WorldIDPacket());
             lastRequest = System.currentTimeMillis();
@@ -75,18 +73,17 @@ public class WorldInfoListener
      */
     public String getWorldID()
     {
-        if(lastResponse < lastRequest)
+        if (lastResponse < lastRequest)
         {
             //No WorldInfo response so just use vanilla world names
             WorldProvider provider = Minecraft.getMinecraft().theWorld.provider;
-            if(provider instanceof WorldProviderEnd)
+            if (provider instanceof WorldProviderEnd)
                 return "world_the_end";
-            else if(provider instanceof WorldProviderHell)
+            else if (provider instanceof WorldProviderHell)
                 return "world_nether";
             else
                 return "world";
-        }
-        else
+        } else
             return worldID;
     }
 
@@ -102,15 +99,18 @@ public class WorldInfoListener
 
         }
 
-        public WorldIDPacket(String worldID) {
+        public WorldIDPacket(String worldID)
+        {
             this.worldID = worldID;
         }
 
-        public String getWorldID() {
+        public String getWorldID()
+        {
             return worldID;
         }
 
-        public void fromBytes(ByteBuf buf) {
+        public void fromBytes(ByteBuf buf)
+        {
             worldID = ByteBufUtils.readUTF8String(buf);
         }
 

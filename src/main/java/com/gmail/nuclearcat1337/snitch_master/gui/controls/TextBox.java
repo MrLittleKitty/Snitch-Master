@@ -15,7 +15,7 @@ public class TextBox extends GuiTextField
 
     public TextBox(String text, FontRenderer renderer, int x, int y, int width, int height, boolean numeric, boolean allowNegative, int maxStringLength)
     {
-        super(0,renderer,x,y,width,height);
+        super(0, renderer, x, y, width, height);
         super.setMaxStringLength(maxStringLength);
         super.setText(text);
         this.number = numeric;
@@ -105,7 +105,8 @@ public class TextBox extends GuiTextField
         {
             return Integer.valueOf(Integer.parseInt(text));
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
         }
         return null;
     }

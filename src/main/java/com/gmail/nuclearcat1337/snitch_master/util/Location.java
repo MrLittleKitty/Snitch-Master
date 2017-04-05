@@ -11,6 +11,7 @@ public class Location implements ILocation
     private final int y;
     private final int z;
     private final String world;
+
     public Location(int x, int y, int z, String world)
     {
         this.x = x;

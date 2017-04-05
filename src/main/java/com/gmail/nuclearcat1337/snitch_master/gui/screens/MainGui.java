@@ -29,8 +29,8 @@ public class MainGui extends GuiScreen
 
         String updateButtonMessage = snitchMaster.getChatSnitchParser().isUpdatingSnitchList() ? "Cancel Snitch Update" : "Full Snitch Update";
 
-        int xPos = (this.width/2) - (GuiConstants.LONG_BUTTON_WIDTH/2);
-        int yPos = (this.height/4) + 8 - (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE);
+        int xPos = (this.width / 2) - (GuiConstants.LONG_BUTTON_WIDTH / 2);
+        int yPos = (this.height / 4) + 8 - (GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE);
 
         this.buttonList.add(new GuiButton(0, xPos, yPos, GuiConstants.LONG_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, updateButtonMessage));
 
@@ -54,7 +54,7 @@ public class MainGui extends GuiScreen
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        this.buttonList.add(new GuiButton(5, xPos,yPos, "Done"));
+        this.buttonList.add(new GuiButton(5, xPos, yPos, "Done"));
     }
 
     public void actionPerformed(GuiButton button)
@@ -64,7 +64,7 @@ public class MainGui extends GuiScreen
         switch (button.id)
         {
             case 0: //"Full Snitch Update" or "Cancel Snitch Update"
-                if(snitchMaster.getChatSnitchParser().isUpdatingSnitchList())
+                if (snitchMaster.getChatSnitchParser().isUpdatingSnitchList())
                     snitchMaster.getChatSnitchParser().resetUpdatingSnitchList(true);
                 else
                     snitchMaster.getChatSnitchParser().updateSnitchList();
@@ -72,14 +72,13 @@ public class MainGui extends GuiScreen
                 this.mc.setIngameFocus();
                 break;
             case 1:
-                if(snitchMaster.getChatSnitchParser().isUpdatingSnitchList())
+                if (snitchMaster.getChatSnitchParser().isUpdatingSnitchList())
                 {
                     snitchMaster.getChatSnitchParser().resetUpdatingSnitchList(true);
                     this.mc.displayGuiScreen((GuiScreen) null);
                     this.mc.setIngameFocus();
-                }
-                else
-                    this.mc.displayGuiScreen(new TargetedSnitchUpdateGui(this,snitchMaster.getChatSnitchParser()));
+                } else
+                    this.mc.displayGuiScreen(new TargetedSnitchUpdateGui(this, snitchMaster.getChatSnitchParser()));
                 break;
             case 2: //"View Settings"
                 this.mc.displayGuiScreen(new SettingsGui(this));
@@ -87,11 +86,11 @@ public class MainGui extends GuiScreen
             case 3: //"View Snitch Lists"
                 this.mc.gameSettings.saveOptions(); //wtf? Why is this here? What does this do?
                 //this.mc.displayGuiScreen(new EditSnitchListsGui(this,snitchMaster,snitchMaster.getSnitchLists().asCollection(),true, "All Snitch Lists"));
-                this.mc.displayGuiScreen(new SnitchListsTable(this,snitchMaster.getManager().getSnitchLists(),"All Snitch Lists",true,snitchMaster));
+                this.mc.displayGuiScreen(new SnitchListsTable(this, snitchMaster.getManager().getSnitchLists(), "All Snitch Lists", true, snitchMaster));
                 break;
             case 4: //"View Snitches"
                 //this.mc.displayGuiScreen(new EditSnitchesGui(this,snitchMaster.getSnitches(),"All Snitches"));
-                this.mc.displayGuiScreen(new SnitchesTable(this,snitchMaster.getManager().getSnitches(),"All Snitches",snitchMaster));
+                this.mc.displayGuiScreen(new SnitchesTable(this, snitchMaster.getManager().getSnitches(), "All Snitches", snitchMaster));
                 break;
             case 5: //"Done"
                 this.mc.displayGuiScreen((GuiScreen) null);

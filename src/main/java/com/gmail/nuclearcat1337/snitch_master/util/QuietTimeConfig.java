@@ -10,10 +10,10 @@ import java.util.Arrays;
 public class QuietTimeConfig
 {
     //TL;DR: Don't even bother trying to read these and understand what they represent. Its not your destiny.
-    public static final QuietTimeConfig NORMAL = new QuietTimeConfig(new byte[]{1,8,2,8,3,8,4},new String[]{});
-    public static final QuietTimeConfig HIDE_COORDS = new QuietTimeConfig(new byte[]{1,8,2,8,3,8,7,4,6,0},new String[]{"[world X X X]"});
-    public static final QuietTimeConfig HIDE_COORDS_AND_NAME = new QuietTimeConfig(new byte[]{1,8,2,8,7,6,0,3,8,7,6,1,4},new String[]{"Hidden","[world X X X]"});
-    public static final QuietTimeConfig GJUM_SPECIAL = new QuietTimeConfig(new byte[]{1,8,2,8,7,3,4},new String[]{});
+    public static final QuietTimeConfig NORMAL = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 3, 8, 4}, new String[]{});
+    public static final QuietTimeConfig HIDE_COORDS = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 3, 8, 7, 4, 6, 0}, new String[]{"[world X X X]"});
+    public static final QuietTimeConfig HIDE_COORDS_AND_NAME = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 7, 6, 0, 3, 8, 7, 6, 1, 4}, new String[]{"Hidden", "[world X X X]"});
+    public static final QuietTimeConfig GJUM_SPECIAL = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 7, 3, 4}, new String[]{});
 
     public byte[] instructions;
     public String[] literals;
@@ -32,7 +32,7 @@ public class QuietTimeConfig
 
     public static QuietTimeConfig GetDefaultQuietTimeConfig()
     {
-       return NORMAL;
+        return NORMAL;
     }
 
     public static QuietTimeConfig FromString(String value)
@@ -56,8 +56,8 @@ public class QuietTimeConfig
     private static String ToString(String[] literals)
     {
         StringBuilder builder = new StringBuilder();
-        for(String str : literals)
-            builder.append(str.replace(":","").replace(";","")).append(';');
+        for (String str : literals)
+            builder.append(str.replace(":", "").replace(";", "")).append(';');
         return builder.toString();
     }
 
@@ -68,10 +68,10 @@ public class QuietTimeConfig
 
     private static byte[] ParseByteArray(String str)
     {
-        str = str.replace("[","").replace("]","").replace(",","");
+        str = str.replace("[", "").replace("]", "").replace(",", "");
         String[] b = str.split(" ");
         byte[] bytes = new byte[b.length];
-        for(int i = 0; i < b.length; i++)
+        for (int i = 0; i < b.length; i++)
             bytes[i] = Byte.parseByte(b[i]);
         return bytes;
     }

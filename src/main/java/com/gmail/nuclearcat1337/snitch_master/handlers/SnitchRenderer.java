@@ -29,7 +29,7 @@ public class SnitchRenderer
 {
     private static final int BLOCK_RENDER_DISTANCE = 60;
     private static final int BOX_RENDER_DISTANCE = 36;
-    private static final int TEXT_RENDER_DISTANCE = (int)((double)((Snitch.SNITCH_RADIUS)+1)*Math.sqrt(2))+2;
+    private static final int TEXT_RENDER_DISTANCE = (int) ((double) ((Snitch.SNITCH_RADIUS) + 1) * Math.sqrt(2)) + 2;
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     private final SnitchMaster snitchMaster;
@@ -47,54 +47,53 @@ public class SnitchRenderer
     @SubscribeEvent
     public void renderSnitches(RenderWorldLastEvent event)
     {
-    	if(manager.getGlobalRender())
-		{
-			boolean renderText = (Boolean) (snitchMaster.getSettings().getValue(Settings.RENDER_TEXT_KEY));
-			for (Snitch snitch : manager.getSnitches().getItemsForWorld(snitchMaster.getCurrentWorld()))
-			{
-				SnitchList renderList = manager.getRenderListForSnitch(snitch);
-				if (renderList != null)
-				{
-					Color renderColor = renderList.getListColor();
-					ILocation location = snitch.getLocation();
-					double distanceSquared = GeneralUtils.DistanceSquared(location.getX(), location.getZ(), (int) mc.thePlayer.posX, (int) mc.thePlayer.posZ);
+        if (manager.getGlobalRender())
+        {
+            boolean renderText = (Boolean) (snitchMaster.getSettings().getValue(Settings.RENDER_TEXT_KEY));
+            for (Snitch snitch : manager.getSnitches().getItemsForWorld(snitchMaster.getCurrentWorld()))
+            {
+                SnitchList renderList = manager.getRenderListForSnitch(snitch);
+                if (renderList != null)
+                {
+                    Color renderColor = renderList.getListColor();
+                    ILocation location = snitch.getLocation();
+                    double distanceSquared = GeneralUtils.DistanceSquared(location.getX(), location.getZ(), (int) mc.thePlayer.posX, (int) mc.thePlayer.posZ);
 
-					if (distanceSquared <= BLOCK_RENDER_DISTANCE * BLOCK_RENDER_DISTANCE)
-					{
-						if (distanceSquared <= BOX_RENDER_DISTANCE * BOX_RENDER_DISTANCE)
-						{
-							renderBox(location.getX(), location.getY(), location.getZ(), Snitch.SNITCH_RADIUS, renderColor, 0.1D, 0.25D, event.getPartialTicks());
-						}
+                    if (distanceSquared <= BLOCK_RENDER_DISTANCE * BLOCK_RENDER_DISTANCE)
+                    {
+                        if (distanceSquared <= BOX_RENDER_DISTANCE * BOX_RENDER_DISTANCE)
+                        {
+                            renderBox(location.getX(), location.getY(), location.getZ(), Snitch.SNITCH_RADIUS, renderColor, 0.1D, 0.25D, event.getPartialTicks());
+                        }
 
-						if (renderText)
-						{
-							if (GeneralUtils.DistanceSquared(location.getX(), location.getZ(), location.getY(), (int) mc.thePlayer.posX, (int) mc.thePlayer.posZ, (int) mc.thePlayer.posY) <= TEXT_RENDER_DISTANCE * TEXT_RENDER_DISTANCE)
-							{
-								String[] text = new String[3];
-								text[0] = "Name: " + snitch.getSnitchName();
-								text[1] = "Group: " + snitch.getGroupName();
-								text[2] = "Location: " + location.toString();
+                        if (renderText)
+                        {
+                            if (GeneralUtils.DistanceSquared(location.getX(), location.getZ(), location.getY(), (int) mc.thePlayer.posX, (int) mc.thePlayer.posZ, (int) mc.thePlayer.posY) <= TEXT_RENDER_DISTANCE * TEXT_RENDER_DISTANCE)
+                            {
+                                String[] text = new String[3];
+                                text[0] = "Name: " + snitch.getSnitchName();
+                                text[1] = "Group: " + snitch.getGroupName();
+                                text[2] = "Location: " + location.toString();
 
-								RenderFloatingText(text, (float) location.getX() + 0.5f, location.getY() + 1.01f, location.getZ() + 0.5f, 0xFFFFFF, true, event.getPartialTicks());
-							}
-						}
+                                RenderFloatingText(text, (float) location.getX() + 0.5f, location.getY() + 1.01f, location.getZ() + 0.5f, 0xFFFFFF, true, event.getPartialTicks());
+                            }
+                        }
 
-						GL11.glDisable(GL11.GL_DEPTH_TEST);
+                        GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-						renderBox(location.getX(), location.getY(), location.getZ(), 0, renderColor, 0.25D, 0.25D, event.getPartialTicks());
+                        renderBox(location.getX(), location.getY(), location.getZ(), 0, renderColor, 0.25D, 0.25D, event.getPartialTicks());
 
-						GL11.glEnable(GL11.GL_DEPTH_TEST);
-					}
-				}
-			}
-		}
+                        GL11.glEnable(GL11.GL_DEPTH_TEST);
+                    }
+                }
+            }
+        }
     }
 
     private static final float MIN_TEXT_RENDER_SCALE = 0.0075f;
     private static final float MAX_TEXT_RENDER_SCALE = 0.04f;
 
-    private static final float SCALE_STEP = (MAX_TEXT_RENDER_SCALE-MIN_TEXT_RENDER_SCALE)/TEXT_RENDER_DISTANCE;
-
+    private static final float SCALE_STEP = (MAX_TEXT_RENDER_SCALE - MIN_TEXT_RENDER_SCALE) / TEXT_RENDER_DISTANCE;
 
     private static void RenderFloatingText(String[] text, float x, float y, float z, int color, boolean renderBlackBackground, float partialTickTime)
     {
@@ -107,11 +106,11 @@ public class SnitchRenderer
         float playerY = (float) (mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * partialTickTime);
         float playerZ = (float) (mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ) * partialTickTime);
 
-        float dx = x-playerX;
-        float dy = y-playerY;
-        float dz = z-playerZ;
-        float distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
-        float scale = MIN_TEXT_RENDER_SCALE + (distance*SCALE_STEP);//.01f; //Min font scale for max text render distance
+        float dx = x - playerX;
+        float dy = y - playerY;
+        float dz = z - playerZ;
+        float distance = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+        float scale = MIN_TEXT_RENDER_SCALE + (distance * SCALE_STEP);//.01f; //Min font scale for max text render distance
 
         GL11.glColor4f(1f, 1f, 1f, 0.5f);
         GL11.glPushMatrix();
@@ -135,9 +134,9 @@ public class SnitchRenderer
         }
 
         int lineHeight = 10;
-        int initialValue = lineHeight*text.length;
+        int initialValue = lineHeight * text.length;
 
-        if(renderBlackBackground)
+        if (renderBlackBackground)
         {
             int stringMiddle = textWidth / 2;
 
@@ -148,10 +147,10 @@ public class SnitchRenderer
 
             //This code taken from 1.8.8 net.minecraft.client.renderer.entity.Render.renderLivingLabel()
             vertexBuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            vertexBuffer.pos((double) (-stringMiddle - 1), (double) (-1)-initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            vertexBuffer.pos((double) (-stringMiddle - 1), (double) (8 + lineHeight*(text.length-1))-initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            vertexBuffer.pos((double) (stringMiddle + 1), (double) (8 + lineHeight*(text.length-1))-initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            vertexBuffer.pos((double) (stringMiddle + 1), (double) (-1)-initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            vertexBuffer.pos((double) (-stringMiddle - 1), (double) (-1) - initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            vertexBuffer.pos((double) (-stringMiddle - 1), (double) (8 + lineHeight * (text.length - 1)) - initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            vertexBuffer.pos((double) (stringMiddle + 1), (double) (8 + lineHeight * (text.length - 1)) - initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            vertexBuffer.pos((double) (stringMiddle + 1), (double) (-1) - initialValue, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 
             tessellator.draw();
 
@@ -159,10 +158,10 @@ public class SnitchRenderer
         }
 
         int i = 0;
-        for(String message : text)
+        for (String message : text)
         {
             int messageWidth = mc.fontRendererObj.getStringWidth(message);
-            mc.fontRendererObj.drawString(message,  0-(messageWidth / 2), (i*lineHeight)-initialValue, color);
+            mc.fontRendererObj.drawString(message, 0 - (messageWidth / 2), (i * lineHeight) - initialValue, color);
             i++;
         }
 
@@ -174,12 +173,9 @@ public class SnitchRenderer
 
     private void renderBox(int x, int y, int z, int radius, Color color, double alpha, double outlineAlpha, float partialTicks)
     {
-        double renderPosX = (float) (mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX)
-                * partialTicks);
-        double renderPosY = (float) (mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY)
-                * partialTicks);
-        double renderPosZ = (float) (mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ)
-                * partialTicks);
+        double renderPosX = (float) (mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * partialTicks);
+        double renderPosY = (float) (mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * partialTicks);
+        double renderPosZ = (float) (mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ) * partialTicks);
 
         GL11.glPushMatrix();
 
@@ -200,7 +196,7 @@ public class SnitchRenderer
         double max = radius + 1.01D;   // +.99D; //.99
         double min = radius + .01D;    // - .01D;//-.01
 
-        if(radius == 0)
+        if (radius == 0)
         {
             min = 0.01D;
             max = 1.01;
@@ -208,11 +204,11 @@ public class SnitchRenderer
 
         AxisAlignedBB bb = new AxisAlignedBB(px - min, py - min, pz - min, px + max, py + max, pz + max);
 
-        GL11.glColor4d(color.getRed(),color.getGreen(),color.getBlue(),outlineAlpha);
+        GL11.glColor4d(color.getRed(), color.getGreen(), color.getBlue(), outlineAlpha);
 
         drawCrossedOutlinedBoundingBox(bb);
 
-        GL11.glColor4d(color.getRed(),color.getGreen(),color.getBlue(),alpha);
+        GL11.glColor4d(color.getRed(), color.getGreen(), color.getBlue(), alpha);
 
         drawBoundingBoxQuads(bb);
 
@@ -224,7 +220,7 @@ public class SnitchRenderer
 
         GL11.glPopMatrix();
 
-        GL11.glColor4d(1.0f,1.0f,1.0f,1.0f);
+        GL11.glColor4d(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     private static final VertexFormat format = DefaultVertexFormats.POSITION;
@@ -306,7 +302,7 @@ public class SnitchRenderer
         Tessellator tess = Tessellator.getInstance();
         VertexBuffer buffer = tess.getBuffer();
 
-        buffer.begin(GL11.GL_LINE_STRIP,format);
+        buffer.begin(GL11.GL_LINE_STRIP, format);
         buffer.pos(bb.maxX, bb.maxY, bb.maxZ).endVertex();
         buffer.pos(bb.minX, bb.maxY, bb.maxZ).endVertex();
         buffer.pos(bb.minX, bb.maxY, bb.minZ).endVertex();
@@ -314,7 +310,7 @@ public class SnitchRenderer
         buffer.pos(bb.maxX, bb.maxY, bb.maxZ).endVertex();
         tess.draw();
 
-        buffer.begin(GL11.GL_LINE_STRIP,format);
+        buffer.begin(GL11.GL_LINE_STRIP, format);
         buffer.pos(bb.maxX, bb.minY, bb.maxZ).endVertex();
         buffer.pos(bb.minX, bb.minY, bb.maxZ).endVertex();
         buffer.pos(bb.minX, bb.minY, bb.minZ).endVertex();
@@ -322,22 +318,22 @@ public class SnitchRenderer
         buffer.pos(bb.maxX, bb.minY, bb.maxZ).endVertex();
         tess.draw();
 
-        buffer.begin(GL11.GL_LINE_STRIP,format);
+        buffer.begin(GL11.GL_LINE_STRIP, format);
         buffer.pos(bb.maxX, bb.minY, bb.maxZ).endVertex();
         buffer.pos(bb.maxX, bb.maxY, bb.maxZ).endVertex();
         tess.draw();
 
-        buffer.begin(GL11.GL_LINE_STRIP,format);
+        buffer.begin(GL11.GL_LINE_STRIP, format);
         buffer.pos(bb.maxX, bb.minY, bb.minZ).endVertex();
         buffer.pos(bb.maxX, bb.maxY, bb.minZ).endVertex();
         tess.draw();
 
-        buffer.begin(GL11.GL_LINE_STRIP,format);
+        buffer.begin(GL11.GL_LINE_STRIP, format);
         buffer.pos(bb.minX, bb.minY, bb.maxZ).endVertex();
         buffer.pos(bb.minX, bb.maxY, bb.maxZ).endVertex();
         tess.draw();
 
-        buffer.begin(GL11.GL_LINE_STRIP,format);
+        buffer.begin(GL11.GL_LINE_STRIP, format);
         buffer.pos(bb.minX, bb.minY, bb.minZ).endVertex();
         buffer.pos(bb.minX, bb.maxY, bb.minZ).endVertex();
         tess.draw();

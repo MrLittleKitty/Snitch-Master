@@ -3,8 +3,6 @@ package com.gmail.nuclearcat1337.snitch_master.snitches;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
 
-import java.util.*;
-
 /**
  * Created by Mr_Little_Kitty on 6/25/2016.
  * A structure that handles the grouping of Snitches by common traits or specified functions.
@@ -26,9 +24,9 @@ public class SnitchList
     private SnitchListQualifier listQualifier;
     private boolean renderSnitches;
 
-    SnitchList(SnitchManager manager, SnitchListQualifier listQualifier,boolean render)
+    SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render)
     {
-    	this.manager = manager;
+        this.manager = manager;
         listName = defaultName;
         listColor = defaultColor;
         this.listQualifier = listQualifier;
@@ -37,8 +35,8 @@ public class SnitchList
 
     SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render, String name)
     {
-		this.manager = manager;
-		this.listName = name;
+        this.manager = manager;
+        this.listName = name;
         listColor = defaultColor;
         this.listQualifier = listQualifier;
         this.renderSnitches = render;
@@ -46,7 +44,7 @@ public class SnitchList
 
     SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render, Color color)
     {
-		this.manager = manager;
+        this.manager = manager;
         listName = defaultName;
         listColor = color;
         this.listQualifier = listQualifier;
@@ -55,7 +53,7 @@ public class SnitchList
 
     SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render, String name, Color color)
     {
-		this.manager = manager;
+        this.manager = manager;
         this.listName = name;
         listColor = color;
         this.listQualifier = listQualifier;
@@ -70,8 +68,8 @@ public class SnitchList
     public void setListName(String name)
     {
         this.listName = name;
-        if(listName.length() > 20)
-            listName = listName.substring(0,19);
+        if (listName.length() > 20)
+            listName = listName.substring(0, 19);
 
         manager.journeyMapRedisplay(this);
     }
@@ -82,19 +80,19 @@ public class SnitchList
     }
 
     void setRenderPriorityUnchecked(int newPriority)
-	{
-		this.renderPriority = newPriority;
-	}
+    {
+        this.renderPriority = newPriority;
+    }
 
-	public void increaseRenderPriority()
-	{
-		manager.changeListRenderPriority(this,true);
-	}
+    public void increaseRenderPriority()
+    {
+        manager.changeListRenderPriority(this, true);
+    }
 
-	public void decreaseRenderPriority()
-	{
-		manager.changeListRenderPriority(this,false);
-	}
+    public void decreaseRenderPriority()
+    {
+        manager.changeListRenderPriority(this, false);
+    }
 
     public Color getListColor()
     {
@@ -115,7 +113,7 @@ public class SnitchList
     public void setShouldRenderSnitches(boolean render)
     {
         this.renderSnitches = render;
-		manager.journeyMapRedisplay(this);
+        manager.journeyMapRedisplay(this);
     }
 
     public SnitchListQualifier getQualifier()
@@ -124,15 +122,15 @@ public class SnitchList
     }
 
     public boolean updateQualifier(String newQualifier)
-	{
-		if(SnitchListQualifier.isSyntaxValid(newQualifier))
-		{
-			this.listQualifier = new SnitchListQualifier(newQualifier);
-			manager.requalifyList(this);
-			return true;
-		}
-		return false;
-	}
+    {
+        if (SnitchListQualifier.isSyntaxValid(newQualifier))
+        {
+            this.listQualifier = new SnitchListQualifier(newQualifier);
+            manager.requalifyList(this);
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public boolean equals(Object o)
@@ -179,7 +177,7 @@ public class SnitchList
     static SnitchList GetSnitchListFromCSV(String csv, SnitchManager manager)
     {
         String[] args = csv.split(CSV_SEPARATOR);
-        if(args.length != NUMBER_OF_CSV_PARAMS)
+        if (args.length != NUMBER_OF_CSV_PARAMS)
         {
             new NumberFormatException("The CSV string provided does not have the correct number of arguments for a Snitch List.").printStackTrace();
             return null;
@@ -193,7 +191,7 @@ public class SnitchList
         boolean shouldRender = Boolean.parseBoolean(args[index++]);
         SnitchListQualifier qualifier = new SnitchListQualifier(Scrub(args[index++]));
 
-        SnitchList list = new SnitchList(manager, qualifier,shouldRender,name,color); //TODO---You need to not have null as the first parameter
+        SnitchList list = new SnitchList(manager, qualifier, shouldRender, name, color); //TODO---You need to not have null as the first parameter
         list.renderPriority = priority;
 
         return list;
@@ -201,6 +199,6 @@ public class SnitchList
 
     private static String Scrub(String string)
     {
-        return string.replace(CSV_SEPARATOR,"");
+        return string.replace(CSV_SEPARATOR, "");
     }
 }

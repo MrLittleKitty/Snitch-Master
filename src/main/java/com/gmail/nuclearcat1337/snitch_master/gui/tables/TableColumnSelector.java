@@ -30,35 +30,28 @@ public class TableColumnSelector<T> extends GuiListExtended
 
     public TableColumnSelector(GuiScreen parent, List<TableColumn<T>> allColumns, List<TableColumn<T>> renderColumns)
     {
-        super(Minecraft.getMinecraft(),
-                parent.width,
-                parent.height,
-                32,
-                parent.height - 32,
-                20);
+        super(Minecraft.getMinecraft(), parent.width, parent.height, 32, parent.height - 32, 20);
 
-        this.renderLength = mc.fontRendererObj.getStringWidth(RENDER_HEADER+"--");
-        this.setHasListHeader(true, (int) ( (float) mc.fontRendererObj.FONT_HEIGHT * 1.5));
+        this.renderLength = mc.fontRendererObj.getStringWidth(RENDER_HEADER + "--");
+        this.setHasListHeader(true, (int) ((float) mc.fontRendererObj.FONT_HEIGHT * 1.5));
 
         entries = new ArrayList<>(allColumns.size());
 
         maxNameLength = 0;
 
-        for(TableColumn<T> col : allColumns)
+        for (TableColumn<T> col : allColumns)
         {
-            entries.add(new ColumnEntry(col,renderColumns.contains(col)));
-            int length = mc.fontRendererObj.getStringWidth(col.getColumnName()+"-");
-            if(length > maxNameLength)
+            entries.add(new ColumnEntry(col, renderColumns.contains(col)));
+            int length = mc.fontRendererObj.getStringWidth(col.getColumnName() + "-");
+            if (length > maxNameLength)
                 maxNameLength = length;
         }
 
         int columnNameLength = mc.fontRendererObj.getStringWidth("-Column Name-");
-        if(columnNameLength > maxNameLength)
+        if (columnNameLength > maxNameLength)
             maxNameLength = columnNameLength;
 
-        entryWidth = renderLength + GuiConstants.STANDARD_SEPARATION_DISTANCE
-                        + maxNameLength + GuiConstants.STANDARD_SEPARATION_DISTANCE
-                        + renderLength;
+        entryWidth = renderLength + GuiConstants.STANDARD_SEPARATION_DISTANCE + maxNameLength + GuiConstants.STANDARD_SEPARATION_DISTANCE + renderLength;
 
     }
 
@@ -66,31 +59,31 @@ public class TableColumnSelector<T> extends GuiListExtended
     {
         String root = ChatFormatting.UNDERLINE + "" + ChatFormatting.BOLD;
 
-        int controlsWidth = mc.fontRendererObj.getStringWidth(root+CONTROLS_HEADER);
-        int nameWidth = mc.fontRendererObj.getStringWidth(root+NAME_HEADER);
-        int renderWidth = mc.fontRendererObj.getStringWidth(root+RENDER_HEADER);
+        int controlsWidth = mc.fontRendererObj.getStringWidth(root + CONTROLS_HEADER);
+        int nameWidth = mc.fontRendererObj.getStringWidth(root + NAME_HEADER);
+        int renderWidth = mc.fontRendererObj.getStringWidth(root + RENDER_HEADER);
 
-        int workingWidth = (this.width-xPosition);
-        int startingXPos = xPosition + (workingWidth/2) - (entryWidth/2);
+        int workingWidth = (this.width - xPosition);
+        int startingXPos = xPosition + (workingWidth / 2) - (entryWidth / 2);
 
-        int drawXPos = startingXPos + (renderLength/2) - (controlsWidth/2);
+        int drawXPos = startingXPos + (renderLength / 2) - (controlsWidth / 2);
 
         this.mc.fontRendererObj.drawString(root + CONTROLS_HEADER, drawXPos, yPosition, 16777215);
 
         startingXPos += (renderWidth + GuiConstants.STANDARD_SEPARATION_DISTANCE);
-        drawXPos = startingXPos + (maxNameLength/2) - (nameWidth/2);
+        drawXPos = startingXPos + (maxNameLength / 2) - (nameWidth / 2);
 
         this.mc.fontRendererObj.drawString(root + NAME_HEADER, drawXPos, yPosition, 16777215);
 
         startingXPos += (maxNameLength + GuiConstants.STANDARD_SEPARATION_DISTANCE);
-        drawXPos = startingXPos + (renderLength/2) - (renderWidth/2);
+        drawXPos = startingXPos + (renderLength / 2) - (renderWidth / 2);
 
         this.mc.fontRendererObj.drawString(root + RENDER_HEADER, drawXPos, yPosition, 16777215);
     }
 
     private void swapItems(int index1, int index2)
     {
-        if(index1 >= entries.size() || index2 >= entries.size() || index1  < 0 || index2 < 0)
+        if (index1 >= entries.size() || index2 >= entries.size() || index1 < 0 || index2 < 0)
             return;
 
         ColumnEntry one = entries.get(index1);
@@ -112,7 +105,7 @@ public class TableColumnSelector<T> extends GuiListExtended
     public ArrayList<TableColumn<T>> getAllColumns()
     {
         ArrayList<TableColumn<T>> allColumns = new ArrayList<>();
-        for(ColumnEntry entry : entries)
+        for (ColumnEntry entry : entries)
             allColumns.add(entry.column);
         return allColumns;
     }
@@ -120,19 +113,21 @@ public class TableColumnSelector<T> extends GuiListExtended
     public ArrayList<TableColumn<T>> getRenderColumns()
     {
         ArrayList<TableColumn<T>> renderColumns = new ArrayList<>();
-        for(ColumnEntry entry : entries)
-            if(entry.render)
+        for (ColumnEntry entry : entries)
+            if (entry.render)
                 renderColumns.add(entry.column);
         return renderColumns;
     }
 
     @Override
-    protected int getScrollBarX() {
+    protected int getScrollBarX()
+    {
         return this.width - 8;
     }
 
     @Override
-    public int getListWidth() {
+    public int getListWidth()
+    {
         return this.width;
     }
 
@@ -162,9 +157,9 @@ public class TableColumnSelector<T> extends GuiListExtended
             this.column = column;
             this.render = render;
 
-            this.upButton = new GuiButton(0, width - 60, 0, renderLength/2 - GuiConstants.SMALL_SEPARATION_DISTANCE/2, GuiConstants.STANDARD_BUTTON_HEIGHT, "/\\");
-            this.downButton = new GuiButton(1, width - 60, 0, renderLength/2 - GuiConstants.SMALL_SEPARATION_DISTANCE/2, GuiConstants.STANDARD_BUTTON_HEIGHT, "\\/");
-            this.renderButton = new GuiButton(2, width - 60, 0, renderLength-2, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
+            this.upButton = new GuiButton(0, width - 60, 0, renderLength / 2 - GuiConstants.SMALL_SEPARATION_DISTANCE / 2, GuiConstants.STANDARD_BUTTON_HEIGHT, "/\\");
+            this.downButton = new GuiButton(1, width - 60, 0, renderLength / 2 - GuiConstants.SMALL_SEPARATION_DISTANCE / 2, GuiConstants.STANDARD_BUTTON_HEIGHT, "\\/");
+            this.renderButton = new GuiButton(2, width - 60, 0, renderLength - 2, GuiConstants.STANDARD_BUTTON_HEIGHT, "");
             setRenderText();
         }
 
@@ -172,10 +167,10 @@ public class TableColumnSelector<T> extends GuiListExtended
         public void drawEntry(int slotIndex, int xPosition, int yPosition, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected)
         {
             int stringYPosition = yPosition + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) / 2);
-            yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) /2);
+            yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) / 2);
 
-            int workingWidth = (width-xPosition);
-            int xPos = xPosition + (workingWidth/2) - (entryWidth/2);
+            int workingWidth = (width - xPosition);
+            int xPos = xPosition + (workingWidth / 2) - (entryWidth / 2);
 
             upButton.yPosition = yPosition;// + (upButton.height/3);
             upButton.xPosition = xPos;
@@ -189,14 +184,14 @@ public class TableColumnSelector<T> extends GuiListExtended
 
             int stringWidth = mc.fontRendererObj.getStringWidth(column.getColumnName());
 
-            int namePos = xPos + (maxNameLength /2) - (stringWidth/2);
+            int namePos = xPos + (maxNameLength / 2) - (stringWidth / 2);
 
-            mc.fontRendererObj.drawString(column.getColumnName(), namePos , stringYPosition,16777215);
+            mc.fontRendererObj.drawString(column.getColumnName(), namePos, stringYPosition, 16777215);
 
             xPos += maxNameLength + (GuiConstants.STANDARD_SEPARATION_DISTANCE);
 
             renderButton.yPosition = yPosition;
-            renderButton.xPosition = xPos + (renderLength/2) - (renderButton.width/2);
+            renderButton.xPosition = xPos + (renderLength / 2) - (renderButton.width / 2);
 
             this.upButton.drawButton(mc, mouseX, mouseY);
             this.downButton.drawButton(mc, mouseX, mouseY);
@@ -207,20 +202,20 @@ public class TableColumnSelector<T> extends GuiListExtended
         public boolean mousePressed(int index, int xPos, int yPos, int mouseEvent, int relX, int relY)
         {
             //Dont let them right click the buttons
-            if(mouseEvent == 1)
+            if (mouseEvent == 1)
                 return false;
 
             if (this.upButton.mousePressed(mc, xPos, yPos))
             {
-                swapItems(index,index-1); //The array is goes from bottom to top. so index 0 is at top of screen
+                swapItems(index, index - 1); //The array is goes from bottom to top. so index 0 is at top of screen
                 return true;
             }
             if (this.downButton.mousePressed(mc, xPos, yPos))
             {
-                swapItems(index,index+1); //The array is goes from bottom to top. so index 0 is at top of screen
+                swapItems(index, index + 1); //The array is goes from bottom to top. so index 0 is at top of screen
                 return true;
             }
-            if(renderButton.mousePressed(mc,xPos,yPos))
+            if (renderButton.mousePressed(mc, xPos, yPos))
             {
                 render = !render;
                 setRenderText();
@@ -231,7 +226,7 @@ public class TableColumnSelector<T> extends GuiListExtended
 
         private void setRenderText()
         {
-            renderButton.displayString = "Render: "+(render ? "On" : "Off");
+            renderButton.displayString = "Render: " + (render ? "On" : "Off");
         }
 
         @Override

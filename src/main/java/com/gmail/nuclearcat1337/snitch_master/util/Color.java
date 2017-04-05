@@ -1,6 +1,5 @@
 package com.gmail.nuclearcat1337.snitch_master.util;
 
-import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import org.apache.commons.lang3.SerializationException;
 
 /**
@@ -8,7 +7,7 @@ import org.apache.commons.lang3.SerializationException;
  */
 public class Color
 {
-    private int red,green,blue;
+    private int red, green, blue;
 
     public Color(int red, int green, int blue)
     {
@@ -19,9 +18,9 @@ public class Color
 
     public Color(String serializedString)
     {
-        String[] args = serializedString.replace("{","").replace("}","").split(":");
-        if(args.length != 3)
-            throw new SerializationException("Invalid color string: "+serializedString);
+        String[] args = serializedString.replace("{", "").replace("}", "").split(":");
+        if (args.length != 3)
+            throw new SerializationException("Invalid color string: " + serializedString);
 
         red = Integer.parseInt(args[0]);
         green = Integer.parseInt(args[1]);
@@ -30,17 +29,17 @@ public class Color
 
     public double getRed()
     {
-        return red/255D;
+        return red / 255D;
     }
 
     public double getGreen()
     {
-        return green/255D;
+        return green / 255D;
     }
 
     public double getBlue()
     {
-        return blue/255D;
+        return blue / 255D;
     }
 
     public int getRedInt()
@@ -60,7 +59,7 @@ public class Color
 
     public String serialize()
     {
-        return "{"+red+":"+green+":"+blue+"}";
+        return "{" + red + ":" + green + ":" + blue + "}";
     }
 
     public static boolean AreEqual(Color one, Color two)

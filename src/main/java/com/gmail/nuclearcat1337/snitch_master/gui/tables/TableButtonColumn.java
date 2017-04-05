@@ -1,16 +1,10 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.tables;
 
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
-import com.gmail.nuclearcat1337.snitch_master.gui.snitchtable.SnitchesTable;
-import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
-import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchLists;
-import com.gmail.nuclearcat1337.snitch_master.util.Acceptor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,29 +52,29 @@ public class TableButtonColumn<T> implements TableColumn<T>
     public void clicked(T item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
         //Don't allow right clicks on the button
-        if(!leftClick)
+        if (!leftClick)
             return;
 
-        if(buttons[0].mousePressed(mc,xPos,yPos))
+        if (buttons[0].mousePressed(mc, xPos, yPos))
             onClick.onClick(item, buttons[0], parentScreen);
     }
 
     @Override
-    public void released(T list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void released(T list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
-        buttons[0].mouseReleased(xPos,yPos);
+        buttons[0].mouseReleased(xPos, yPos);
     }
 
     @Override
-    public void draw(T list, int xPosition, int yPosition, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
+    public void draw(T list, int xPosition, int yPosition, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY)
     {
-        yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) /2);
-        int xPos = xPosition + (columnWidth/2) - (buttonWidth/2);
+        yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) / 2);
+        int xPos = xPosition + (columnWidth / 2) - (buttonWidth / 2);
 
         buttons[0].yPosition = yPosition;
         buttons[0].xPosition = xPos;
 
-        buttons[0].drawButton(mc,mouseX,mouseY);
+        buttons[0].drawButton(mc, mouseX, mouseY);
     }
 
     @Override

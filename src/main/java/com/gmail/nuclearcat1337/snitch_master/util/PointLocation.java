@@ -7,7 +7,7 @@ import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
  */
 public class PointLocation implements ILocation
 {
-    public int x,y,z;
+    public int x, y, z;
     public String world;
 
     public PointLocation(int x, int y, int z, String world)

@@ -43,22 +43,21 @@ public class SnitchesTable extends TableTopGui<Snitch>
         Settings settings = snitchMaster.getSettings();
 
         String saveString = "";
-        for(TableColumn<Snitch> col : allColumns)
+        for (TableColumn<Snitch> col : allColumns)
         {
-            String entry = col.getColumnName()+","+renderColumns.contains(col);
-            saveString += entry+";";
+            String entry = col.getColumnName() + "," + renderColumns.contains(col);
+            saveString += entry + ";";
         }
-        settings.setValue(SNITCHES_COLUMNS_KEY,saveString.substring(0,saveString.length()-1));
+        settings.setValue(SNITCHES_COLUMNS_KEY, saveString.substring(0, saveString.length() - 1));
         settings.saveSettings();
     }
 
-
     @Override
-    protected Collection<Pair<TableColumn<Snitch>,Boolean>> initializeColumns()
+    protected Collection<Pair<TableColumn<Snitch>, Boolean>> initializeColumns()
     {
         Settings settings = snitchMaster.getSettings();
 
-        ArrayList<Pair<TableColumn<Snitch>,Boolean>> columns = new ArrayList<>();
+        ArrayList<Pair<TableColumn<Snitch>, Boolean>> columns = new ArrayList<>();
         columns.add(packageValues(new SnitchRemoveColumn(snitchMaster), false));
 
         columns.add(packageValues(new SnitchNameColumn(), true));
@@ -74,35 +73,34 @@ public class SnitchesTable extends TableTopGui<Snitch>
         columns.add(packageValues(new SnitchDistanceColumn(), true));
         columns.add(packageValues(new TableButtonColumn<>("Lists", "View", VIEW_LISTS_BUTTON_WIDTH, viewListsClick), true));
 
-        if(!settings.hasValue(SNITCHES_COLUMNS_KEY))
+        if (!settings.hasValue(SNITCHES_COLUMNS_KEY))
         {
             String saveString = "";
-            for(Pair<TableColumn<Snitch>,Boolean> pair : columns)
+            for (Pair<TableColumn<Snitch>, Boolean> pair : columns)
             {
-                String entry = pair.getOne().getColumnName()+","+pair.getTwo().toString();
-                saveString += entry+";";
+                String entry = pair.getOne().getColumnName() + "," + pair.getTwo().toString();
+                saveString += entry + ";";
             }
-            settings.setValue(SNITCHES_COLUMNS_KEY,saveString.substring(0,saveString.length()-1));
+            settings.setValue(SNITCHES_COLUMNS_KEY, saveString.substring(0, saveString.length() - 1));
             settings.saveSettings();
-        }
-        else
+        } else
         {
             String[] entries = settings.getValue(SNITCHES_COLUMNS_KEY).toString().split(";");
-            for(int entryIndex = 0; entryIndex < entries.length; entryIndex++)
+            for (int entryIndex = 0; entryIndex < entries.length; entryIndex++)
             {
                 String[] vals = entries[entryIndex].split(",");
-                for(int colIndex = 0; colIndex < columns.size(); colIndex++)
+                for (int colIndex = 0; colIndex < columns.size(); colIndex++)
                 {
                     Pair<TableColumn<Snitch>, Boolean> pair = columns.get(colIndex);
                     //Find the column with this name
                     if (pair.getOne().getColumnName().equalsIgnoreCase(vals[0]))
                     {
-                        pair.setValues(pair.getOne(),Boolean.parseBoolean(vals[1]));
+                        pair.setValues(pair.getOne(), Boolean.parseBoolean(vals[1]));
 
                         //Swap the columns in the list so they are in their proper place
                         Pair<TableColumn<Snitch>, Boolean> temp = columns.get(entryIndex);
-                        columns.set(entryIndex,pair);
-                        columns.set(colIndex,temp);
+                        columns.set(entryIndex, pair);
+                        columns.set(colIndex, temp);
 
                         break;
                     }
@@ -118,13 +116,13 @@ public class SnitchesTable extends TableTopGui<Snitch>
         public void onClick(Snitch item, GuiButton button, GuiScreen parent)
         {
             String snitchName = item.getSnitchName().isEmpty() ? "Undefined" : item.getSnitchName();
-            mc.displayGuiScreen(new SnitchListsTable(parent,snitchMaster.getManager().getSnitchListsForSnitch(item),"Snitch Lists for Snitch "+snitchName,false,snitchMaster));
+            mc.displayGuiScreen(new SnitchListsTable(parent, snitchMaster.getManager().getSnitchListsForSnitch(item), "Snitch Lists for Snitch " + snitchName, false, snitchMaster));
         }
     };
 
-    private static Pair<TableColumn<Snitch>,Boolean> packageValues(TableColumn<Snitch> col, Boolean render)
+    private static Pair<TableColumn<Snitch>, Boolean> packageValues(TableColumn<Snitch> col, Boolean render)
     {
-        return new Pair<>(col,render);
+        return new Pair<>(col, render);
     }
 
 

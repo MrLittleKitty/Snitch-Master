@@ -1,7 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.snitchtable;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import net.minecraft.client.Minecraft;
@@ -44,25 +43,25 @@ public class SnitchCullTimeColumn implements TableColumn<Snitch>
     }
 
     @Override
-    public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void clicked(Snitch item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
 
     }
 
     @Override
-    public void released(Snitch item, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void released(Snitch item, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
 
     }
 
     @Override
-    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
+    public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY)
     {
         String text = SnitchMaster.CULL_TIME_ENABLED ? (Double.isNaN(snitch.getCullTime()) ? "Off" : CULL_TIME_FORMAT.format(snitch.getCullTime())) : "Off";
-        int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) /2);
+        int yFinal = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) / 2);
         int nameWidth = mc.fontRendererObj.getStringWidth(text);
-        int namePos = xPos + (columnWidth /2) - (nameWidth/2);
-        mc.fontRendererObj.drawString(text, namePos ,yFinal, 16777215);
+        int namePos = xPos + (columnWidth / 2) - (nameWidth / 2);
+        mc.fontRendererObj.drawString(text, namePos, yFinal, 16777215);
     }
 
     @Override
@@ -87,6 +86,6 @@ public class SnitchCullTimeColumn implements TableColumn<Snitch>
     @Override
     public int compare(Snitch snitch, Snitch other)
     {
-        return Double.compare(snitch.getCullTime(),other.getCullTime());
+        return Double.compare(snitch.getCullTime(), other.getCullTime());
     }
 }

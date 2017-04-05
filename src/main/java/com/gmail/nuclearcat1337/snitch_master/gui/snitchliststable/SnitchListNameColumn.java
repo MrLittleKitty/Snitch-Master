@@ -45,27 +45,27 @@ public class SnitchListNameColumn implements TableColumn<SnitchList>
     }
 
     @Override
-    public void clicked(SnitchList list, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void clicked(SnitchList list, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
         //Only if its a right click
-        if(!leftClick)
-            mc.displayGuiScreen(new EditStringGui(parentScreen,list.getListName(),"Edit List Name",new EditNameAcceptor(list),20));
+        if (!leftClick)
+            mc.displayGuiScreen(new EditStringGui(parentScreen, list.getListName(), "Edit List Name", new EditNameAcceptor(list), 20));
     }
 
     @Override
-    public void released(SnitchList list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void released(SnitchList list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
 
     }
 
     @Override
-    public void draw(SnitchList list, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
+    public void draw(SnitchList list, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY)
     {
         int stringYPosition = yPos + ((slotHeight - mc.fontRendererObj.FONT_HEIGHT) / 2);
         String text = list.getListName();
         int stringWidth = mc.fontRendererObj.getStringWidth(text);
-        int namePos = xPos + (columnWidth /2) - (stringWidth/2);
-        mc.fontRendererObj.drawString(text, namePos , stringYPosition,16777215);
+        int namePos = xPos + (columnWidth / 2) - (stringWidth / 2);
+        mc.fontRendererObj.drawString(text, namePos, stringYPosition, 16777215);
     }
 
     @Override
@@ -104,10 +104,10 @@ public class SnitchListNameColumn implements TableColumn<SnitchList>
         @Override
         public boolean accept(String item)
         {
-        	//Check to make sure there isn't already a list with the name they provided
-			//Note, if they don't change the name and just click OK then this will stop us from unnecessarily updating
+            //Check to make sure there isn't already a list with the name they provided
+            //Note, if they don't change the name and just click OK then this will stop us from unnecessarily updating
             boolean valid = !manager.doesListWithNameExist(item);
-            if(valid)
+            if (valid)
             {
                 list.setListName(item);
                 manager.saveSnitchLists();

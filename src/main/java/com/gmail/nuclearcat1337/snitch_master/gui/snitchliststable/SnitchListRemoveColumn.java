@@ -3,8 +3,6 @@ package com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
-import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import net.minecraft.client.Minecraft;
@@ -32,7 +30,7 @@ public class SnitchListRemoveColumn implements TableColumn<SnitchList>
     {
         mc = Minecraft.getMinecraft();
 
-        buttonWidth = mc.fontRendererObj.getStringWidth(BUTTON_TEXT+"---");
+        buttonWidth = mc.fontRendererObj.getStringWidth(BUTTON_TEXT + "---");
         this.manager = snitchMaster.getManager();
         //removedSnitchLists = new HashSet<>();
     }
@@ -61,40 +59,40 @@ public class SnitchListRemoveColumn implements TableColumn<SnitchList>
     public void clicked(SnitchList item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
         //Don't allow right clicks on the button
-        if(!leftClick || removedSnitchLists.contains(item.getListName()))
+        if (!leftClick || removedSnitchLists.contains(item.getListName()))
             return;
 
-        if(buttons[0].mousePressed(mc,xPos,yPos))
+        if (buttons[0].mousePressed(mc, xPos, yPos))
         {
-			manager.removeSnitchList(item.getListName());
+            manager.removeSnitchList(item.getListName());
 
-			//Deleting a snitch list automatically triggers a save
+            //Deleting a snitch list automatically triggers a save
             removedSnitchLists.add(item.getListName());
         }
     }
 
     @Override
-    public void released(SnitchList list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void released(SnitchList list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
-        if(removedSnitchLists.contains(list.getListName()))
+        if (removedSnitchLists.contains(list.getListName()))
             return;
 
-        buttons[0].mouseReleased(xPos,yPos);
+        buttons[0].mouseReleased(xPos, yPos);
     }
 
     @Override
-    public void draw(SnitchList list, int xPosition, int yPosition, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
+    public void draw(SnitchList list, int xPosition, int yPosition, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY)
     {
-        if(removedSnitchLists.contains(list.getListName()))
+        if (removedSnitchLists.contains(list.getListName()))
             return;
 
-        yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) /2);
-        int xPos = xPosition + (columnWidth/2) - (buttonWidth/2);
+        yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) / 2);
+        int xPos = xPosition + (columnWidth / 2) - (buttonWidth / 2);
 
         buttons[0].yPosition = yPosition;
         buttons[0].xPosition = xPos;
 
-        buttons[0].drawButton(mc,mouseX,mouseY);
+        buttons[0].drawButton(mc, mouseX, mouseY);
     }
 
     @Override

@@ -17,7 +17,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ public class SnitchMaster
     public static final String MODID = "snitchmaster";
     public static final String MODNAME = "Snitch Master";
     public static final String MODVERSION = "1.0.9";
-	public static final String modDataFolder = "mods/Snitch-Master";
+    public static final String modDataFolder = "mods/Snitch-Master";
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     /**
@@ -51,7 +50,7 @@ public class SnitchMaster
     public static SnitchMaster instance;
 
     private Settings settings;
-	private SnitchManager manager;
+    private SnitchManager manager;
 
     private ChatSnitchParser chatSnitchParser;
     private WorldInfoListener worldInfoListener;
@@ -59,11 +58,11 @@ public class SnitchMaster
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-		File file = new File(modDataFolder);
-		if(!file.exists())
-			file.mkdir();
+        File file = new File(modDataFolder);
+        if (!file.exists())
+            file.mkdir();
 
-		initializeSettings();
+        initializeSettings();
 
         manager = new SnitchManager(this);
 
@@ -87,9 +86,9 @@ public class SnitchMaster
     }
 
     public SnitchManager getManager()
-	{
-		return manager;
-	}
+    {
+        return manager;
+    }
 
     private void initializeSettings()
     {
@@ -100,32 +99,32 @@ public class SnitchMaster
         settings.setValueIfNotSet(Settings.CHAT_SPAM_KEY, Settings.ChatSpamState.ON);
         settings.setValueIfNotSet(Settings.RENDER_TEXT_KEY, Boolean.TRUE);
         settings.setValueIfNotSet(Settings.MANUAL_MODE_KEY, Boolean.TRUE);
-        settings.setValueIfNotSet(SnitchManager.GLOBAL_RENDER_KEY,Boolean.TRUE);
+        settings.setValueIfNotSet(SnitchManager.GLOBAL_RENDER_KEY, Boolean.TRUE);
 
         settings.saveSettings();
     }
 
     public void fullJourneyMapUpdate()
-	{
-		if(jmInterface != null)
-			jmInterface.refresh(manager.getSnitches()); //TODO---Do better
-	}
+    {
+        if (jmInterface != null)
+            jmInterface.refresh(manager.getSnitches()); //TODO---Do better
+    }
 
-	public void individualJourneyMapUpdate(Snitch snitch)
-	{
-		if(jmInterface != null)
-			jmInterface.displaySnitch(snitch); //TODO--Do better
-	}
+    public void individualJourneyMapUpdate(Snitch snitch)
+    {
+        if (jmInterface != null)
+            jmInterface.displaySnitch(snitch); //TODO--Do better
+    }
 
-	public void snitchListJourneyMapUpdate(SnitchList list)
-	{
-		if(jmInterface != null)
-		{
-			List<Snitch> snitches = manager.getSnitchesInList(list);
-			for (Snitch snitch : snitches)
-				individualJourneyMapUpdate(snitch); //TODO---Do better
-		}
-	}
+    public void snitchListJourneyMapUpdate(SnitchList list)
+    {
+        if (jmInterface != null)
+        {
+            List<Snitch> snitches = manager.getSnitchesInList(list);
+            for (Snitch snitch : snitches)
+                individualJourneyMapUpdate(snitch); //TODO---Do better
+        }
+    }
 
     public Settings getSettings()
     {
@@ -150,7 +149,7 @@ public class SnitchMaster
 
     public static void SendMessageToPlayer(String message)
     {
-        mc.thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] "+message));
+        mc.thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] " + message));
     }
 
     private static class ObjectParser implements Settings.ValueParser

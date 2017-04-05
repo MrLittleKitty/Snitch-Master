@@ -20,7 +20,7 @@ public class SnitchAlert
     public SnitchAlert(String player, int x, int y, int z, String activityText, String snitchName, String world, ITextComponent rawMessage)
     {
         this.playerName = player;
-        this.point = new Location(x,y,z,world);
+        this.point = new Location(x, y, z, world);
         this.activity = SnitchActivity.FromText(activityText);
         this.snitchName = snitchName;
         this.world = world;

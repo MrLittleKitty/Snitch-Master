@@ -7,7 +7,6 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 
 /**
@@ -19,7 +18,6 @@ public class KeyHandler
 {
     public KeyBinding snitchMasterMainGUI = new KeyBinding("Snitch Master Settings", Keyboard.KEY_V, "Snitch Master");
     public KeyBinding toggleAllRender = new KeyBinding("Toggle Render Snitch Lists", Keyboard.KEY_N, "Snitch Master");
-
 
     private SnitchMaster snitchMaster;
 
@@ -33,14 +31,14 @@ public class KeyHandler
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event)
     {
-        if(snitchMasterMainGUI.isPressed())
+        if (snitchMasterMainGUI.isPressed())
         {
             Minecraft.getMinecraft().displayGuiScreen(new MainGui(snitchMaster));
         }
-        if(toggleAllRender.isPressed())
+        if (toggleAllRender.isPressed())
         {
             snitchMaster.getManager().toggleGlobalRender();
-            SnitchMaster.SendMessageToPlayer("Global render is now: "+(snitchMaster.getManager().getGlobalRender() ? "On" : "Off"));
+            SnitchMaster.SendMessageToPlayer("Global render is now: " + (snitchMaster.getManager().getGlobalRender() ? "On" : "Off"));
         }
     }
 }

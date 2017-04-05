@@ -1,6 +1,5 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable;
 
-import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
@@ -38,7 +37,7 @@ public class SnitchListControlsColumn implements TableColumn<SnitchList>
         GuiButton[] buttons = new GuiButton[3];
         buttons[0] = new GuiButton(0, 0, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "/\\");
         buttons[1] = new GuiButton(1, 0, 0, ON_OFF_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, list.shouldRenderSnitches() ? "On" : "Off");
-        buttons[2] = new GuiButton(2,0, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "\\/");
+        buttons[2] = new GuiButton(2, 0, 0, ARROW_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "\\/");
         return buttons;
     }
 
@@ -55,51 +54,48 @@ public class SnitchListControlsColumn implements TableColumn<SnitchList>
     }
 
     @Override
-    public void clicked(SnitchList list, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void clicked(SnitchList list, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
         //Don't allow right clicks
-        if(!leftClick)
+        if (!leftClick)
             return;
 
-        if(buttons[0].mousePressed(mc,xPos,yPos)) //Up arrow button
+        if (buttons[0].mousePressed(mc, xPos, yPos)) //Up arrow button
         {
-            table.swapTableItems(slotIndex,slotIndex-1);
+            table.swapTableItems(slotIndex, slotIndex - 1);
             list.increaseRenderPriority();
             manager.saveSnitchLists();
-        }
-        else if(buttons[1].mousePressed(mc,xPos,yPos)) //Render toggle button
+        } else if (buttons[1].mousePressed(mc, xPos, yPos)) //Render toggle button
         {
             list.setShouldRenderSnitches(!list.shouldRenderSnitches());
             manager.saveSnitchLists();
-        }
-        else if(buttons[2].mousePressed(mc,xPos,yPos)) //Down arrow button
+        } else if (buttons[2].mousePressed(mc, xPos, yPos)) //Down arrow button
         {
-            table.swapTableItems(slotIndex,slotIndex+1);
+            table.swapTableItems(slotIndex, slotIndex + 1);
             list.decreaseRenderPriority();
             manager.saveSnitchLists();
         }
     }
 
-
     @Override
-    public void released(SnitchList list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen,int slotIndex)
+    public void released(SnitchList list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex)
     {
-        buttons[0].mouseReleased(xPos,yPos);
-        buttons[1].mouseReleased(xPos,yPos);
-        buttons[2].mouseReleased(xPos,yPos);
+        buttons[0].mouseReleased(xPos, yPos);
+        buttons[1].mouseReleased(xPos, yPos);
+        buttons[2].mouseReleased(xPos, yPos);
     }
 
     @Override
-    public void draw(SnitchList list, int xPosition, int yPosition, int columnWidth, int slotHeight, GuiButton[] buttons,int slotIndex, int mouseX, int mouseY)
+    public void draw(SnitchList list, int xPosition, int yPosition, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY)
     {
-        yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) /2);
+        yPosition = yPosition + ((slotHeight - GuiConstants.STANDARD_BUTTON_HEIGHT) / 2);
 
         //Set the y position of all 3 buttons
         buttons[0].yPosition = yPosition;
         buttons[1].yPosition = yPosition;
         buttons[2].yPosition = yPosition;
 
-        int xPos = xPosition + (columnWidth/2) - (ENTRY_WIDTH/2);
+        int xPos = xPosition + (columnWidth / 2) - (ENTRY_WIDTH / 2);
 
         buttons[0].xPosition = xPos;
 
@@ -112,9 +108,9 @@ public class SnitchListControlsColumn implements TableColumn<SnitchList>
 
         buttons[2].xPosition = xPos;
 
-        buttons[0].drawButton(mc,mouseX,mouseY);
-        buttons[1].drawButton(mc,mouseX,mouseY);
-        buttons[2].drawButton(mc,mouseX,mouseY);
+        buttons[0].drawButton(mc, mouseX, mouseY);
+        buttons[1].drawButton(mc, mouseX, mouseY);
+        buttons[2].drawButton(mc, mouseX, mouseY);
     }
 
     @Override
