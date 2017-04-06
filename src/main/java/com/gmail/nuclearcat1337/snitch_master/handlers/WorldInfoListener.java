@@ -6,7 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -38,8 +40,13 @@ public class WorldInfoListener
     public WorldInfoListener(SnitchMaster snitchMaster)
     {
         this.snitchMaster = snitchMaster;
+
         channel = NetworkRegistry.INSTANCE.newSimpleChannel("world_name");
         channel.registerMessage(WorldListener.class, WorldIDPacket.class, 0, Side.CLIENT);
+
+        //IDK which one this classes uses and I cant be bothered to find out
+        MinecraftForge.EVENT_BUS.register(this);
+        FMLCommonHandler.instance().bus().register(this);
     }
 
     @SubscribeEvent

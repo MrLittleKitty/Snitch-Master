@@ -4,6 +4,11 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObjectList;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.*;
 import java.util.*;
@@ -13,23 +18,26 @@ import java.util.*;
  */
 public class SnitchManager
 {
+    private static final Minecraft mc = Minecraft.getMinecraft();
+
+    private static final String serversFolder = SnitchMaster.modDataFolder + "/Servers";
+    private static final String SNITCHES_FILE = "Snitches.csv";
+    private static final String SNITCH_LISTS_FILE = "SnitchLists.csv";
+
     public static final String GLOBAL_RENDER_KEY = "global-render";
+
     private static final SnitchListQualifier friendly = new SnitchListQualifier("origin == 'jalist' || origin == 'chat'");
     private static final SnitchListQualifier neutral = new SnitchListQualifier("origin == 'manual'");
-
     public static SnitchList[] getDefaultSnitchLists(SnitchManager manager)
     {
         return new SnitchList[]{new SnitchList(manager, SnitchManager.friendly, true, "Friendly", new Color(0, (int) (0.56D * 255D), 255)), new SnitchList(manager, SnitchManager.neutral, true, "Neutral", new Color(238, 210, 2))}; //"Safety Yellow"
     }
 
-    private static final String modSnitchesFile = SnitchMaster.modDataFolder + "/Snitches.csv";
-    private static final String modSnitchListsFile = SnitchMaster.modDataFolder + "/SnitchLists.csv";
-
     private final SnitchMaster snitchMaster;
-
     private final LocatableObjectList<Snitch> snitches;
     private final List<SnitchList> snitchLists;
 
+    private String currentServer;
     private boolean globalRender;
 
     public SnitchManager(SnitchMaster snitchMaster)
@@ -41,13 +49,67 @@ public class SnitchManager
 
         globalRender = (boolean) snitchMaster.getSettings().getValue(GLOBAL_RENDER_KEY);
 
-        loadSnitchLists(new File(modSnitchListsFile));
-        loadSnitches(new File(modSnitchesFile));
+        currentServer = null;
+        File file = new File(serversFolder);
+        if(!file.exists())
+            file.mkdir();
 
-        if (snitchLists.isEmpty()) //If we load the lists from the file and there are none, create the default ones
+        //IDK which one this classes uses and I cant be bothered to find out
+        MinecraftForge.EVENT_BUS.register(this);
+        FMLCommonHandler.instance().bus().register(this);
+    }
+
+    @SubscribeEvent
+    public void onEntityJoinWorld(EntityJoinWorldEvent event)
+    {
+        //Make sure the player isn't dead and isn't null (idk why?)
+        if(mc.thePlayer == null || (!mc.thePlayer.isDead && mc.thePlayer.getDisplayName().equals(event.getEntity().getDisplayName())))
         {
-            for (SnitchList list : getDefaultSnitchLists(this))
-                snitchLists.add(list);
+            //The name of the server they just joined
+            String newServer = null;
+            if(mc.isSingleplayer())
+                newServer = "single-player"; //Obviously
+            else
+            {
+                //Clean the name of their current server
+                if(mc.getCurrentServerData() != null)
+                    newServer = mc.getCurrentServerData().serverIP.replace(":","").replace("/","");
+                else
+                    return; //Idk wtf happened here so just return
+            }
+
+            //They joined a new server
+            if(!newServer.equalsIgnoreCase(currentServer))
+            {
+                saveSnitchLists();
+                saveSnitches();
+
+                snitchLists.clear();
+                snitches.clear();
+
+                currentServer = newServer;
+
+                File serverDirectory = new File(serversFolder, "/" + currentServer);
+                if(!serverDirectory.exists() || !serverDirectory.isDirectory())
+                    serverDirectory.mkdir();
+                else //If we just created the directory for this server then obviously there is no data yet
+                {
+                    loadSnitchLists();
+
+                    if (snitchLists.isEmpty()) //If we load the lists from the file and there are none, create the default ones
+                    {
+                        for(SnitchList list : getDefaultSnitchLists(this))
+                            snitchLists.add(list);
+                    }
+
+                    loadSnitches();
+
+                    if(snitches.size() > 0)
+                        SnitchMaster.SendMessageToPlayer("Loaded "+snitches.size()+" snitches for server: "+currentServer);
+                    if(snitchLists.size() > 0)
+                        SnitchMaster.SendMessageToPlayer("Loaded "+snitchLists.size()+" snitch lists for server: "+currentServer);
+                }
+            }
         }
     }
 
@@ -184,20 +246,26 @@ public class SnitchManager
 
     public void saveSnitchLists()
     {
-        ArrayList<String> csvs = new ArrayList<>();
-        for (SnitchList list : snitchLists)
-            csvs.add(SnitchList.ConvertSnitchListToCSV(list));
+        if(currentServer != null)
+        {
+            ArrayList<String> csvs = new ArrayList<>();
+            for (SnitchList list : snitchLists)
+                csvs.add(SnitchList.ConvertSnitchListToCSV(list));
 
-        writeToCSV(new File(modSnitchListsFile), csvs);
+            writeToCSV(new File(serversFolder+"/"+currentServer+"/"+SNITCH_LISTS_FILE), csvs);
+        }
     }
 
     public void saveSnitches()
     {
-        ArrayList<String> csvs = new ArrayList<>();
-        for (Snitch snitch : snitches)
-            csvs.add(Snitch.ConvertSnitchToCSV(snitch));
+        if(currentServer != null)
+        {
+            ArrayList<String> csvs = new ArrayList<>();
+            for (Snitch snitch : snitches)
+                csvs.add(Snitch.ConvertSnitchToCSV(snitch));
 
-        writeToCSV(new File(modSnitchesFile), csvs);
+            writeToCSV(new File(serversFolder+"/"+currentServer+"/"+SNITCHES_FILE), csvs);
+        }
     }
 
     public LocatableObjectList<Snitch> getSnitches()
@@ -308,49 +376,57 @@ public class SnitchManager
         }
     }
 
-    private void loadSnitches(File file)
+    private void loadSnitches()
     {
-        try
+        if(currentServer != null)
         {
-            if (file.exists())
+            File file = new File(serversFolder,"/"+currentServer+"/"+SNITCHES_FILE);
+            try
             {
-                try (BufferedReader br = new BufferedReader(new FileReader(file)))
+                if (file.exists())
                 {
-                    for (String line = null; (line = br.readLine()) != null; )
+                    try (BufferedReader br = new BufferedReader(new FileReader(file)))
                     {
-                        Snitch snitch = Snitch.GetSnitchFromCSV(line);
-                        if (snitch != null)
-                            submitSnitch(snitch);
+                        for (String line = null; (line = br.readLine()) != null; )
+                        {
+                            Snitch snitch = Snitch.GetSnitchFromCSV(line);
+                            if (snitch != null)
+                                submitSnitch(snitch);
+                        }
                     }
                 }
             }
-        }
-        catch (IOException e)
-        {
+            catch (IOException e)
+            {
 
+            }
         }
     }
 
-    private void loadSnitchLists(File file)
+    private void loadSnitchLists()
     {
-        try
+        if(currentServer != null)
         {
-            if (file.exists())
+            File file = new File(serversFolder,"/"+currentServer+"/"+SNITCH_LISTS_FILE);
+            try
             {
-                try (BufferedReader br = new BufferedReader(new FileReader(file)))
+                if (file.exists())
                 {
-                    for (String line = null; (line = br.readLine()) != null; )
+                    try (BufferedReader br = new BufferedReader(new FileReader(file)))
                     {
-                        SnitchList list = SnitchList.GetSnitchListFromCSV(line, this);
-                        if (list != null)
-                            this.snitchLists.add(list);
+                        for (String line = null; (line = br.readLine()) != null; )
+                        {
+                            SnitchList list = SnitchList.GetSnitchListFromCSV(line, this);
+                            if (list != null)
+                                this.snitchLists.add(list);
+                        }
                     }
                 }
             }
-        }
-        catch (IOException e)
-        {
+            catch (IOException e)
+            {
 
+            }
         }
     }
 

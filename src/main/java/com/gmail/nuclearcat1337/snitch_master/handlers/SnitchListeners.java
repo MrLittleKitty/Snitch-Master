@@ -8,6 +8,7 @@ import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -25,6 +26,8 @@ public class SnitchListeners
     {
         this.snitchMaster = snitchMaster;
         manager = snitchMaster.getManager();
+
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     /**

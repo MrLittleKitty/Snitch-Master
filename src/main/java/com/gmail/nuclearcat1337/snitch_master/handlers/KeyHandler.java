@@ -5,6 +5,7 @@ import com.gmail.nuclearcat1337.snitch_master.gui.screens.MainGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
@@ -26,6 +27,8 @@ public class KeyHandler
         this.snitchMaster = snitchMaster;
         ClientRegistry.registerKeyBinding(snitchMasterMainGUI);
         ClientRegistry.registerKeyBinding(toggleAllRender);
+
+        FMLCommonHandler.instance().bus().register(this);
     }
 
     @SubscribeEvent

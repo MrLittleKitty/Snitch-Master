@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -39,6 +40,8 @@ public class SnitchRenderer
     {
         this.snitchMaster = snitchMaster;
         manager = snitchMaster.getManager();
+
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     /**

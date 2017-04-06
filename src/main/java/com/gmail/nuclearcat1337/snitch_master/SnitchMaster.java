@@ -67,8 +67,6 @@ public class SnitchMaster
         manager = new SnitchManager(this);
 
         worldInfoListener = new WorldInfoListener(this);
-        MinecraftForge.EVENT_BUS.register(worldInfoListener);
-        FMLCommonHandler.instance().bus().register(worldInfoListener);
     }
 
     @Mod.EventHandler
@@ -76,11 +74,9 @@ public class SnitchMaster
     {
         chatSnitchParser = new ChatSnitchParser(this);
 
-        MinecraftForge.EVENT_BUS.register(chatSnitchParser);
-        MinecraftForge.EVENT_BUS.register(new SnitchRenderer(this));
-        MinecraftForge.EVENT_BUS.register(new SnitchListeners(this));
-
-        FMLCommonHandler.instance().bus().register(new KeyHandler(this));
+        new SnitchRenderer(this);
+        new SnitchListeners(this);
+        new KeyHandler(this);
 
         chatSnitchParser.addAlertRecipient(new QuietTimeHandler(getSettings()));
     }
@@ -149,7 +145,8 @@ public class SnitchMaster
 
     public static void SendMessageToPlayer(String message)
     {
-        mc.thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] " + message));
+        if(mc.thePlayer != null)
+            mc.thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] " + message));
     }
 
     private static class ObjectParser implements Settings.ValueParser
