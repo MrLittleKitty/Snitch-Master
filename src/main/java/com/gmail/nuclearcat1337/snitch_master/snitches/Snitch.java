@@ -47,7 +47,7 @@ public class Snitch extends LocatableObject<Snitch>
     /**
      * The origin string from where this Snitch object was created.
      */
-    private final String origin;
+    String origin;
 
     /**
      * The cull time of this Snitch. This field can be NaN (Not a Number).

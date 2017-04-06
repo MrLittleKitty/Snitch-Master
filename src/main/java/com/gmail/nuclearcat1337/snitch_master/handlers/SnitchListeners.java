@@ -49,11 +49,15 @@ public class SnitchListeners
                     if (state.getBlock().equals(Blocks.JUKEBOX) || state.getBlock().equals(Blocks.NOTEBLOCK))
                     {
                         Location loc = new Location(pos.getX(), pos.getY(), pos.getZ(), snitchMaster.getCurrentWorld());
-                        Snitch snitch = new Snitch(loc, "manual");
 
-                        manager.submitSnitch(snitch);
+                        if(!manager.getSnitches().contains(loc))
+                        {
+                            Snitch snitch = new Snitch(loc, "manual");
 
-                        manager.saveSnitches();
+                            manager.submitSnitch(snitch);
+
+                            manager.saveSnitches();
+                        }
                     }
                 }
             }
