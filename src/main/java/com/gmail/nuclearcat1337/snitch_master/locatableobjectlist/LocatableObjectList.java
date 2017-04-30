@@ -26,7 +26,8 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         {
             //According to the documentation of the binarySearch method this solves for the insertion point of the item
             index = (index + 1) * -1;
-        } else
+        }
+        else
         {
             //If the item is already contained in the list then we do nothing
             return false;
@@ -159,7 +160,8 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         {
             T removedValue = remove((ILocation) o);
             return removedValue != null;
-        } else if (o instanceof LocatableObject)
+        }
+        else if (o instanceof LocatableObject)
         {
             LocatableObject obj = (LocatableObject) o;
 

@@ -134,7 +134,8 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
             }
             settings.setValue(SNITCH_LIST_COLUMNS_KEY, saveString.substring(0, saveString.length() - 1));
             settings.saveSettings();
-        } else
+        }
+        else
         {
             String[] entries = settings.getValue(SNITCH_LIST_COLUMNS_KEY).toString().split(";");
             for (int entryIndex = 0; entryIndex < entries.length; entryIndex++)

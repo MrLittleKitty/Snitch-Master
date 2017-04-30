@@ -50,7 +50,7 @@ public class SnitchListeners
                     {
                         Location loc = new Location(pos.getX(), pos.getY(), pos.getZ(), snitchMaster.getCurrentWorld());
 
-                        if(!manager.getSnitches().contains(loc))
+                        if (!manager.getSnitches().contains(loc))
                         {
                             Snitch snitch = new Snitch(loc, "manual");
 

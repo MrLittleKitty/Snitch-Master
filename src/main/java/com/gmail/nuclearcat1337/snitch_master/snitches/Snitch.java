@@ -82,7 +82,7 @@ public class Snitch extends LocatableObject<Snitch>
 
         this.origins = new HashSet<>();
 
-        if(origin != null)
+        if (origin != null)
             this.origins.add(origin);
 
         this.cullTime = SnitchMaster.CULL_TIME_ENABLED ? MAX_CULL_TIME : Double.NaN;
@@ -189,10 +189,10 @@ public class Snitch extends LocatableObject<Snitch>
         return origins;
     }
 
-//    public boolean hasOrigin(String origin)
-//    {
-//        return origins.contains(origin);
-//    }
+    //    public boolean hasOrigin(String origin)
+    //    {
+    //        return origins.contains(origin);
+    //    }
 
     void addOrigins(Collection<String> origins)
     {
@@ -273,7 +273,7 @@ public class Snitch extends LocatableObject<Snitch>
         builder.append(snitch.location.getY()).append(CSV_SEPARATOR);
         builder.append(snitch.location.getZ()).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.location.getWorld())).append(CSV_SEPARATOR);
-        builder.append(Scrub(concatenate(snitch.getOrigins(),ORIGIN_SEPARATOR))).append(CSV_SEPARATOR);
+        builder.append(Scrub(concatenate(snitch.getOrigins(), ORIGIN_SEPARATOR))).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.getGroupName())).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.getSnitchName())).append(CSV_SEPARATOR);
         builder.append(snitch.getCullTime()).append(CSV_SEPARATOR);
@@ -351,15 +351,15 @@ public class Snitch extends LocatableObject<Snitch>
     static String concatenate(Collection<String> list, String seperator)
     {
         StringBuilder builder = new StringBuilder();
-        for(String str : list)
+        for (String str : list)
             builder.append(str).append(seperator);
-        if(list.size() > 1)
-            builder.setLength(builder.length()-1);
+        if (list.size() > 1)
+            builder.setLength(builder.length() - 1);
         return builder.toString();
     }
 
     static String Scrub(String string)
     {
-        return string.replace(CSV_SEPARATOR, "").replace(DESCRIPTION_SEPARATOR, "").replace(ORIGIN_SEPARATOR,"");
+        return string.replace(CSV_SEPARATOR, "").replace(DESCRIPTION_SEPARATOR, "").replace(ORIGIN_SEPARATOR, "");
     }
 }

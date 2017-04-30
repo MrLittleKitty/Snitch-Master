@@ -104,7 +104,8 @@ public class SnitchListQualifier
                             finalResult = finalResult || result;
                             if (finalResult) //Short circuiting logic
                                 return true;
-                        } else
+                        }
+                        else
                         {
                             finalResult = finalResult && result;
                             if (!finalResult) //Short circuiting logic
@@ -184,17 +185,17 @@ public class SnitchListQualifier
 
     private static boolean checkTokens(String left, String right, String operator)
     {
-        if(isListVariable(left) || isListVariable(right))
+        if (isListVariable(left) || isListVariable(right))
         {
             //If the operator is not a valid operator for working with lists then throw an error
-            if(!isEqualityOperator(operator))
+            if (!isEqualityOperator(operator))
                 return false;
 
             //If one of the variables is a string list then the other needs to be a string literal
-            if(isListVariable(left) && isStringLiteral(right))
+            if (isListVariable(left) && isStringLiteral(right))
                 return true;
 
-            if(isListVariable(right) && isStringLiteral(left))
+            if (isListVariable(right) && isStringLiteral(left))
                 return true;
 
             return false;
@@ -219,7 +220,8 @@ public class SnitchListQualifier
                 return false;
 
             return (isDoubleVariable(left) || isDoubleLiteral(left)) && (isDoubleVariable(right) || isDoubleLiteral(right));
-        } else if (isIntegerVariable(left) || isIntegerVariable(right))
+        }
+        else if (isIntegerVariable(left) || isIntegerVariable(right))
         {
             //Is the operator is not valid for doubles then throw an error
             if (!isComparisonToken(operator))
@@ -233,18 +235,18 @@ public class SnitchListQualifier
 
     private static boolean evaluateTokens(String left, String right, String operator, Snitch snitch) throws Exception
     {
-        if(isListVariable(left) || isListVariable(right))
+        if (isListVariable(left) || isListVariable(right))
         {
             //If the operator is not a valid operator for working with lists then throw an error
-            if(!isEqualityOperator(operator))
+            if (!isEqualityOperator(operator))
                 throw new Exception("Syntax error at expression: " + left + " " + operator + " " + right);
 
             //If one of the variables is a string list then the other needs to be a string literal
-            if(isListVariable(left) && isStringLiteral(right))
-                return evaluateListExpression(getListValue(left,snitch),getStringValue(right,snitch),operator);
+            if (isListVariable(left) && isStringLiteral(right))
+                return evaluateListExpression(getListValue(left, snitch), getStringValue(right, snitch), operator);
 
-            if(isListVariable(right) && isStringLiteral(left))
-                return evaluateListExpression(getListValue(right,snitch),getStringValue(left,snitch),operator);
+            if (isListVariable(right) && isStringLiteral(left))
+                return evaluateListExpression(getListValue(right, snitch), getStringValue(left, snitch), operator);
 
             throw new Exception("Syntax error at expression: " + left + " " + operator + " " + right);
         }
@@ -270,7 +272,8 @@ public class SnitchListQualifier
                 return evaluateDoubleComparisonExpression(getDoubleValue(left, snitch), getDoubleValue(right, snitch), operator);
 
             throw new Exception("Syntax error at expression: " + left + " " + operator + " " + right);
-        } else if (isIntegerVariable(left) || isIntegerVariable(right))
+        }
+        else if (isIntegerVariable(left) || isIntegerVariable(right))
         {
             //Is the operator is not valid for doubles then throw an error
             if (!isComparisonToken(operator))
@@ -287,7 +290,7 @@ public class SnitchListQualifier
 
     private static Collection<String> getListValue(String token, Snitch snitch) throws Exception
     {
-        if(token.equalsIgnoreCase(ORIGIN_TOKEN))
+        if (token.equalsIgnoreCase(ORIGIN_TOKEN))
             return snitch.getOrigins();
         else
             throw new Exception("Syntax error: Token " + token + " is not a valid list value");
@@ -327,8 +330,8 @@ public class SnitchListQualifier
             return snitch.getSnitchName();
         else if (token.equalsIgnoreCase(WORLD_TOKEN))
             return snitch.getLocation().getWorld();
-//        else if (token.equalsIgnoreCase(ORIGIN_TOKEN))
-//            return snitch.getOrigin();
+            //        else if (token.equalsIgnoreCase(ORIGIN_TOKEN))
+            //            return snitch.getOrigin();
         else
             throw new Exception("Syntax error: Token " + token + " is not a valid String value");
     }
@@ -414,7 +417,7 @@ public class SnitchListQualifier
         else if (operator.equals(NOT_EQUAL_OPERATOR))
             return !list.contains(value);
         else
-            throw new Exception("Error doing list evaluation on expression: list "+operator+" "+value);
+            throw new Exception("Error doing list evaluation on expression: list " + operator + " " + value);
     }
 
     private static boolean evaluateStringExpression(String one, String two, String operator) throws Exception

@@ -90,7 +90,8 @@ public class WorldInfoListener
                 return "world_nether";
             else
                 return "world";
-        } else
+        }
+        else
             return worldID;
     }
 

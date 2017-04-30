@@ -33,10 +33,8 @@ public class SnitchManager
 
     private static SnitchList[] getDefaultSnitchLists(SnitchManager manager)
     {
-        return new SnitchList[]{
-                new SnitchList(manager, SnitchManager.friendly, true, "Friendly", new Color(0, (int) (0.56D * 255D), 255)),
-                new SnitchList(manager, SnitchManager.neutral, true, "Neutral", new Color(238, 210, 2)), //"Safety Yellow"
-                new SnitchList(manager,SnitchManager.gone,true,"Gone",new Color(220,20,60)) //TODO---Finish implementing this feature
+        return new SnitchList[]{new SnitchList(manager, SnitchManager.friendly, true, "Friendly", new Color(0, (int) (0.56D * 255D), 255)), new SnitchList(manager, SnitchManager.neutral, true, "Neutral", new Color(238, 210, 2)), //"Safety Yellow"
+                new SnitchList(manager, SnitchManager.gone, true, "Gone", new Color(220, 20, 60)) //TODO---Finish implementing this feature
         };
     }
 
@@ -58,7 +56,7 @@ public class SnitchManager
 
         currentServer = null;
         File file = new File(serversFolder);
-        if(!file.exists())
+        if (!file.exists())
             file.mkdir();
 
         //IDK which one this classes uses and I cant be bothered to find out
@@ -70,23 +68,23 @@ public class SnitchManager
     public void onEntityJoinWorld(EntityJoinWorldEvent event)
     {
         //Make sure the player isn't dead and isn't null (idk why?)
-        if(mc.thePlayer == null || (!mc.thePlayer.isDead && mc.thePlayer.getDisplayName().equals(event.getEntity().getDisplayName())))
+        if (mc.thePlayer == null || (!mc.thePlayer.isDead && mc.thePlayer.getDisplayName().equals(event.getEntity().getDisplayName())))
         {
             //The name of the server they just joined
             String newServer = null;
-            if(mc.isSingleplayer())
+            if (mc.isSingleplayer())
                 newServer = "single-player"; //Obviously
             else
             {
                 //Clean the name of their current server
-                if(mc.getCurrentServerData() != null)
-                    newServer = mc.getCurrentServerData().serverIP.replace(":","").replace("/","");
+                if (mc.getCurrentServerData() != null)
+                    newServer = mc.getCurrentServerData().serverIP.replace(":", "").replace("/", "");
                 else
                     return; //Idk wtf happened here so just return
             }
 
             //They joined a new server
-            if(!newServer.equalsIgnoreCase(currentServer))
+            if (!newServer.equalsIgnoreCase(currentServer))
             {
                 saveSnitchLists();
                 saveSnitches();
@@ -97,7 +95,7 @@ public class SnitchManager
                 currentServer = newServer;
 
                 File serverDirectory = new File(serversFolder, "/" + currentServer);
-                if(!serverDirectory.exists() || !serverDirectory.isDirectory())
+                if (!serverDirectory.exists() || !serverDirectory.isDirectory())
                     serverDirectory.mkdir();
                 else //If we just created the directory for this server then obviously there is no data yet
                 {
@@ -105,16 +103,16 @@ public class SnitchManager
 
                     if (snitchLists.isEmpty()) //If we load the lists from the file and there are none, create the default ones
                     {
-                        for(SnitchList list : getDefaultSnitchLists(this))
+                        for (SnitchList list : getDefaultSnitchLists(this))
                             snitchLists.add(list);
                     }
 
                     loadSnitches();
 
-                    if(snitches.size() > 0)
-                        SnitchMaster.SendMessageToPlayer("Loaded "+snitches.size()+" snitches for server: "+currentServer);
-                    if(snitchLists.size() > 0)
-                        SnitchMaster.SendMessageToPlayer("Loaded "+snitchLists.size()+" snitch lists for server: "+currentServer);
+                    if (snitches.size() > 0)
+                        SnitchMaster.SendMessageToPlayer("Loaded " + snitches.size() + " snitches for server: " + currentServer);
+                    if (snitchLists.size() > 0)
+                        SnitchMaster.SendMessageToPlayer("Loaded " + snitchLists.size() + " snitch lists for server: " + currentServer);
                 }
             }
         }
@@ -255,25 +253,25 @@ public class SnitchManager
 
     public void saveSnitchLists()
     {
-        if(currentServer != null)
+        if (currentServer != null)
         {
             ArrayList<String> csvs = new ArrayList<>();
             for (SnitchList list : snitchLists)
                 csvs.add(SnitchList.ConvertSnitchListToCSV(list));
 
-            writeToCSV(new File(serversFolder+"/"+currentServer+"/"+SNITCH_LISTS_FILE), csvs);
+            writeToCSV(new File(serversFolder + "/" + currentServer + "/" + SNITCH_LISTS_FILE), csvs);
         }
     }
 
     public void saveSnitches()
     {
-        if(currentServer != null)
+        if (currentServer != null)
         {
             ArrayList<String> csvs = new ArrayList<>();
             for (Snitch snitch : snitches)
                 csvs.add(Snitch.ConvertSnitchToCSV(snitch));
 
-            writeToCSV(new File(serversFolder+"/"+currentServer+"/"+SNITCHES_FILE), csvs);
+            writeToCSV(new File(serversFolder + "/" + currentServer + "/" + SNITCHES_FILE), csvs);
         }
     }
 
@@ -387,9 +385,9 @@ public class SnitchManager
 
     private void loadSnitches()
     {
-        if(currentServer != null)
+        if (currentServer != null)
         {
-            File file = new File(serversFolder,"/"+currentServer+"/"+SNITCHES_FILE);
+            File file = new File(serversFolder, "/" + currentServer + "/" + SNITCHES_FILE);
             try
             {
                 if (file.exists())
@@ -414,9 +412,9 @@ public class SnitchManager
 
     private void loadSnitchLists()
     {
-        if(currentServer != null)
+        if (currentServer != null)
         {
-            File file = new File(serversFolder,"/"+currentServer+"/"+SNITCH_LISTS_FILE);
+            File file = new File(serversFolder, "/" + currentServer + "/" + SNITCH_LISTS_FILE);
             try
             {
                 if (file.exists())

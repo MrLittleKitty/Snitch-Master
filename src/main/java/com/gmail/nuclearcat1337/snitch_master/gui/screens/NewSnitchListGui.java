@@ -115,7 +115,8 @@ public class NewSnitchListGui extends GuiScreen
                 nameBox.setFocused(false);
             }
             nameBox.textboxKeyTyped(par1, par2);
-        } else if (qualifierBox.isFocused())
+        }
+        else if (qualifierBox.isFocused())
         {
             if (par2 == Keyboard.KEY_TAB)
             {
@@ -123,7 +124,8 @@ public class NewSnitchListGui extends GuiScreen
                 qualifierBox.setFocused(false);
             }
             qualifierBox.textboxKeyTyped(par1, par2);
-        } else if (redBox.isFocused())
+        }
+        else if (redBox.isFocused())
         {
             if (par2 == Keyboard.KEY_TAB)
             {
@@ -131,7 +133,8 @@ public class NewSnitchListGui extends GuiScreen
                 redBox.setFocused(false);
             }
             redBox.textboxKeyTyped(par1, par2);
-        } else if (greenBox.isFocused())
+        }
+        else if (greenBox.isFocused())
         {
             if (par2 == Keyboard.KEY_TAB)
             {
@@ -139,7 +142,8 @@ public class NewSnitchListGui extends GuiScreen
                 greenBox.setFocused(false);
             }
             greenBox.textboxKeyTyped(par1, par2);
-        } else if (blueBox.isFocused())
+        }
+        else if (blueBox.isFocused())
         {
             if (par2 == Keyboard.KEY_TAB)
             {

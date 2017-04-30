@@ -81,15 +81,18 @@ public class TargetedSnitchUpdateGui extends GuiScreen
             {
                 stopIndexBox.setFocused(true);
                 startIndexBox.setFocused(false);
-            } else
+            }
+            else
                 startIndexBox.textboxKeyTyped(par1, par2);
-        } else if (stopIndexBox.isFocused())
+        }
+        else if (stopIndexBox.isFocused())
         {
             if (par2 == Keyboard.KEY_TAB)
             {
                 startIndexBox.setFocused(true);
                 stopIndexBox.setFocused(false);
-            } else
+            }
+            else
                 stopIndexBox.textboxKeyTyped(par1, par2);
         }
         super.keyTyped(par1, par2);

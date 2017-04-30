@@ -8,8 +8,6 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.QuietTimeConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -145,7 +143,7 @@ public class SnitchMaster
 
     public static void SendMessageToPlayer(String message)
     {
-        if(mc.thePlayer != null)
+        if (mc.thePlayer != null)
             mc.thePlayer.addChatComponentMessage(new TextComponentString("[Snitch Master] " + message));
     }
 

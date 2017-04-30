@@ -83,7 +83,8 @@ public class SnitchesTable extends TableTopGui<Snitch>
             }
             settings.setValue(SNITCHES_COLUMNS_KEY, saveString.substring(0, saveString.length() - 1));
             settings.saveSettings();
-        } else
+        }
+        else
         {
             String[] entries = settings.getValue(SNITCHES_COLUMNS_KEY).toString().split(";");
             for (int entryIndex = 0; entryIndex < entries.length; entryIndex++)

@@ -64,18 +64,21 @@ public class QuietTimeHandler implements IAlertRecipient
                     {
                         currentComponent = new TextComponentString(builder.toString()).setStyle(aqua.createShallowCopy());
                         builder = new StringBuilder();
-                    } else if (builder.length() > 0)
+                    }
+                    else if (builder.length() > 0)
                     {
                         currentComponent.appendSibling(new TextComponentString(builder.toString()).setStyle(aqua.createShallowCopy()));
                         builder = new StringBuilder();
                     }
                     currentComponent.appendSibling(hoverComponent);
-                } else
+                }
+                else
                 {
                     SnitchMaster.SendMessageToPlayer("Your quiet time config has an invalid hover instruction. Please load a working config.");
                     return;
                 }
-            } else if (instruction == B_STRING_SUBSTITUTION && index + 1 < instructions.length)
+            }
+            else if (instruction == B_STRING_SUBSTITUTION && index + 1 < instructions.length)
             {
                 index++;
                 String sub = getStringSubstitution(instructions[index]);
@@ -86,7 +89,8 @@ public class QuietTimeHandler implements IAlertRecipient
                     SnitchMaster.SendMessageToPlayer("Your quiet time config has an invalid string sub. Please load a working config.");
                     return;
                 }
-            } else if (instruction == B_INSERT_SPACE)
+            }
+            else if (instruction == B_INSERT_SPACE)
                 builder.append(" ");
             else
             {
@@ -159,7 +163,8 @@ public class QuietTimeHandler implements IAlertRecipient
             if (index >= instructions.length)
                 return null;
             return getStringSubstitution(instructions[index]);
-        } else
+        }
+        else
             return GetString(alert, inst1);
     }
 

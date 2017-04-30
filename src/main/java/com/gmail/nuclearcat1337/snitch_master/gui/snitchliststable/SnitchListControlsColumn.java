@@ -65,11 +65,13 @@ public class SnitchListControlsColumn implements TableColumn<SnitchList>
             table.swapTableItems(slotIndex, slotIndex - 1);
             list.increaseRenderPriority();
             manager.saveSnitchLists();
-        } else if (buttons[1].mousePressed(mc, xPos, yPos)) //Render toggle button
+        }
+        else if (buttons[1].mousePressed(mc, xPos, yPos)) //Render toggle button
         {
             list.setShouldRenderSnitches(!list.shouldRenderSnitches());
             manager.saveSnitchLists();
-        } else if (buttons[2].mousePressed(mc, xPos, yPos)) //Down arrow button
+        }
+        else if (buttons[2].mousePressed(mc, xPos, yPos)) //Down arrow button
         {
             table.swapTableItems(slotIndex, slotIndex + 1);
             list.decreaseRenderPriority();
