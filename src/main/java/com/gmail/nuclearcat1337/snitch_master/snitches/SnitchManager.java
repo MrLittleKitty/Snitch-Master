@@ -26,11 +26,18 @@ public class SnitchManager
 
     public static final String GLOBAL_RENDER_KEY = "global-render";
 
+    //private static final SnitchListQualifier friendly = new SnitchListQualifier("origin != 'gone' && origin == 'jalist' || origin == 'chat'");
     private static final SnitchListQualifier friendly = new SnitchListQualifier("origin == 'jalist' || origin == 'chat'");
     private static final SnitchListQualifier neutral = new SnitchListQualifier("origin == 'manual'");
-    public static SnitchList[] getDefaultSnitchLists(SnitchManager manager)
+    private static final SnitchListQualifier gone = new SnitchListQualifier("origin == 'gone'");
+
+    private static SnitchList[] getDefaultSnitchLists(SnitchManager manager)
     {
-        return new SnitchList[]{new SnitchList(manager, SnitchManager.friendly, true, "Friendly", new Color(0, (int) (0.56D * 255D), 255)), new SnitchList(manager, SnitchManager.neutral, true, "Neutral", new Color(238, 210, 2))}; //"Safety Yellow"
+        return new SnitchList[]{
+                new SnitchList(manager, SnitchManager.friendly, true, "Friendly", new Color(0, (int) (0.56D * 255D), 255)),
+                new SnitchList(manager, SnitchManager.neutral, true, "Neutral", new Color(238, 210, 2)), //"Safety Yellow"
+                new SnitchList(manager,SnitchManager.gone,true,"Gone",new Color(220,20,60)) //TODO---Finish implementing this feature
+        };
     }
 
     private final SnitchMaster snitchMaster;
@@ -221,11 +228,12 @@ public class SnitchManager
             contains.setCullTime(snitch.getCullTime());
             contains.setGroupName(snitch.getGroupName());
             contains.setSnitchName(snitch.getSnitchName());
-            contains.origin = snitch.origin;
+            contains.addOrigins(snitch.getOrigins());
 
             //Clear the attached snitch lists because we are going to requalify the snitch because some attributes changed
             contains.attachedSnitchLists.clear();
-        } else
+        }
+        else
         {
             //Just some reference rearranging
             contains = snitch;

@@ -5,8 +5,7 @@ import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObject;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Mr_Little_Kitty on 6/25/2016.
@@ -47,7 +46,7 @@ public class Snitch extends LocatableObject<Snitch>
     /**
      * The origin string from where this Snitch object was created.
      */
-    String origin;
+    private Set<String> origins;
 
     /**
      * The cull time of this Snitch. This field can be NaN (Not a Number).
@@ -80,7 +79,12 @@ public class Snitch extends LocatableObject<Snitch>
     public Snitch(ILocation location, String origin)
     {
         this.location = location;
-        this.origin = origin;
+
+        this.origins = new HashSet<>();
+
+        if(origin != null)
+            this.origins.add(origin);
+
         this.cullTime = SnitchMaster.CULL_TIME_ENABLED ? MAX_CULL_TIME : Double.NaN;
         this.ctGroup = DEFAULT_NAME;
         this.name = DEFAULT_NAME;
@@ -180,9 +184,19 @@ public class Snitch extends LocatableObject<Snitch>
         return ctGroup;
     }
 
-    public String getOrigin()
+    public Set<String> getOrigins()
     {
-        return origin;
+        return origins;
+    }
+
+//    public boolean hasOrigin(String origin)
+//    {
+//        return origins.contains(origin);
+//    }
+
+    void addOrigins(Collection<String> origins)
+    {
+        this.origins.addAll(origins);
     }
 
     public void setSnitchName(String name)
@@ -245,6 +259,7 @@ public class Snitch extends LocatableObject<Snitch>
     private static final int NUMBER_OF_CSV_PARAMS = 8;
     private static final String CSV_SEPARATOR = ",";
     private static final String DESCRIPTION_SEPARATOR = ";";
+    private static final String ORIGIN_SEPARATOR = "#";
 
     /**
      * Returns a string that represents the given Snitch object.
@@ -258,7 +273,7 @@ public class Snitch extends LocatableObject<Snitch>
         builder.append(snitch.location.getY()).append(CSV_SEPARATOR);
         builder.append(snitch.location.getZ()).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.location.getWorld())).append(CSV_SEPARATOR);
-        builder.append(Scrub(snitch.getOrigin())).append(CSV_SEPARATOR);
+        builder.append(Scrub(concatenate(snitch.getOrigins(),ORIGIN_SEPARATOR))).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.getGroupName())).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.getSnitchName())).append(CSV_SEPARATOR);
         builder.append(snitch.getCullTime()).append(CSV_SEPARATOR);
@@ -295,7 +310,10 @@ public class Snitch extends LocatableObject<Snitch>
                 int y = Integer.parseInt(args[index++]);
                 int z = Integer.parseInt(args[index++]);
                 String world = Scrub(args[index++]);
-                String origin = Scrub(args[index++]);
+
+                String originString = Scrub(args[index++]);
+                String[] origins = originString.split(ORIGIN_SEPARATOR);
+
                 String groupName = Scrub(args[index++]);
                 String snitchName = Scrub(args[index++]);
                 double cullTime = Double.parseDouble(args[index++]);
@@ -303,7 +321,8 @@ public class Snitch extends LocatableObject<Snitch>
                 if (snitchName.isEmpty())
                     snitchName = DEFAULT_NAME;
 
-                Snitch snitch = new Snitch(new Location(x, y, z, world), origin, cullTime, groupName, snitchName);
+                Snitch snitch = new Snitch(new Location(x, y, z, world), null, cullTime, groupName, snitchName);
+                Collections.addAll(snitch.origins, origins);
 
                 //If there is an argument for the description
                 if (args.length > index)
@@ -329,8 +348,18 @@ public class Snitch extends LocatableObject<Snitch>
         return null;
     }
 
+    static String concatenate(Collection<String> list, String seperator)
+    {
+        StringBuilder builder = new StringBuilder();
+        for(String str : list)
+            builder.append(str).append(seperator);
+        if(list.size() > 1)
+            builder.setLength(builder.length()-1);
+        return builder.toString();
+    }
+
     static String Scrub(String string)
     {
-        return string.replace(CSV_SEPARATOR, "").replace(DESCRIPTION_SEPARATOR, "");
+        return string.replace(CSV_SEPARATOR, "").replace(DESCRIPTION_SEPARATOR, "").replace(ORIGIN_SEPARATOR,"");
     }
 }
