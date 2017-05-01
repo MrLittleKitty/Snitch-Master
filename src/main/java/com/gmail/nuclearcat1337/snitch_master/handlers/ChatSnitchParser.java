@@ -98,6 +98,14 @@ public class ChatSnitchParser
                 return;
             }
         }
+        else if(msgText.contains("Changed snitch name to"))
+        {
+            if(tryParseNameChangeMessage(msg))
+            {
+                manager.saveSnitches();
+                return;
+            }
+        }
 
         //Only check for reset sequences or /jalist messages if we are updating
         if (updatingSnitchList)
@@ -135,6 +143,49 @@ public class ChatSnitchParser
 
         //Set the alert's message to whatever the final message is from the alert "event"
         event.setMessage(alert.getRawMessage());
+    }
+
+    private boolean tryParseNameChangeMessage(ITextComponent msg)
+    {
+        List<ITextComponent> siblings = msg.getSiblings();
+        if (siblings.size() <= 0)
+            return false;
+
+        ITextComponent hoverComponent = siblings.get(0);
+
+        HoverEvent hover = hoverComponent.getStyle().getHoverEvent();
+        if (hover != null)
+        {
+            String text = hover.getValue().getUnformattedComponentText();
+            try
+            {
+                String[] args = text.split("\n");
+                String[] worldArgs = args[0].split(" ");
+                String[] locationArgs = args[1].split(":")[1].split(" ");
+                String newName = args[6].trim();
+
+                int x, y, z;
+                x = Integer.parseInt(locationArgs[1].substring(1));
+                y = Integer.parseInt(locationArgs[2]);
+                z = Integer.parseInt(locationArgs[3].substring(0, locationArgs[3].length() - 1));
+                String world = worldArgs.length > 1 ? worldArgs[1] : snitchMaster.getCurrentWorld();
+
+                Location loc = new Location(x, y, z, world);
+                Snitch snitch = manager.getSnitches().get(loc);
+
+                if(snitch != null)
+                {
+                    snitch.setSnitchName(newName);
+                    snitchMaster.individualJourneyMapUpdate(snitch);
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+        return false;
     }
 
     private boolean tryParsePlaceMessage(ITextComponent msg)
