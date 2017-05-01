@@ -2,6 +2,7 @@ package com.gmail.nuclearcat1337.snitch_master.handlers;
 
 import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchTags;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
@@ -52,7 +53,7 @@ public class SnitchListeners
 
                         if (!manager.getSnitches().contains(loc))
                         {
-                            Snitch snitch = new Snitch(loc, "manual");
+                            Snitch snitch = new Snitch(loc, SnitchTags.FROM_MANUAL);
 
                             manager.submitSnitch(snitch);
 

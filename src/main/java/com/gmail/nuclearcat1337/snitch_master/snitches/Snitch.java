@@ -44,9 +44,9 @@ public class Snitch extends LocatableObject<Snitch>
     private final ILocation location;
 
     /**
-     * The origin string from where this Snitch object was created.
+     * The tags attached to this snitch object
      */
-    private Set<String> origins;
+    Set<String> tags;
 
     /**
      * The cull time of this Snitch. This field can be NaN (Not a Number).
@@ -74,16 +74,12 @@ public class Snitch extends LocatableObject<Snitch>
      * Creates a new Snitch and populates "Name" and "Citadel Group Name" with the default name.
      *
      * @param location The location of this Snitch block.
-     * @param origin   The origin string of where this Snitch object came from.
      */
-    public Snitch(ILocation location, String origin)
+    public Snitch(ILocation location)
     {
         this.location = location;
 
-        this.origins = new HashSet<>();
-
-        if (origin != null)
-            this.origins.add(origin);
+        this.tags = new HashSet<>();
 
         this.cullTime = SnitchMaster.CULL_TIME_ENABLED ? MAX_CULL_TIME : Double.NaN;
         this.ctGroup = DEFAULT_NAME;
@@ -92,18 +88,26 @@ public class Snitch extends LocatableObject<Snitch>
         description = null;
     }
 
+    public Snitch(ILocation location, String initialTag)
+    {
+        this(location);
+
+        if(initialTag != null)
+            tags.add(initialTag);
+    }
+
     /**
      * Creates a new Snitch with all the values specified.
      *
      * @param location   The location of this Snitch block.
-     * @param origin     The origin string of where this Snitch object came from.
+     * @param tag        The initial tag to attach to this Snitch object.
      * @param culltime   The cull time remaining for this snitch. (Can be NaN)
      * @param ctGroup    The Citadel group name of the group this Snitch is reinforced under.
      * @param snitchName The name of this Snitch.
      */
-    public Snitch(ILocation location, String origin, double culltime, String ctGroup, String snitchName)
+    public Snitch(ILocation location, String tag, double culltime, String ctGroup, String snitchName)
     {
-        this(location, origin);
+        this(location, tag);
         this.cullTime = culltime;
         this.ctGroup = ctGroup == null ? DEFAULT_NAME : ctGroup;
         this.name = snitchName == null || snitchName.isEmpty() ? DEFAULT_NAME : snitchName;
@@ -184,19 +188,14 @@ public class Snitch extends LocatableObject<Snitch>
         return ctGroup;
     }
 
-    public Set<String> getOrigins()
+    public Set<String> getTags()
     {
-        return origins;
+        return tags;
     }
 
-    //    public boolean hasOrigin(String origin)
-    //    {
-    //        return origins.contains(origin);
-    //    }
-
-    void addOrigins(Collection<String> origins)
+    public boolean isTagged(String tag)
     {
-        this.origins.addAll(origins);
+        return tags.contains(tag);
     }
 
     public void setSnitchName(String name)
@@ -253,13 +252,32 @@ public class Snitch extends LocatableObject<Snitch>
         return compareTo(other.getLocation());
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Snitch snitch = (Snitch) o;
+
+        return location.equals(snitch.location);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return location.hashCode();
+    }
+
     /**
      * The number of parameters in a comma separated value string representing a Snitch object
      */
     private static final int NUMBER_OF_CSV_PARAMS = 8;
     private static final String CSV_SEPARATOR = ",";
     private static final String DESCRIPTION_SEPARATOR = ";";
-    private static final String ORIGIN_SEPARATOR = "#";
+    private static final String TAG_SEPARATOR = "#";
 
     /**
      * Returns a string that represents the given Snitch object.
@@ -273,7 +291,7 @@ public class Snitch extends LocatableObject<Snitch>
         builder.append(snitch.location.getY()).append(CSV_SEPARATOR);
         builder.append(snitch.location.getZ()).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.location.getWorld())).append(CSV_SEPARATOR);
-        builder.append(Scrub(concatenate(snitch.getOrigins(), ORIGIN_SEPARATOR))).append(CSV_SEPARATOR);
+        builder.append(Scrub(concatenate(snitch.tags, TAG_SEPARATOR))).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.getGroupName())).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.getSnitchName())).append(CSV_SEPARATOR);
         builder.append(snitch.getCullTime()).append(CSV_SEPARATOR);
@@ -312,7 +330,7 @@ public class Snitch extends LocatableObject<Snitch>
                 String world = Scrub(args[index++]);
 
                 String originString = Scrub(args[index++]);
-                String[] origins = originString.split(ORIGIN_SEPARATOR);
+                String[] origins = originString.split(TAG_SEPARATOR);
 
                 String groupName = Scrub(args[index++]);
                 String snitchName = Scrub(args[index++]);
@@ -322,7 +340,7 @@ public class Snitch extends LocatableObject<Snitch>
                     snitchName = DEFAULT_NAME;
 
                 Snitch snitch = new Snitch(new Location(x, y, z, world), null, cullTime, groupName, snitchName);
-                Collections.addAll(snitch.origins, origins);
+                Collections.addAll(snitch.tags, origins);
 
                 //If there is an argument for the description
                 if (args.length > index)
@@ -360,6 +378,6 @@ public class Snitch extends LocatableObject<Snitch>
 
     static String Scrub(String string)
     {
-        return string.replace(CSV_SEPARATOR, "").replace(DESCRIPTION_SEPARATOR, "").replace(ORIGIN_SEPARATOR, "");
+        return string.replace(CSV_SEPARATOR, "").replace(DESCRIPTION_SEPARATOR, "").replace(TAG_SEPARATOR, "");
     }
 }

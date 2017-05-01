@@ -26,14 +26,14 @@ public class SnitchManager
 
     public static final String GLOBAL_RENDER_KEY = "global-render";
 
-    //private static final SnitchListQualifier friendly = new SnitchListQualifier("origin != 'gone' && origin == 'jalist' || origin == 'chat'");
-    private static final SnitchListQualifier friendly = new SnitchListQualifier("origin == 'jalist' || origin == 'chat'");
-    private static final SnitchListQualifier neutral = new SnitchListQualifier("origin == 'manual'");
-    private static final SnitchListQualifier gone = new SnitchListQualifier("origin == 'gone'");
+    private static final SnitchListQualifier friendly = new SnitchListQualifier(String.format("origin == '%s' || origin == '%s' && origin != '%s'", SnitchTags.IS_GONE, SnitchTags.FROM_JALIST, SnitchTags.FROM_TEXT));
+    private static final SnitchListQualifier neutral = new SnitchListQualifier(String.format("origin == '%s'", SnitchTags.FROM_MANUAL));
+    private static final SnitchListQualifier gone = new SnitchListQualifier(String.format("origin == '%s'", SnitchTags.IS_GONE));
 
     private static SnitchList[] getDefaultSnitchLists(SnitchManager manager)
     {
-        return new SnitchList[]{new SnitchList(manager, SnitchManager.friendly, true, "Friendly", new Color(0, (int) (0.56D * 255D), 255)), new SnitchList(manager, SnitchManager.neutral, true, "Neutral", new Color(238, 210, 2)), //"Safety Yellow"
+        return new SnitchList[]{new SnitchList(manager, SnitchManager.friendly, true, "Friendly", new Color(0, (int) (0.56D * 255D), 255)),
+                new SnitchList(manager, SnitchManager.neutral, true, "Neutral", new Color(238, 210, 2)), //"Safety Yellow"
                 new SnitchList(manager, SnitchManager.gone, true, "Gone", new Color(220, 20, 60)) //TODO---Finish implementing this feature
         };
     }
@@ -210,6 +210,32 @@ public class SnitchManager
         return attachedSnitches;
     }
 
+    public void addTag(Snitch snitch, String tag)
+    {
+        snitch.tags.add(tag);
+        snitch.attachedSnitchLists.clear();
+        for(SnitchList list : snitchLists)
+            if(list.getQualifier().isQualified(snitch))
+                attachListToSnitch(list,snitch);
+
+        snitchMaster.individualJourneyMapUpdate(snitch);
+    }
+
+    public boolean removeTag(Snitch snitch, String tag)
+    {
+        if(!snitch.tags.remove(tag))
+            return false;
+
+        snitch.attachedSnitchLists.clear();
+        for(SnitchList list : snitchLists)
+            if(list.getQualifier().isQualified(snitch))
+                attachListToSnitch(list,snitch);
+
+        snitchMaster.individualJourneyMapUpdate(snitch);
+
+        return true;
+    }
+
     /**
      * Submits a Snitch for processing and adding to the Snitch collection.
      * The Snitch is added to all SnitchLists, JourneyMap, (if applicable) and then saved to a file.
@@ -226,7 +252,10 @@ public class SnitchManager
             contains.setCullTime(snitch.getCullTime());
             contains.setGroupName(snitch.getGroupName());
             contains.setSnitchName(snitch.getSnitchName());
-            contains.addOrigins(snitch.getOrigins());
+
+            if(snitch.isTagged(SnitchTags.FROM_JALIST))
+                contains.tags.remove(SnitchTags.IS_GONE); //Remove it the dirty way cause this is the manager
+            contains.tags.addAll(snitch.getTags());
 
             //Clear the attached snitch lists because we are going to requalify the snitch because some attributes changed
             contains.attachedSnitchLists.clear();

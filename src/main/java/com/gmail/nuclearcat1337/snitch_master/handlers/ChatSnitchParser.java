@@ -4,6 +4,7 @@ import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.IAlertRecipient;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchAlert;
+import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchTags;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.Location;
@@ -16,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +42,8 @@ public class ChatSnitchParser
     private int maxJaListIndex = -1;
 
     private boolean updatingSnitchList = false;
+    private HashSet<Snitch> snitchesCopy;
+    private HashSet<Snitch> loadedSnitches;
 
     private double waitTime = 4;
     private int tickTimeout = 20;
@@ -50,6 +54,8 @@ public class ChatSnitchParser
         this.snitchMaster = api;
         this.manager = snitchMaster.getManager();
         alertRecipients = new ArrayList<>();
+        snitchesCopy = null;
+        loadedSnitches = null;
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -172,7 +178,7 @@ public class ChatSnitchParser
             Location loc = new Location(x, y, z, world);
             String group = groupArgs.length > 1 ? groupArgs[1] : Snitch.DEFAULT_NAME;
 
-            return new Snitch(loc, "chat", SnitchMaster.CULL_TIME_ENABLED ? Snitch.MAX_CULL_TIME : Double.NaN, group, Snitch.DEFAULT_NAME);
+            return new Snitch(loc, SnitchTags.FROM_TEXT, SnitchMaster.CULL_TIME_ENABLED ? Snitch.MAX_CULL_TIME : Double.NaN, group, Snitch.DEFAULT_NAME);
         }
         catch (Exception e)
         {
@@ -223,6 +229,10 @@ public class ChatSnitchParser
                     if (!matcher.matches())
                         continue;
                     Snitch snitch = parseSnitchFromJaList(matcher);
+
+                    if(loadedSnitches != null)
+                        loadedSnitches.add(snitch);
+
                     manager.submitSnitch(snitch);
                 }
             }
@@ -258,7 +268,7 @@ public class ChatSnitchParser
         String ctGroup = matcher.group(6);
         String name = matcher.group(7);
 
-        return new Snitch(new Location(x, y, z, worldName), "jalist", cullTime, ctGroup, name);
+        return new Snitch(new Location(x, y, z, worldName), SnitchTags.FROM_JALIST, cullTime, ctGroup, name);
     }
 
     @SubscribeEvent
@@ -306,11 +316,20 @@ public class ChatSnitchParser
     {
         resetUpdatingSnitchList(false);
 
+        snitchesCopy = new HashSet<>();
+        loadedSnitches = new HashSet<>();
+
+        //Go through all the snitches that we have saved
+        for(Snitch snitch : manager.getSnitches())
+        {
+            //If the snitch isn't already marked as gone and is marked as jalist
+            if(!snitch.isTagged(SnitchTags.IS_GONE) && snitch.isTagged(SnitchTags.FROM_JALIST))
+                snitchesCopy.add(snitch); //Then we add it to the copy list
+        }
+
         Minecraft.getMinecraft().thePlayer.sendChatMessage("/tps");
         nextUpdate = System.currentTimeMillis() + 2000;
         updatingSnitchList = true;
-
-        //SnitchMaster.SendMessageToPlayer("The current world is: "+snitchMaster.getCurrentWorld());
     }
 
     public void updateSnitchList(int startIndex, int stopIndex)
@@ -363,15 +382,29 @@ public class ChatSnitchParser
      */
     public void resetUpdatingSnitchList(boolean save)
     {
-        jaListIndex = 1;
-        maxJaListIndex = -1;
-
-        if (save)
+        if(updatingSnitchList && snitchesCopy != null)
         {
-            manager.saveSnitches();
+            //Remove all the snitches that we loaded from jalist from the copy
+            snitchesCopy.removeAll(loadedSnitches);
+
+            for(Snitch snitch : snitchesCopy)
+                manager.addTag(snitch,SnitchTags.IS_GONE);
+
+            SnitchMaster.SendMessageToPlayer(snitchesCopy.size()+" snitches were missing since the last full update.");
+
+            snitchesCopy.clear();
+            loadedSnitches.clear();
+
+            snitchesCopy = null;
+            loadedSnitches = null;
         }
 
+        jaListIndex = 1;
+        maxJaListIndex = -1;
         updatingSnitchList = false;
+
+        if (save)
+            manager.saveSnitches();
     }
 
     private static SnitchAlert buildSnitchAlert(Matcher matcher, ITextComponent message)

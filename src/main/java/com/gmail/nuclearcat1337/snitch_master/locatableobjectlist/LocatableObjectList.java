@@ -332,6 +332,16 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         };
     }
 
+    public LocatableObjectList<T> deepCopy()
+    {
+        LocatableObjectList<T> copy = new LocatableObjectList<T>();
+        copy.wrappedList.addAll(this.wrappedList);
+        for(Map.Entry<String,IntPair> pair:  this.worldIndices.entrySet())
+            copy.worldIndices.put(pair.getKey(),pair.getValue().deepCopy());
+        copy.modCount = this.modCount;
+        return copy;
+    }
+
     private static int binarySearch(ArrayList<? extends LocatableObject> list, int low, int high, ILocation location)
     {
         while (low <= high)
@@ -427,6 +437,11 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
         {
             this.one = one;
             this.two = two;
+        }
+
+        public IntPair deepCopy()
+        {
+            return new IntPair(one,two);
         }
     }
 }

@@ -16,7 +16,11 @@ public class SnitchListQualifier
     private static final String WORLD_TOKEN = "world";
     private static final String GROUP_TOKEN = "group";
     private static final String NAME_TOKEN = "name";
-    private static final String ORIGIN_TOKEN = "origin";
+
+    private static final String DEPRECATED_ORIGIN_TOKEN = "origin";
+    private static final String TAG_TOKEN = "tag";
+
+
     private static final String X_TOKEN = "x";
     private static final String Y_TOKEN = "y";
     private static final String Z_TOKEN = "z";
@@ -102,14 +106,14 @@ public class SnitchListQualifier
                         if (token.equals(OR_OPERATOR))
                         {
                             finalResult = finalResult || result;
-                            if (finalResult) //Short circuiting logic
-                                return true;
+//                            if (finalResult) //Short circuiting logic
+//                                return true;
                         }
                         else
                         {
                             finalResult = finalResult && result;
-                            if (!finalResult) //Short circuiting logic
-                                return false;
+//                            if (!finalResult) //Short circuiting logic
+//                                return false;
                         }
                     }
                 }
@@ -290,8 +294,8 @@ public class SnitchListQualifier
 
     private static Collection<String> getListValue(String token, Snitch snitch) throws Exception
     {
-        if (token.equalsIgnoreCase(ORIGIN_TOKEN))
-            return snitch.getOrigins();
+        if (token.equalsIgnoreCase(DEPRECATED_ORIGIN_TOKEN) || token.equalsIgnoreCase(TAG_TOKEN))
+            return snitch.getTags();
         else
             throw new Exception("Syntax error: Token " + token + " is not a valid list value");
     }
@@ -330,7 +334,7 @@ public class SnitchListQualifier
             return snitch.getSnitchName();
         else if (token.equalsIgnoreCase(WORLD_TOKEN))
             return snitch.getLocation().getWorld();
-            //        else if (token.equalsIgnoreCase(ORIGIN_TOKEN))
+            //        else if (token.equalsIgnoreCase(DEPRECATED_ORIGIN_TOKEN))
             //            return snitch.getOrigin();
         else
             throw new Exception("Syntax error: Token " + token + " is not a valid String value");
@@ -376,18 +380,18 @@ public class SnitchListQualifier
     //                //token.equalsIgnoreCase("y") ||
     //                //token.equalsIgnoreCase("z") ||
     //                token.equalsIgnoreCase(WORLD_TOKEN) ||
-    //                token.equalsIgnoreCase(ORIGIN_TOKEN);
+    //                token.equalsIgnoreCase(DEPRECATED_ORIGIN_TOKEN);
     //
     //    }
 
     private static boolean isListVariable(String token)
     {
-        return token.equalsIgnoreCase(ORIGIN_TOKEN);
+        return token.equalsIgnoreCase(DEPRECATED_ORIGIN_TOKEN) || token.equalsIgnoreCase(TAG_TOKEN);
     }
 
     private static boolean isStringVariable(String token)
     {
-        return token.equalsIgnoreCase(WORLD_TOKEN) || token.equalsIgnoreCase(GROUP_TOKEN) || token.equalsIgnoreCase(NAME_TOKEN); //|| token.equalsIgnoreCase(ORIGIN_TOKEN);
+        return token.equalsIgnoreCase(WORLD_TOKEN) || token.equalsIgnoreCase(GROUP_TOKEN) || token.equalsIgnoreCase(NAME_TOKEN); //|| token.equalsIgnoreCase(DEPRECATED_ORIGIN_TOKEN);
     }
 
     private static boolean isDoubleVariable(String token)
