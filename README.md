@@ -4,7 +4,7 @@ Snitch Master --- A Minecraft Forge mod for rendering and managing JukeAlert sni
 
 # Current Version
 
-Minecraft 1.10.2 --- [Release v1.1.0](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.1.0) (NEW!!!)
+Minecraft 1.10.2 --- [Release v1.1.1](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.1.1) (NEW!!!)
 
 # Screenshots
 
@@ -25,7 +25,7 @@ Minecraft 1.10.2 --- [Release v1.1.0](https://github.com/MrLittleKitty/Snitch-Ma
 
 # All Downloads
 
-Minecraft 1.10.2 --- [Release v1.1.0](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.1.0)
+Minecraft 1.10.2 --- [Release v1.1.1](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.1.1)
 
 Minecraft 1.10.2 --- [Release v1.0.9](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.0.9)
 
