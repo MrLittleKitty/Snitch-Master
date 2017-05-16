@@ -26,7 +26,7 @@ public class SnitchManager
 
     public static final String GLOBAL_RENDER_KEY = "global-render";
 
-    private static final SnitchListQualifier friendly = new SnitchListQualifier(String.format("origin == '%s' || origin == '%s' && origin != '%s'", SnitchTags.IS_GONE, SnitchTags.FROM_JALIST, SnitchTags.FROM_TEXT));
+    private static final SnitchListQualifier friendly = new SnitchListQualifier(String.format("origin == '%s' || origin == '%s' && origin != '%s'", SnitchTags.FROM_JALIST, SnitchTags.FROM_TEXT, SnitchTags.IS_GONE));
     private static final SnitchListQualifier neutral = new SnitchListQualifier(String.format("origin == '%s'", SnitchTags.FROM_MANUAL));
     private static final SnitchListQualifier gone = new SnitchListQualifier(String.format("origin == '%s'", SnitchTags.IS_GONE));
 
