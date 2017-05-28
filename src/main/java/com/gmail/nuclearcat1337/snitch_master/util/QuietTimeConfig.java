@@ -11,7 +11,7 @@ public class QuietTimeConfig
 {
     //TL;DR: Don't even bother trying to read these and understand what they represent. Its not your destiny.
     public static final QuietTimeConfig NORMAL = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 3, 8, 4}, new String[]{});
-    public static final QuietTimeConfig HIDE_COORDS = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 3, 8, 7, 4, 6, 0}, new String[]{"[world X X X]"});
+    public static final QuietTimeConfig HIDE_COORDS = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 3, 8, 7, 6, 0, 4}, new String[]{"[world X X X]"});
     public static final QuietTimeConfig HIDE_COORDS_AND_NAME = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 7, 6, 0, 3, 8, 7, 6, 1, 4}, new String[]{"Hidden", "[world X X X]"});
     public static final QuietTimeConfig GJUM_SPECIAL = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 7, 3, 4}, new String[]{});
 
