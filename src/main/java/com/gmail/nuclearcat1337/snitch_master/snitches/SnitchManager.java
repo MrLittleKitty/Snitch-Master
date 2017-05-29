@@ -255,7 +255,9 @@ public class SnitchManager
 
             if(snitch.isTagged(SnitchTags.FROM_JALIST))
                 contains.tags.remove(SnitchTags.IS_GONE); //Remove it the dirty way cause this is the manager
-            contains.tags.addAll(snitch.getTags());
+
+            for(String str : snitch.getTags())
+                contains.tags.add(str);
 
             //Clear the attached snitch lists because we are going to requalify the snitch because some attributes changed
             contains.attachedSnitchLists.clear();

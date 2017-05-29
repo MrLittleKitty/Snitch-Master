@@ -46,7 +46,7 @@ public class Snitch extends LocatableObject<Snitch>
     /**
      * The tags attached to this snitch object
      */
-    Set<String> tags;
+    HashSet<String> tags;
 
     /**
      * The cull time of this Snitch. This field can be NaN (Not a Number).
@@ -291,7 +291,7 @@ public class Snitch extends LocatableObject<Snitch>
         builder.append(snitch.location.getY()).append(CSV_SEPARATOR);
         builder.append(snitch.location.getZ()).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.location.getWorld())).append(CSV_SEPARATOR);
-        builder.append(Scrub(concatenate(snitch.tags, TAG_SEPARATOR))).append(CSV_SEPARATOR);
+        builder.append(concatenate(snitch.tags, TAG_SEPARATOR)).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.getGroupName())).append(CSV_SEPARATOR);
         builder.append(Scrub(snitch.getSnitchName())).append(CSV_SEPARATOR);
         builder.append(snitch.getCullTime()).append(CSV_SEPARATOR);
@@ -329,7 +329,7 @@ public class Snitch extends LocatableObject<Snitch>
                 int z = Integer.parseInt(args[index++]);
                 String world = Scrub(args[index++]);
 
-                String originString = Scrub(args[index++]);
+                String originString = args[index++];
                 String[] origins = originString.split(TAG_SEPARATOR);
 
                 String groupName = Scrub(args[index++]);
@@ -340,7 +340,8 @@ public class Snitch extends LocatableObject<Snitch>
                     snitchName = DEFAULT_NAME;
 
                 Snitch snitch = new Snitch(new Location(x, y, z, world), null, cullTime, groupName, snitchName);
-                Collections.addAll(snitch.tags, origins);
+                for(String str : origins)
+                    snitch.tags.add(str);
 
                 //If there is an argument for the description
                 if (args.length > index)
@@ -371,7 +372,7 @@ public class Snitch extends LocatableObject<Snitch>
         StringBuilder builder = new StringBuilder();
         for (String str : list)
             builder.append(str).append(seperator);
-        if (list.size() > 1)
+        if (list.size() > 0)
             builder.setLength(builder.length() - 1);
         return builder.toString();
     }
