@@ -175,8 +175,7 @@ public class ChatSnitchParser
 
                 if(snitch != null)
                 {
-                    snitch.setSnitchName(newName);
-                    snitchMaster.individualJourneyMapUpdate(snitch);
+                    manager.setSnitchName(snitch,newName);
                     return true;
                 }
             }

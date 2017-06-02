@@ -1,14 +1,21 @@
 package com.gmail.nuclearcat1337.snitch_master.journeymap;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
+import com.gmail.nuclearcat1337.snitch_master.gui.screens.EditSnitchScreen;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
+import journeymap.client.api.display.IOverlayListener;
 import journeymap.client.api.display.ImageOverlay;
 import journeymap.client.api.model.MapImage;
+import journeymap.client.api.util.UIState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.math.BlockPos;
+import scala.collection.parallel.ParIterableLike;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -39,6 +46,40 @@ public class SnitchImageFactory
             ImageOverlay overlay = new ImageOverlay(SnitchMaster.MODID, displayID, nw, se, image);
 
             overlay.setTitle(SNITCH_FORMAT_STRING.replace("{0}", snitch.getGroupName()).replace("{1}", snitch.getSnitchName()).replace("{2}", renderList.getListName()));
+            overlay.setOverlayListener(new IOverlayListener()
+            {
+                @Override
+                public void onActivate(UIState uiState)
+                {
+
+                }
+
+                @Override
+                public void onDeactivate(UIState uiState)
+                {
+
+                }
+
+                @Override
+                public void onMouseMove(UIState uiState, Point2D.Double aDouble, BlockPos blockPos)
+                {
+
+                }
+
+                @Override
+                public void onMouseOut(UIState uiState, Point2D.Double aDouble, BlockPos blockPos)
+                {
+
+                }
+
+                @Override
+                public boolean onMouseClick(UIState uiState, Point2D.Double aDouble, BlockPos blockPos, int i, boolean b)
+                {
+                    GuiScreen current = Minecraft.getMinecraft().currentScreen;
+                    Minecraft.getMinecraft().displayGuiScreen(new EditSnitchScreen(snitch,SnitchMaster.instance.getManager(),current));
+                    return true;
+                }
+            });
 
             return overlay;
         }

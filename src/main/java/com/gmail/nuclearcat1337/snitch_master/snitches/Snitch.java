@@ -113,7 +113,7 @@ public class Snitch extends LocatableObject<Snitch>
         this.name = snitchName == null || snitchName.isEmpty() ? DEFAULT_NAME : snitchName;
     }
 
-    public void setCullTime(double cullTime)
+    void setCullTime(double cullTime)
     {
         this.cullTime = cullTime;
     }
@@ -123,7 +123,7 @@ public class Snitch extends LocatableObject<Snitch>
         return cullTime;
     }
 
-    public void setDescription(List<String> description)
+    void setDescription(List<String> description)
     {
         this.description = description;
     }
@@ -198,13 +198,13 @@ public class Snitch extends LocatableObject<Snitch>
         return tags.contains(tag);
     }
 
-    public void setSnitchName(String name)
+    void setSnitchName(String name)
     {
         if (!name.isEmpty())
             this.name = name;
     }
 
-    public void setGroupName(String groupName)
+    void setGroupName(String groupName)
     {
         this.ctGroup = groupName;
     }

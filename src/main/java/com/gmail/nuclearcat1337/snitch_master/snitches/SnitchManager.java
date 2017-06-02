@@ -210,15 +210,32 @@ public class SnitchManager
         return attachedSnitches;
     }
 
+    public void setSnitchName(Snitch snitch, String name)
+    {
+        snitch.setSnitchName(name);
+
+        requalifySnitch(snitch);
+    }
+
+    public void setSnitchGroup(Snitch snitch, String group)
+    {
+        snitch.setGroupName(group);
+
+        requalifySnitch(snitch);
+    }
+
+    public void setSnitchCullTime(Snitch snitch, double cullTime)
+    {
+        snitch.setCullTime(cullTime);
+
+        requalifySnitch(snitch);
+    }
+
     public void addTag(Snitch snitch, String tag)
     {
         snitch.tags.add(tag);
-        snitch.attachedSnitchLists.clear();
-        for(SnitchList list : snitchLists)
-            if(list.getQualifier().isQualified(snitch))
-                attachListToSnitch(list,snitch);
 
-        snitchMaster.individualJourneyMapUpdate(snitch);
+        requalifySnitch(snitch);
     }
 
     public boolean removeTag(Snitch snitch, String tag)
@@ -226,14 +243,19 @@ public class SnitchManager
         if(!snitch.tags.remove(tag))
             return false;
 
+        requalifySnitch(snitch);
+
+        return true;
+    }
+
+    private void requalifySnitch(Snitch snitch)
+    {
         snitch.attachedSnitchLists.clear();
         for(SnitchList list : snitchLists)
             if(list.getQualifier().isQualified(snitch))
                 attachListToSnitch(list,snitch);
 
         snitchMaster.individualJourneyMapUpdate(snitch);
-
-        return true;
     }
 
     /**
