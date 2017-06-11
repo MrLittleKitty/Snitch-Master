@@ -30,13 +30,15 @@ public abstract class TableTopGui<T> extends GuiScreen
 
     private final String title;
     private final int titleWidth;
+    private final boolean columnLocked;
 
     private TableGui<T> tableGui;
 
-    public TableTopGui(GuiScreen parentScreen, Collection<T> items, String title)
+    public TableTopGui(GuiScreen parentScreen, Collection<T> items, boolean columnLocked, String title)
     {
         this.parentScreen = parentScreen;
         this.items = items;
+        this.columnLocked = columnLocked;
         this.title = title;
         this.titleWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(title);
     }
@@ -86,7 +88,8 @@ public abstract class TableTopGui<T> extends GuiScreen
         int buttonWidth = mc.fontRendererObj.getStringWidth("--Columns--");
         xPos -= ((GuiConstants.STANDARD_SEPARATION_DISTANCE * 4) + buttonWidth);
 
-        columnsButton = new GuiButton(1, xPos, yPos, buttonWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "Columns");
+        if(!columnLocked)
+            columnsButton = new GuiButton(1, xPos, yPos, buttonWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "Columns");
 
         buttonList.add(doneButton);
         buttonList.add(columnsButton);

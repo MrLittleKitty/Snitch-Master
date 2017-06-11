@@ -5,7 +5,7 @@ import com.gmail.nuclearcat1337.snitch_master.journeymap.JourneyMapInterface;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
-import com.gmail.nuclearcat1337.snitch_master.util.QuietTimeConfig;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchalerts.AlertFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Mod;
@@ -89,7 +89,7 @@ public class SnitchMaster
         settings = new Settings(new ObjectParser());
         settings.loadSettings();
 
-        settings.setValueIfNotSet(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, QuietTimeConfig.GetDefaultQuietTimeConfig());
+        settings.setValueIfNotSet(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, AlertFormat.GetDefaultQuietTimeConfig());
         settings.setValueIfNotSet(Settings.CHAT_SPAM_KEY, Settings.ChatSpamState.ON);
         settings.setValueIfNotSet(Settings.RENDER_TEXT_KEY, Boolean.TRUE);
         settings.setValueIfNotSet(Settings.MANUAL_MODE_KEY, Boolean.TRUE);
@@ -157,7 +157,7 @@ public class SnitchMaster
             else if (key.equalsIgnoreCase(Settings.CHAT_SPAM_KEY))
                 return Settings.ChatSpamState.valueOf(value);
             else if (key.equalsIgnoreCase(QuietTimeHandler.QUIET_TIME_CONFIG_KEY))
-                return QuietTimeConfig.FromString(value);
+                return AlertFormat.FromString(value);
             else
             {
                 if (value.equalsIgnoreCase(Boolean.FALSE.toString()))

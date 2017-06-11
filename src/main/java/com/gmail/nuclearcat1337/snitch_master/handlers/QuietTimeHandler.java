@@ -4,7 +4,7 @@ import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.IAlertRecipient;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchAlert;
-import com.gmail.nuclearcat1337.snitch_master.util.QuietTimeConfig;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchalerts.AlertFormat;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -44,7 +44,7 @@ public class QuietTimeHandler implements IAlertRecipient
     public void receiveSnitchAlert(SnitchAlert alert)
     {
         index = 0;
-        QuietTimeConfig quietTimeConfig = (QuietTimeConfig) settings.getValue(QUIET_TIME_CONFIG_KEY);
+        AlertFormat quietTimeConfig = (AlertFormat) settings.getValue(QUIET_TIME_CONFIG_KEY);
         instructions = quietTimeConfig.instructions;
         literals = quietTimeConfig.literals;
 

@@ -1,4 +1,4 @@
-package com.gmail.nuclearcat1337.snitch_master.util;
+package com.gmail.nuclearcat1337.snitch_master.gui.snitchalerts;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 
@@ -7,21 +7,27 @@ import java.util.Arrays;
 /**
  * Created by Mr_Little_Kitty on 2/22/2017.
  */
-public class QuietTimeConfig
+public class AlertFormat
 {
     //TL;DR: Don't even bother trying to read these and understand what they represent. Its not your destiny.
-    public static final QuietTimeConfig NORMAL = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 3, 8, 4}, new String[]{});
-    public static final QuietTimeConfig HIDE_COORDS = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 3, 8, 7, 6, 0, 4}, new String[]{"[world X X X]"});
-    public static final QuietTimeConfig HIDE_COORDS_AND_NAME = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 7, 6, 0, 3, 8, 7, 6, 1, 4}, new String[]{"Hidden", "[world X X X]"});
-    public static final QuietTimeConfig GJUM_SPECIAL = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 7, 3, 4}, new String[]{});
+    public static final AlertFormat NORMAL = new AlertFormat(new byte[]{1, 8, 2, 8, 3, 8, 4}, new String[]{});
+    public static final AlertFormat HIDE_COORDS = new AlertFormat(new byte[]{1, 8, 2, 8, 3, 8, 7, 6, 0, 4}, new String[]{"[world X X X]"});
+    public static final AlertFormat HIDE_COORDS_AND_NAME = new AlertFormat(new byte[]{1, 8, 2, 8, 7, 6, 0, 3, 8, 7, 6, 1, 4}, new String[]{"Hidden", "[world X X X]"});
+    public static final AlertFormat GJUM_SPECIAL = new AlertFormat(new byte[]{1, 8, 2, 8, 7, 3, 4}, new String[]{});
+
 
     public byte[] instructions;
     public String[] literals;
 
-    public QuietTimeConfig(byte[] instructions, String[] literals)
+    public AlertFormat(byte[] instructions, String[] literals)
     {
         this.instructions = instructions;
         this.literals = literals;
+    }
+
+    public String getName()
+    {
+        return "";
     }
 
     @Override
@@ -30,12 +36,12 @@ public class QuietTimeConfig
         return Arrays.toString(instructions) + ":" + ToString(literals);
     }
 
-    public static QuietTimeConfig GetDefaultQuietTimeConfig()
+    public static AlertFormat GetDefaultQuietTimeConfig()
     {
         return NORMAL;
     }
 
-    public static QuietTimeConfig FromString(String value)
+    public static AlertFormat FromString(String value)
     {
         try
         {
@@ -44,7 +50,7 @@ public class QuietTimeConfig
                 return GetDefaultQuietTimeConfig();
             byte[] bytes = ParseByteArray(parts[0]);
             String[] literals = parts.length > 1 ? ParseStringArray(parts[1]) : new String[0];
-            return new QuietTimeConfig(bytes, literals);
+            return new AlertFormat(bytes, literals);
         }
         catch (Exception e)
         {
@@ -84,7 +90,7 @@ public class QuietTimeConfig
         if (o == null || getClass() != o.getClass())
             return false;
 
-        QuietTimeConfig that = (QuietTimeConfig) o;
+        AlertFormat that = (AlertFormat) o;
 
         if (!Arrays.equals(instructions, that.instructions))
             return false;

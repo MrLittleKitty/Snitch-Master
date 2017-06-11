@@ -27,7 +27,7 @@ public class SnitchesTable extends TableTopGui<Snitch>
 
     public SnitchesTable(GuiScreen parentScreen, Collection<Snitch> items, String title, SnitchMaster snitchMaster)
     {
-        super(parentScreen, items, title);
+        super(parentScreen, items, false, title);
         this.snitchMaster = snitchMaster;
     }
 

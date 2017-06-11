@@ -46,7 +46,7 @@ public class SnitchListsTable extends TableTopGui<SnitchList>
 
     public SnitchListsTable(GuiScreen parentScreen, Collection<SnitchList> items, String title, boolean fullList, SnitchMaster snitchMaster)
     {
-        super(parentScreen, items, title);
+        super(parentScreen, items, false, title);
         this.fullList = fullList;
         this.snitchMaster = snitchMaster;
         this.manager = snitchMaster.getManager();

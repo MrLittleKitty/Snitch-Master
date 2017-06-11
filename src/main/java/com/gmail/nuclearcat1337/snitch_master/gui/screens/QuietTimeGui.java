@@ -4,7 +4,7 @@ import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.controls.TextBox;
 import com.gmail.nuclearcat1337.snitch_master.handlers.QuietTimeHandler;
-import com.gmail.nuclearcat1337.snitch_master.util.QuietTimeConfig;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchalerts.AlertFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -81,22 +81,22 @@ public class QuietTimeGui extends GuiScreen
                 Minecraft.getMinecraft().displayGuiScreen(null);
                 break;
             case 3:
-                this.settings.setValue(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, QuietTimeConfig.NORMAL);
+                this.settings.setValue(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, AlertFormat.NORMAL);
                 this.settings.saveSettings();
                 setTextBoxContent();
                 break;
             case 4:
-                this.settings.setValue(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, QuietTimeConfig.GJUM_SPECIAL);
+                this.settings.setValue(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, AlertFormat.GJUM_SPECIAL);
                 this.settings.saveSettings();
                 setTextBoxContent();
                 break;
             case 5:
-                this.settings.setValue(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, QuietTimeConfig.HIDE_COORDS);
+                this.settings.setValue(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, AlertFormat.HIDE_COORDS);
                 this.settings.saveSettings();
                 setTextBoxContent();
                 break;
             case 6:
-                this.settings.setValue(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, QuietTimeConfig.HIDE_COORDS_AND_NAME);
+                this.settings.setValue(QuietTimeHandler.QUIET_TIME_CONFIG_KEY, AlertFormat.HIDE_COORDS_AND_NAME);
                 this.settings.saveSettings();
                 setTextBoxContent();
                 break;
@@ -105,16 +105,16 @@ public class QuietTimeGui extends GuiScreen
 
     private void setTextBoxContent()
     {
-        QuietTimeConfig config = (QuietTimeConfig) settings.getValue(QuietTimeHandler.QUIET_TIME_CONFIG_KEY);
+        AlertFormat config = (AlertFormat) settings.getValue(QuietTimeHandler.QUIET_TIME_CONFIG_KEY);
         int hash = config.hashCode();
 
-        if (hash == QuietTimeConfig.NORMAL.hashCode() && config.equals(QuietTimeConfig.NORMAL))
+        if (hash == AlertFormat.NORMAL.hashCode() && config.equals(AlertFormat.NORMAL))
             messageBox.setText("Normal");
-        else if (hash == QuietTimeConfig.GJUM_SPECIAL.hashCode() && config.equals(QuietTimeConfig.GJUM_SPECIAL))
+        else if (hash == AlertFormat.GJUM_SPECIAL.hashCode() && config.equals(AlertFormat.GJUM_SPECIAL))
             messageBox.setText("Gjum Special");
-        else if (hash == QuietTimeConfig.HIDE_COORDS.hashCode() && config.equals(QuietTimeConfig.HIDE_COORDS))
+        else if (hash == AlertFormat.HIDE_COORDS.hashCode() && config.equals(AlertFormat.HIDE_COORDS))
             messageBox.setText("Hide Coordinates");
-        else if (hash == QuietTimeConfig.HIDE_COORDS_AND_NAME.hashCode() && config.equals(QuietTimeConfig.HIDE_COORDS_AND_NAME))
+        else if (hash == AlertFormat.HIDE_COORDS_AND_NAME.hashCode() && config.equals(AlertFormat.HIDE_COORDS_AND_NAME))
             messageBox.setText("Hide Coords/Name");
         else
             messageBox.setText("Custom config? Idk.");
