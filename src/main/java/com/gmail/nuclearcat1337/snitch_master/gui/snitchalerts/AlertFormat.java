@@ -10,24 +10,30 @@ import java.util.Arrays;
 public class AlertFormat
 {
     //TL;DR: Don't even bother trying to read these and understand what they represent. Its not your destiny.
-    public static final AlertFormat NORMAL = new AlertFormat(new byte[]{1, 8, 2, 8, 3, 8, 4}, new String[]{});
-    public static final AlertFormat HIDE_COORDS = new AlertFormat(new byte[]{1, 8, 2, 8, 3, 8, 7, 6, 0, 4}, new String[]{"[world X X X]"});
-    public static final AlertFormat HIDE_COORDS_AND_NAME = new AlertFormat(new byte[]{1, 8, 2, 8, 7, 6, 0, 3, 8, 7, 6, 1, 4}, new String[]{"Hidden", "[world X X X]"});
-    public static final AlertFormat GJUM_SPECIAL = new AlertFormat(new byte[]{1, 8, 2, 8, 7, 3, 4}, new String[]{});
+    public static final AlertFormat NORMAL = new AlertFormat("Normal",new byte[]{1, 8, 2, 8, 3, 8, 4}, new String[]{});
+    public static final AlertFormat HIDE_COORDS = new AlertFormat("Hide Coords",new byte[]{1, 8, 2, 8, 3, 8, 7, 6, 0, 4}, new String[]{"[world X X X]"});
+    public static final AlertFormat HIDE_COORDS_AND_NAME = new AlertFormat("Hide Coords and Name",new byte[]{1, 8, 2, 8, 7, 6, 0, 3, 8, 7, 6, 1, 4}, new String[]{"Hidden", "[world X X X]"});
+    public static final AlertFormat GJUM_SPECIAL = new AlertFormat("Gjum Special",new byte[]{1, 8, 2, 8, 7, 3, 4}, new String[]{});
 
-
+    private String name;
     public byte[] instructions;
     public String[] literals;
 
-    public AlertFormat(byte[] instructions, String[] literals)
+    public AlertFormat(String name, byte[] instructions, String[] literals)
     {
+        this.name = name;
         this.instructions = instructions;
         this.literals = literals;
     }
 
     public String getName()
     {
-        return "";
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     @Override
@@ -50,7 +56,7 @@ public class AlertFormat
                 return GetDefaultQuietTimeConfig();
             byte[] bytes = ParseByteArray(parts[0]);
             String[] literals = parts.length > 1 ? ParseStringArray(parts[1]) : new String[0];
-            return new AlertFormat(bytes, literals);
+            return new AlertFormat("Loaded", bytes, literals);
         }
         catch (Exception e)
         {

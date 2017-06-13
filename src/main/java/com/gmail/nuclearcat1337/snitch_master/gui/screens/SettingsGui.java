@@ -3,8 +3,12 @@ package com.gmail.nuclearcat1337.snitch_master.gui.screens;
 import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchalerts.AlertFormat;
+import com.gmail.nuclearcat1337.snitch_master.gui.snitchalerts.AlertFormatsTable;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+
+import java.util.ArrayList;
 
 /**
  * Created by Mr_Little_Kitty on 12/29/2016.
@@ -81,7 +85,10 @@ public class SettingsGui extends GuiScreen
                 settings.saveSettings();
                 break;
             case 3: //"Quiet Time"
-                this.mc.displayGuiScreen(new QuietTimeGui(this, settings));
+                //this.mc.displayGuiScreen(new QuietTimeGui(this, settings));
+                ArrayList<AlertFormat> format = new ArrayList<>();
+                format.add(new AlertFormat("Test",new byte[]{1},new String[]{}));
+                this.mc.displayGuiScreen(new AlertFormatsTable(SnitchMaster.instance.getManager(),this,format));
                 break;
             case 4: //"Updating Snitches Spam: "
                 nextChatSpamState();

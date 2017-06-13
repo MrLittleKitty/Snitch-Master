@@ -53,6 +53,17 @@ public class AlertFormatsTable extends TableTopGui<AlertFormat>
         return cols;
     }
 
+    @Override
+    public void actionPerformed(GuiButton button)
+    {
+        if(button.id == firstId)
+        {
+            mc.displayGuiScreen(new NewAlertFormatScreen(this,null,null));
+        }
+
+        super.actionPerformed(button);
+    }
+
     private class EditButtonClick implements TableButtonColumn.OnButtonClick<AlertFormat>
     {
         @Override

@@ -89,14 +89,17 @@ public abstract class TableTopGui<T> extends GuiScreen
         xPos -= ((GuiConstants.STANDARD_SEPARATION_DISTANCE * 4) + buttonWidth);
 
         if(!columnLocked)
+        {
             columnsButton = new GuiButton(1, xPos, yPos, buttonWidth, GuiConstants.STANDARD_BUTTON_HEIGHT, "Columns");
-
-        buttonList.add(doneButton);
-        buttonList.add(columnsButton);
-
-        //buttonList.add(new DropMenu(2,20,20));
-
-        initializeButtons(3);
+            buttonList.add(doneButton);
+            buttonList.add(columnsButton);
+            initializeButtons(3);
+        }
+        else
+        {
+            buttonList.add(doneButton);
+            initializeButtons(2);
+        }
 
         super.initGui();
     }

@@ -49,7 +49,7 @@ public class AlertLanguage
         if(instruction == HOVER_EVENT)
             return "Hover Event";
         if(instruction == INSERT_SPACE)
-            return "INSERT SPACE";
+            return "Insert Space";
         return "None";
     }
 }

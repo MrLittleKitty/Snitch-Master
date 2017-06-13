@@ -197,6 +197,20 @@ public class EditSnitchScreen extends GuiScreen
     }
 
     @Override
+    public void updateScreen()
+    {
+        nameBox.updateCursorCounter();
+        groupBox.updateCursorCounter();
+        xBox.updateCursorCounter();
+        yBox.updateCursorCounter();
+        zBox.updateCursorCounter();
+        worldBox.updateCursorCounter();
+        cullTimeBox.updateCursorCounter();
+        distanceBox.updateCursorCounter();
+        super.updateScreen();
+    }
+
+    @Override
     public void keyTyped(char par1, int par2) throws IOException
     {
         if(par2 == Keyboard.KEY_RETURN)
