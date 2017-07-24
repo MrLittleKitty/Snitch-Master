@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  */
 public class ChatSnitchParser
 {
-    private static final Pattern jaListPattern = Pattern.compile("\\s*World: (\\S*)\\sLocation: \\[([-\\d]+) ([-\\d]+) ([-\\d]+)\\]\\sHours to cull: ([-\\d]*)\\sGroup: (\\S*)\\sName: (\\S*)\\s*", Pattern.MULTILINE);
+    private static final Pattern jaListPattern = Pattern.compile("\\s*Location: \\[(\\S*) ?([-\\d]+) ([-\\d]+) ([-\\d]+)\\]\\sGroup: (\\S*)\\sType: (\\S*)\\sCull: ([-\\d.]*)h\\sName: (\\S*)\\s*", Pattern.MULTILINE);
     private static final Pattern snitchAlertPattern = Pattern.compile("\\s*\\*\\s*([^\\s]*)\\s\\b(entered snitch at|logged out in snitch at|logged in to snitch at)\\b\\s*([^\\s]*)\\s\\[([^\\s]*)\\s([-\\d]*)\\s([-\\d]*)\\s([-\\d]*)\\]");
 
     private static final String[] resetSequences = {"Unknown command", " is empty", "You do not own any snitches nearby!"};
@@ -68,6 +68,10 @@ public class ChatSnitchParser
         this.alertRecipients.add(recipient);
     }
 
+    private static String stripMinecraftFormattingCodes(String str) {
+        return str.replaceAll("(?i)\\u00A7[a-z0-9]", "");
+    }
+
     @SubscribeEvent
     public void chatParser(ClientChatReceivedEvent event)
     {
@@ -78,6 +82,8 @@ public class ChatSnitchParser
         String msgText = msg.getUnformattedText();
         if (msgText == null)
             return;
+
+        msgText = stripMinecraftFormattingCodes(msgText);
 
         //Check if its the tps message (this is quick)
         if (msgText.contains(tpsMessage))
@@ -156,7 +162,7 @@ public class ChatSnitchParser
         HoverEvent hover = hoverComponent.getStyle().getHoverEvent();
         if (hover != null)
         {
-            String text = hover.getValue().getUnformattedComponentText();
+            String text = stripMinecraftFormattingCodes(hover.getValue().getUnformattedComponentText());
             try
             {
                 String[] args = text.split("\n");
@@ -175,8 +181,7 @@ public class ChatSnitchParser
 
                 if(snitch != null)
                 {
-                    snitch.setSnitchName(newName);
-                    snitchMaster.individualJourneyMapUpdate(snitch);
+                    manager.setSnitchName(snitch,newName);
                     return true;
                 }
             }
@@ -199,7 +204,7 @@ public class ChatSnitchParser
         HoverEvent hover = hoverComponent.getStyle().getHoverEvent();
         if (hover != null)
         {
-            String text = hover.getValue().getUnformattedComponentText();
+            String text = stripMinecraftFormattingCodes(hover.getValue().getUnformattedComponentText());
             Snitch snitch = parseSnitchFromChat(text);
             if (snitch != null)
             {
@@ -274,7 +279,7 @@ public class ChatSnitchParser
                 HoverEvent event = row.getStyle().getHoverEvent();
                 if (event != null)
                 {
-                    hoverText = event.getValue().getUnformattedComponentText();
+                    hoverText = stripMinecraftFormattingCodes(event.getValue().getUnformattedComponentText());
 
                     Matcher matcher = jaListPattern.matcher(hoverText);
                     if (!matcher.matches())
@@ -310,14 +315,16 @@ public class ChatSnitchParser
         int z = Integer.parseInt(matcher.group(4));
         double cullTime;
 
-        String cullTimeString = matcher.group(5);
+        String ctGroup = matcher.group(5);
+        String ctType = matcher.group(6); // TODO unused at the moment, could track in each snitch
+
+        String cullTimeString = matcher.group(7);
         if (cullTimeString == null || cullTimeString.isEmpty())
             cullTime = Double.NaN;
         else
             cullTime = Double.parseDouble(cullTimeString);
 
-        String ctGroup = matcher.group(6);
-        String name = matcher.group(7);
+        String name = matcher.group(8);
 
         return new Snitch(new Location(x, y, z, worldName), SnitchTags.FROM_JALIST, cullTime, ctGroup, name);
     }
