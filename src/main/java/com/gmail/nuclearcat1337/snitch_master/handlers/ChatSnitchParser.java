@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  */
 public class ChatSnitchParser
 {
-    private static final Pattern jaListPattern = Pattern.compile("\\s*World: (\\S*)\\sLocation: \\[([-\\d]+) ([-\\d]+) ([-\\d]+)\\]\\sHours to cull: ([-\\d]*)\\sGroup: (\\S*)\\sName: (\\S*)\\s*", Pattern.MULTILINE);
+    private static final Pattern jaListPattern = Pattern.compile("\\s*Location: \\[(\\S*) ?([-\\d]+) ([-\\d]+) ([-\\d]+)\\]\\sGroup: (\\S*)\\sType: (\\S*)\\sCull: ([-\\d.]*)h\\sName: (\\S*)\\s*", Pattern.MULTILINE);
     private static final Pattern snitchAlertPattern = Pattern.compile("\\s*\\*\\s*([^\\s]*)\\s\\b(entered snitch at|logged out in snitch at|logged in to snitch at)\\b\\s*([^\\s]*)\\s\\[([^\\s]*)\\s([-\\d]*)\\s([-\\d]*)\\s([-\\d]*)\\]");
 
     private static final String[] resetSequences = {"Unknown command", " is empty", "You do not own any snitches nearby!"};
@@ -315,14 +315,16 @@ public class ChatSnitchParser
         int z = Integer.parseInt(matcher.group(4));
         double cullTime;
 
-        String cullTimeString = matcher.group(5);
+        String ctGroup = matcher.group(5);
+        String ctType = matcher.group(6); // TODO unused at the moment, could track in each snitch
+
+        String cullTimeString = matcher.group(7);
         if (cullTimeString == null || cullTimeString.isEmpty())
             cullTime = Double.NaN;
         else
             cullTime = Double.parseDouble(cullTimeString);
 
-        String ctGroup = matcher.group(6);
-        String name = matcher.group(7);
+        String name = matcher.group(8);
 
         return new Snitch(new Location(x, y, z, worldName), SnitchTags.FROM_JALIST, cullTime, ctGroup, name);
     }
