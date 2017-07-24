@@ -68,6 +68,10 @@ public class ChatSnitchParser
         this.alertRecipients.add(recipient);
     }
 
+    private static String stripMinecraftFormattingCodes(String str) {
+        return str.replaceAll("(?i)\\u00A7[a-z0-9]", "");
+    }
+
     @SubscribeEvent
     public void chatParser(ClientChatReceivedEvent event)
     {
@@ -78,6 +82,8 @@ public class ChatSnitchParser
         String msgText = msg.getUnformattedText();
         if (msgText == null)
             return;
+
+        msgText = stripMinecraftFormattingCodes(msgText);
 
         //Check if its the tps message (this is quick)
         if (msgText.contains(tpsMessage))
@@ -156,7 +162,7 @@ public class ChatSnitchParser
         HoverEvent hover = hoverComponent.getStyle().getHoverEvent();
         if (hover != null)
         {
-            String text = hover.getValue().getUnformattedComponentText();
+            String text = stripMinecraftFormattingCodes(hover.getValue().getUnformattedComponentText());
             try
             {
                 String[] args = text.split("\n");
@@ -198,7 +204,7 @@ public class ChatSnitchParser
         HoverEvent hover = hoverComponent.getStyle().getHoverEvent();
         if (hover != null)
         {
-            String text = hover.getValue().getUnformattedComponentText();
+            String text = stripMinecraftFormattingCodes(hover.getValue().getUnformattedComponentText());
             Snitch snitch = parseSnitchFromChat(text);
             if (snitch != null)
             {
@@ -273,7 +279,7 @@ public class ChatSnitchParser
                 HoverEvent event = row.getStyle().getHoverEvent();
                 if (event != null)
                 {
-                    hoverText = event.getValue().getUnformattedComponentText();
+                    hoverText = stripMinecraftFormattingCodes(event.getValue().getUnformattedComponentText());
 
                     Matcher matcher = jaListPattern.matcher(hoverText);
                     if (!matcher.matches())
