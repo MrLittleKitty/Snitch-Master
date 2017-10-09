@@ -6,32 +6,24 @@ import net.minecraft.client.gui.GuiScreen;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by Mr_Little_Kitty on 12/31/2016.
- */
-public interface TableColumn<T> extends Comparator<T>
-{
-    GuiButton[] prepareEntry(T item);
+public interface TableColumn<T> extends Comparator<T> {
+	GuiButton[] prepareEntry(T item);
 
-    //Must be less than or equal to column width (this is also the header)
-    String getColumnName();
+	//Must be less than or equal to column width (this is also the header)
+	String getColumnName();
 
-    //int getColumnWidth();
+	boolean doBoundsCheck();
 
-    //int getRightSeparationDistance();
+	void clicked(T item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex);
 
-    boolean doBoundsCheck();
+	void released(T item, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex);
 
-    void clicked(T item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex);
+	void draw(T item, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY);
 
-    void released(T item, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex);
+	int getDrawWidth(T item);
 
-    void draw(T item, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY);
+	//Returns a list of strings to draw as hover text
+	List<String> hover(T item, int xPos, int yPos);
 
-    int getDrawWidth(T item);
-
-    //Returns a list of strings to draw as hover text
-    List<String> hover(T item, int xPos, int yPos);
-
-    boolean canSort();
+	boolean canSort();
 }

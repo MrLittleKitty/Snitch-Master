@@ -18,132 +18,97 @@ import org.lwjgl.input.Keyboard;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Created by Mr_Little_Kitty on 9/20/2016.
  * The class that handles the displaying of Snitches on JourneyMap.
  */
 @ParametersAreNonnullByDefault
 @journeymap.client.api.ClientPlugin
-public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterface
-{
-    private final KeyBinding renderJourneyMapOverlay = new KeyBinding("Journey Map Overlay", Keyboard.KEY_Y, "Snitch Master");
-    private boolean renderOverlay;
+public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterface {
+	private final KeyBinding renderJourneyMapOverlay = new KeyBinding("Journey Map Overlay", Keyboard.KEY_Y, "Snitch Master");
+	private boolean renderOverlay;
 
-    private IClientAPI api = null;
+	private IClientAPI api = null;
 
-    public JourneyMapOverlayPlugin()
-    {
-        renderOverlay = false;
-    }
+	public JourneyMapOverlayPlugin() {
+		renderOverlay = false;
+	}
 
-    @SubscribeEvent
-    public void onKeyPress(InputEvent.KeyInputEvent event)
-    {
-        if (renderJourneyMapOverlay.isPressed())
-        {
-            toggleRender();
-            SnitchMaster.SendMessageToPlayer("JourneyMap Overlay: " + (renderOverlay ? "On" : "Off"));
-        }
-    }
+	@SubscribeEvent
+	public void onKeyPress(InputEvent.KeyInputEvent event) {
+		if (renderJourneyMapOverlay.isPressed()) {
+			toggleRender();
+			SnitchMaster.SendMessageToPlayer("JourneyMap Overlay: " + (renderOverlay ? "On" : "Off"));
+		}
+	}
 
-    /**
-     * Toggles the rendering of all Snitches on JourneyMap (both on minimap and on the fullscreen map)
-     */
-    private void toggleRender()
-    {
-        renderOverlay = !renderOverlay;
-        if (!renderOverlay)
-            clearDisplayed();
-        else
-        {
-            IReadOnlyLocatableObjectList<Snitch> snitches = SnitchMaster.instance.getManager().getSnitches();
-            if (snitches != null)
-            {
-                String currentWorld = SnitchMaster.instance.getCurrentWorld();
-                Iterable<Snitch> worldSnitches = snitches.getItemsForWorld(currentWorld);
-                if (worldSnitches != null)
-                    refresh(worldSnitches);
-            }
-        }
-    }
+	private void toggleRender() {
+		renderOverlay = !renderOverlay;
+		if (!renderOverlay) {
+			clearDisplayed();
+		} else {
+			IReadOnlyLocatableObjectList<Snitch> snitches = SnitchMaster.instance.getManager().getSnitches();
+			if (snitches != null) {
+				String currentWorld = SnitchMaster.instance.getCurrentWorld();
+				Iterable<Snitch> worldSnitches = snitches.getItemsForWorld(currentWorld);
+				if (worldSnitches != null) {
+					refresh(worldSnitches);
+				}
+			}
+		}
+	}
 
-    @Override
-    public void initialize(final IClientAPI jmAPI)
-    {
-        this.api = jmAPI;
-        SnitchMaster.jmInterface = this;
+	@Override
+	public void initialize(final IClientAPI jmAPI) {
+		this.api = jmAPI;
+		SnitchMaster.jmInterface = this;
 
-        FMLCommonHandler.instance().bus().register(this);
-        ClientRegistry.registerKeyBinding(renderJourneyMapOverlay);
+		FMLCommonHandler.instance().bus().register(this);
+		ClientRegistry.registerKeyBinding(renderJourneyMapOverlay);
 
-        // Subscribe to desired ClientEvent types from JourneyMap
-        //this.api.subscribe(getModId(), EnumSet.of(MAPPING_STOPPED));
+		SnitchMaster.logger.info("[SnitchMaster] JourneyMap overlay initialized");
+	}
 
-        SnitchMaster.logger.info("[SnitchMaster] JourneyMap overlay initialized");
-    }
+	/**
+	 * Used by JourneyMap to associate a modId with this plugin.
+	 */
+	@Override
+	public String getModId() {
+		return SnitchMaster.MODID;
+	}
 
-    /**
-     * Used by JourneyMap to associate a modId with this plugin.
-     */
-    @Override
-    public String getModId()
-    {
-        return SnitchMaster.MODID;
-    }
+	@Override
+	public void onEvent(ClientEvent clientEvent) {
 
-    @Override
-    public void onEvent(ClientEvent clientEvent)
-    {
+	}
 
-    }
+	private void sendImage(Snitch snitch) {
+		if (api.playerAccepts(getModId(), DisplayType.Image)) {
+			ImageOverlay overlay = SnitchImageFactory.createSnitchOverlay(snitch);
+			try {
+				if (overlay != null) {
+					api.show(overlay);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    //private ArrayList<Snitch> renderedSnitches = new ArrayList<>();
+	@Override
+	public void displaySnitch(Snitch snitch) {
+		if (renderOverlay) {
+			sendImage(snitch);
+		}
+	}
 
-    private void sendImage(Snitch snitch)
-    {
-        if (api.playerAccepts(getModId(), DisplayType.Image))
-        {
-            //renderedSnitches.add(snitch.getLocation());
-            ImageOverlay overlay = SnitchImageFactory.createSnitchOverlay(snitch);
-            try
-            {
-                if (overlay != null)
-                    api.show(overlay);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
+	@Override
+	public void refresh(Iterable<Snitch> snitches) {
+		clearDisplayed();
+		for (Snitch snitch : snitches) {
+			displaySnitch(snitch);
+		}
+	}
 
-    @Override
-    public void displaySnitch(Snitch snitch)
-    {
-        if (renderOverlay)
-            sendImage(snitch);
-    }
-
-    @Override
-    public void refresh(Iterable<Snitch> snitches)
-    {
-        clearDisplayed();
-        for (Snitch snitch : snitches)
-            displaySnitch(snitch);
-    }
-
-    private void clearDisplayed()
-    {
-        api.removeAll(this.getModId());
-    }
-
-    //    @Override
-    //    public void onEvent(ClientEvent clientEvent)
-    //    {
-    //        switch (clientEvent.type)
-    //        {
-    //            case MAPPING_STOPPED:
-    //                clearDisplayed();
-    //                break;
-    //        }
-    //    }
+	private void clearDisplayed() {
+		api.removeAll(this.getModId());
+	}
 }

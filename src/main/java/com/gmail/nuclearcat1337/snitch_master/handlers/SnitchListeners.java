@@ -14,72 +14,51 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-/**
- * Created by Mr_Little_Kitty on 9/8/2016.
- * Handles misc events related to Snitches.
- */
-public class SnitchListeners
-{
-    private final SnitchMaster snitchMaster;
-    private final SnitchManager manager;
+public class SnitchListeners {
+	private final SnitchMaster snitchMaster;
+	private final SnitchManager manager;
 
-    public SnitchListeners(SnitchMaster snitchMaster)
-    {
-        this.snitchMaster = snitchMaster;
-        manager = snitchMaster.getManager();
+	public SnitchListeners(SnitchMaster snitchMaster) {
+		this.snitchMaster = snitchMaster;
+		manager = snitchMaster.getManager();
 
-        MinecraftForge.EVENT_BUS.register(this);
-    }
+		MinecraftForge.EVENT_BUS.register(this);
+	}
 
-    /**
-     * Event that handles when a Snitch is right clicked.
-     */
-    @SubscribeEvent
-    public void onSnitchPlace(PlayerInteractEvent event)
-    {
-        if (event instanceof PlayerInteractEvent.RightClickBlock)
-        {
-            //If manual mode is enabled...
-            if ((Boolean) snitchMaster.getSettings().getValue(Settings.MANUAL_MODE_KEY))
-            {
-                PlayerInteractEvent.RightClickBlock event1 = (PlayerInteractEvent.RightClickBlock) event;
-                BlockPos pos = event1.getPos();
-                if (pos != null)
-                {
-                    IBlockState state = event1.getWorld().getBlockState(pos);
-                    if (state.getBlock().equals(Blocks.JUKEBOX) || state.getBlock().equals(Blocks.NOTEBLOCK))
-                    {
-                        Location loc = new Location(pos.getX(), pos.getY(), pos.getZ(), snitchMaster.getCurrentWorld());
+	/**
+	 * Event that handles when a Snitch is right clicked.
+	 */
+	@SubscribeEvent
+	public void onSnitchPlace(PlayerInteractEvent event) {
+		if (event instanceof PlayerInteractEvent.RightClickBlock) {
+			//If manual mode is enabled...
+			if ((Boolean) snitchMaster.getSettings().getValue(Settings.MANUAL_MODE_KEY)) {
+				PlayerInteractEvent.RightClickBlock event1 = (PlayerInteractEvent.RightClickBlock) event;
+				BlockPos pos = event1.getPos();
+				if (pos != null) {
+					IBlockState state = event1.getWorld().getBlockState(pos);
+					if (state.getBlock().equals(Blocks.JUKEBOX) || state.getBlock().equals(Blocks.NOTEBLOCK)) {
+						Location loc = new Location(pos.getX(), pos.getY(), pos.getZ(), snitchMaster.getCurrentWorld());
+						if (!manager.getSnitches().contains(loc)) {
+							Snitch snitch = new Snitch(loc, SnitchTags.FROM_MANUAL);
+							manager.submitSnitch(snitch);
+							manager.saveSnitches();
+						}
+					}
+				}
+			}
+		}
+	}
 
-                        if (!manager.getSnitches().contains(loc))
-                        {
-                            Snitch snitch = new Snitch(loc, SnitchTags.FROM_MANUAL);
-
-                            manager.submitSnitch(snitch);
-
-                            manager.saveSnitches();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onSnitchBreak(BlockEvent.BreakEvent event)
-    {
-        BlockPos pos = event.getPos();
-        Location loc = new Location(pos.getX(), pos.getY(), pos.getZ(), snitchMaster.getCurrentWorld());
-
-        Snitch snitch = manager.getSnitches().remove(loc);
-        if (snitch != null)
-        {
-            snitchMaster.individualJourneyMapUpdate(snitch);
-
-            manager.saveSnitches();
-
-            SnitchMaster.SendMessageToPlayer("Removed snitch at " + loc.toString());
-        }
-
-    }
+	@SubscribeEvent
+	public void onSnitchBreak(BlockEvent.BreakEvent event) {
+		BlockPos pos = event.getPos();
+		Location loc = new Location(pos.getX(), pos.getY(), pos.getZ(), snitchMaster.getCurrentWorld());
+		Snitch snitch = manager.getSnitches().remove(loc);
+		if (snitch != null) {
+			snitchMaster.individualJourneyMapUpdate(snitch);
+			manager.saveSnitches();
+			SnitchMaster.SendMessageToPlayer("Removed snitch at " + loc.toString());
+		}
+	}
 }
