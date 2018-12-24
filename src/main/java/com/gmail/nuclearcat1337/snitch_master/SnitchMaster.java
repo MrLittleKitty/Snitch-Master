@@ -21,7 +21,7 @@ import java.util.List;
 public class SnitchMaster {
 	public static final String MODID = "snitchmaster";
 	public static final String MODNAME = "Snitch Master";
-	public static final String MODVERSION = "1.0.9";
+	public static final String MODVERSION = "1.2.0";
 	public static final String modDataFolder = "mods/Snitch-Master";
 
 	private static final Minecraft mc = Minecraft.getMinecraft();

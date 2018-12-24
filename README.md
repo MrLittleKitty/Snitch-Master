@@ -2,9 +2,9 @@
 
 Snitch Master --- A Minecraft Forge mod for rendering and managing JukeAlert snitches on servers powered by the [Citadel](https://github.com/Civcraft/Citadel) plugin.
 
-# Current Version
+# Current Version: Minecraft 1.12.2
 
-Minecraft 1.10.2 --- [Release v1.1.1](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.1.1) (NEW!!!)
+Minecraft 1.12.2 --- [Release v1.2.0](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.2.0)
 
 # Screenshots
 
@@ -24,6 +24,7 @@ Minecraft 1.10.2 --- [Release v1.1.1](https://github.com/MrLittleKitty/Snitch-Ma
 
 
 # All Downloads
+Minecraft 1.12.2 --- [Release v1.2.0](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.2.0)
 
 Minecraft 1.10.2 --- [Release v1.1.1](https://github.com/MrLittleKitty/Snitch-Master/releases/tag/v1.1.1)
 
@@ -44,20 +45,24 @@ Minecraft 1.10.2 --- [Release v1.0.3](https://github.com/MrLittleKitty/Snitch-Ma
 3. Run Minecraft and use the mod
 
 # Building the mod yourself
+Everyone:
+1. Clone this project
+2. Run "gradlew setupDecompWorkspace" to setup Minecraft Forge
 
-1. Setup MinecraftForge
-2. Setup Gradle
-3. Create the `libs` directory and place the JourneyMap Jar in there
-4. Run the build.gradle file from this repository
-5. The result can be found at `build/libs/*.jar`
-
+If using IntelliJ IDEA (then do this after above):
+3. Run "gradlew genIntellijRuns"
+4. Open the build.gradle file from IntelliJ
+5. Run Gradle tasks from the Gradle window
+6. (Optional) [Read this guide](https://mcforge.readthedocs.io/en/latest/gettingstarted/)
 # Credits
 
-[Mr_Little_Kitty](https://github.com/MrLittleKitty) - Main manager and creator of the mod
+[Mr_Little_Kitty](https://github.com/MrLittleKitty) - Father of Snitch Master (Creator and wrote a lot of the code)
 
-[Gjum](https://github.com/Gjum) - Code, ideas, bug reports, and general help
+[iykHvfIvfR](https://github.com/iykHvfIvfR) - Step-father of Snitch Master (Maintained and updated Snitch Master after I abandoned her to get a cigarette)
 
-Special thanks to all the contributors over at the [Snitch Visualizer Mod](https://github.com/Scuwr/Snitch-Visualizer) who started the idea of a mod to render snitches in-game.
+[Gjum](https://github.com/Gjum) - Uncle of Snitch Master (Code, ideas, bug reports, and general help)
+
+[Snitch Visualizer Mod Contributors](https://github.com/Scuwr/Snitch-Visualizer) Cousins of Snitch Master (Inspired the creation of Snitch Master)
 
 # License
 
