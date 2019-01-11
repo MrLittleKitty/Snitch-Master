@@ -1,5 +1,7 @@
 /build
 /classes
+/testserver
+/config/serverfiles
 /out
 /run
 /libs

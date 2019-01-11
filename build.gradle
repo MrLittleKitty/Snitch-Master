@@ -3,16 +3,32 @@
 buildscript {
     repositories {
         jcenter()
+        mavenLocal()
         mavenCentral()
         maven { url = "http://files.minecraftforge.net/maven" }
         maven { url 'https://oss.sonatype.org/content/groups/public/' }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
+        classpath "de.undercouch:gradle-download-task:3.4.3"
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+
+repositories {
+    jcenter()
+    mavenLocal()
+    mavenCentral()
+    maven {
+        name 'spigot-repo'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+}
+apply plugin: 'de.undercouch.download'
 
 version = "1.12.2-1.2.0"
 group= "com.gmail.nuclearcat1337.snitch_master" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -36,9 +52,17 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
-
+configurations {
+    server {
+        description = 'dependencies that the server should have'
+        transitive = true
+    }
+}
 
 dependencies {
+    server group: 'org.bukkit', name: 'bukkit', version: project.property('apiversion')
+    server group: 'org.bukkit', name: 'craftbukkit', version: project.property('apiversion')
+
     compile group: "info.journeymap", name: "journeymap-api", version: "1.12-1.4", changing: true
 }
 
@@ -60,4 +84,76 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+def spigotBuildDir = new File("${project.buildDir}/spigot/")
+
+task buildSpigot(type: Exec) {
+    group = 'spigot server'
+    if (hasSpigot()) {
+        enabled = false;
+    } else {
+        dependsOn 'downloadBuildTools'
+
+        if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+            commandLine 'where git'.execute().text.trim().replace('cmd\\git.exe', 'bin\\sh.exe'), '-login', '-c', 'java -jar BuildTools.jar --rev ' + project.property('apibuildtoolversion')
+        } else {
+            commandLine 'java -jar BuildTools.jar --rev ' + project.property('apibuildtoolversion')
+        }
+        workingDir = spigotBuildDir
+    }
+}
+
+task downloadBuildTools(type: de.undercouch.gradle.tasks.download.Download) {
+    group = 'spigot server'
+    spigotBuildDir.mkdirs()
+    src project.property('buildtoolurl')
+    dest new File(spigotBuildDir, 'BuildTools.jar')
+}
+
+task extractServerJar(type: Copy) {
+    group = 'spigot server'
+    from {
+        configurations.server
+    }
+    include("spigot-" + project.property("apiversion") + ".jar")
+    rename("spigot-" + project.property("apiversion") + ".jar", "server.jar")
+    into "testserver/"
+}
+
+task setupDevServer(dependsOn: 'extractServerJar', type: Copy) {
+    group = 'spigot server'
+    from 'config/serverfiles'
+    into 'testserver'
+}
+
+task prepareDevServer(dependsOn: ['buildSpigot', 'setupDevServer']) {
+    group = 'spigot server'
+}
+
+task startDevServer(dependsOn: [prepareDevServer], type: JavaExec) {
+    group = 'spigot server'
+    description = 'Starts a spigot test server'
+    classpath configurations.server
+    main = 'org.bukkit.craftbukkit.Main'
+    workingDir = 'testserver/'
+    standardInput = System.in
+}
+
+task wrapper(type: Wrapper) {
+    group = 'spigot server'
+    description = 'Generates and updates Gradle wrapper files.'
+    gradleVersion = '4.1'
+}
+
+def hasSpigot() {
+    def groupId = 'org.spigotmc'
+    def version = project.property('apiversion')
+    return hasArtifact(groupId, 'spigot-api', version) && hasArtifact(groupId, 'spigot', version)
+}
+
+def hasArtifact(groupId, artifactId, version) {
+    def localMavenRepo = new File(new File(ant.properties['user.home'] as String), '.m2/repository/')
+    def file = new File(localMavenRepo, groupId.replace('.', '/') + '/' + artifactId + '/' + version + '/')
+    return file.exists()
 }
