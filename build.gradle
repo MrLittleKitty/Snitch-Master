@@ -60,7 +60,7 @@ configurations {
 }
 
 dependencies {
-    server group: 'org.bukkit', name: 'bukkit', version: project.property('apiversion')
+    server group: 'org.spigotmc', name: 'spigot', version: project.property('apiversion')
     server group: 'org.bukkit', name: 'craftbukkit', version: project.property('apiversion')
 
     compile group: "info.journeymap", name: "journeymap-api", version: "1.12-1.4", changing: true
