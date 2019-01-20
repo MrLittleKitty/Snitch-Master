@@ -8,6 +8,9 @@ import net.minecraft.client.gui.GuiScreen;
 
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 1/1/2017.
+ */
 public class SnitchCoordinateColumn implements TableColumn<Snitch> {
 	public enum CoordinateType {
 		X, Y, Z;

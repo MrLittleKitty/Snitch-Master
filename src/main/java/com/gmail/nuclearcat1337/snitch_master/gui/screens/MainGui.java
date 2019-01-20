@@ -9,6 +9,9 @@ import com.gmail.nuclearcat1337.snitch_master.gui.snitchtable.SnitchesTable;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
+/**
+ * Created by Mr_Little_Kitty on 9/11/2016.
+ */
 public class MainGui extends GuiScreen {
 	private SnitchMaster snitchMaster;
 

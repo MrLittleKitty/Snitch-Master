@@ -8,6 +8,9 @@ import net.minecraft.client.gui.GuiScreen;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 1/1/2017.
+ */
 public class TableColumnSelectorTop<T> extends GuiScreen {
 	private static final int DONE_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH * 3;
 	private static final int SAVE_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH * 3;

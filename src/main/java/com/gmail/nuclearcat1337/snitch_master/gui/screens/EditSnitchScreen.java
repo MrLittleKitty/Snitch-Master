@@ -13,6 +13,9 @@ import java.io.IOException;
 
 import static com.gmail.nuclearcat1337.snitch_master.gui.snitchtable.SnitchRemoveColumn.removedSnitches;
 
+/**
+ * Created by Mr_Little_Kitty on 5/28/2017.
+ */
 public class EditSnitchScreen extends GuiScreen {
 	private SnitchManager snitchManager;
 	private final GuiScreen previousScreen;

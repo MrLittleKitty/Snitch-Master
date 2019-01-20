@@ -12,12 +12,15 @@ import journeymap.client.api.util.UIState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.math.BlockPos;
-import scala.collection.parallel.ParIterableLike;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
+/**
+ * Created by Mr_Little_Kitty on 9/20/2016.
+ * Handles the creation of the Snitch images to be displayed on JourneyMap (both on minimap and on the fullscreen map)
+ */
 public class SnitchImageFactory {
 	private static final String SNITCH_FORMAT_STRING = "Group: {0}\nName: {1}\nList: {2}";
 

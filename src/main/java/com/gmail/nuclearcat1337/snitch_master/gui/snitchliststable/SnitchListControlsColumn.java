@@ -10,6 +10,9 @@ import net.minecraft.client.gui.GuiScreen;
 
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 1/2/2017.
+ */
 public class SnitchListControlsColumn implements TableColumn<SnitchList> {
 	private static final int ARROW_BUTTON_WIDTH = 20;
 	private static final int ON_OFF_BUTTON_WIDTH = 30;

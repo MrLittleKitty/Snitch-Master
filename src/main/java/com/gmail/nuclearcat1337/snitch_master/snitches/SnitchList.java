@@ -4,6 +4,7 @@ import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
 
 /**
+ * Created by Mr_Little_Kitty on 6/25/2016.
  * A structure that handles the grouping of Snitches by common traits or specified functions.
  */
 public class SnitchList {

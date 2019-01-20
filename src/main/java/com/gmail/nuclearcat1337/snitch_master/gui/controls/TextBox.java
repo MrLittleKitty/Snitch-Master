@@ -3,6 +3,9 @@ package com.gmail.nuclearcat1337.snitch_master.gui.controls;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 
+/**
+ * Created by Mr_Little_Kitty on 9/18/2016.
+ */
 public class TextBox extends GuiTextField {
 	private final String numericRegex;
 	private boolean number, allowNegative;

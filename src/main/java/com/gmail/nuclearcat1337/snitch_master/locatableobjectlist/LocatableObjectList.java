@@ -2,6 +2,9 @@ package com.gmail.nuclearcat1337.snitch_master.locatableobjectlist;
 
 import java.util.*;
 
+/**
+ * Created by Mr_Little_Kitty on 7/26/2016.
+ */
 public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnlyLocatableObjectList<T> implements Collection<T>, RandomAccess {
 	private int modCount = 0;
 	private final ArrayList<T> wrappedList;

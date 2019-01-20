@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 12/31/2016.
+ */
 public abstract class TableTopGui<T> extends GuiScreen {
 	private static final int DONE_BUTTON_WIDTH = GuiConstants.SMALL_BUTTON_WIDTH * 3;
 

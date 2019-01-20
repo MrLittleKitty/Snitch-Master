@@ -4,6 +4,9 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 
 import java.util.Arrays;
 
+/**
+ * Created by Mr_Little_Kitty on 2/22/2017.
+ */
 public class QuietTimeConfig {
 	//TL;DR: Don't even bother trying to read these and understand what they represent. Its not your destiny.
 	public static final QuietTimeConfig NORMAL = new QuietTimeConfig(new byte[]{1, 8, 2, 8, 3, 8, 4}, new String[]{});

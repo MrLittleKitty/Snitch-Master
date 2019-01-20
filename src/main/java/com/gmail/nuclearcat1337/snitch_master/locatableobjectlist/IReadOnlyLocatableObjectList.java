@@ -2,6 +2,9 @@ package com.gmail.nuclearcat1337.snitch_master.locatableobjectlist;
 
 import java.util.Collection;
 
+/**
+ * Created by Mr_Little_Kitty on 7/28/2016.
+ */
 public abstract class IReadOnlyLocatableObjectList<T extends LocatableObject<T>> implements Iterable<T>, Collection<T> {
 	public abstract int size();
 

@@ -12,6 +12,9 @@ import net.minecraft.client.gui.GuiScreen;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 1/3/2017.
+ */
 public class SnitchListRemoveColumn implements TableColumn<SnitchList> {
 	private static Minecraft mc;
 

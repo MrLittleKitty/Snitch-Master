@@ -7,6 +7,10 @@ import com.gmail.nuclearcat1337.snitch_master.util.Location;
 
 import java.util.*;
 
+/**
+ * Created by Mr_Little_Kitty on 6/25/2016.
+ * Represents a Snitch block in Minecraft. (Jukebox or Noteblock as of Sept. 2016)
+ */
 public class Snitch extends LocatableObject<Snitch> {
 	public static final String MAX_NAME_CHARACTERS = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
 

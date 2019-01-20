@@ -5,6 +5,7 @@ import com.gmail.nuclearcat1337.snitch_master.util.Location;
 import net.minecraft.util.text.ITextComponent;
 
 /**
+ * Created by Mr_Little_Kitty on 7/9/2016.
  * Represents a Snitch alert received in chat.
  */
 public class SnitchAlert {

@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 12/31/2016.
+ */
 public class SnitchesTable extends TableTopGui<Snitch> {
 	private static final String SNITCHES_COLUMNS_KEY = "snitches-table-columns";
 	private static final int VIEW_LISTS_BUTTON_WIDTH = 60;

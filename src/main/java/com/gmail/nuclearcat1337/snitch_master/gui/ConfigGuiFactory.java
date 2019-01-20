@@ -7,6 +7,9 @@ import net.minecraftforge.fml.client.IModGuiFactory;
 
 import java.util.Set;
 
+/**
+ * Created by Mr_Little_Kitty on 12/30/2016.
+ */
 public class ConfigGuiFactory implements IModGuiFactory {
 	@Override
 	public void initialize(Minecraft minecraft) {

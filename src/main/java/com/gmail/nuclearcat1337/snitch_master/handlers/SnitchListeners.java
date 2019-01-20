@@ -14,6 +14,10 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+/**
+ * Created by Mr_Little_Kitty on 9/8/2016.
+ * Handles misc events related to Snitches.
+ */
 public class SnitchListeners {
 	private final SnitchMaster snitchMaster;
 	private final SnitchManager manager;

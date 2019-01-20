@@ -8,6 +8,9 @@ import net.minecraft.client.gui.GuiScreen;
 
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 12/31/2016.
+ */
 public class SnitchNameColumn implements TableColumn<Snitch> {
 	private static Minecraft mc;
 

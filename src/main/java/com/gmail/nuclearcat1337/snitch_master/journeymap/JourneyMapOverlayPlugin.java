@@ -9,6 +9,7 @@ import journeymap.client.api.display.DisplayType;
 import journeymap.client.api.display.ImageOverlay;
 import journeymap.client.api.event.ClientEvent;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,6 +19,7 @@ import org.lwjgl.input.Keyboard;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
+ * Created by Mr_Little_Kitty on 9/20/2016.
  * The class that handles the displaying of Snitches on JourneyMap.
  */
 @ParametersAreNonnullByDefault
@@ -61,7 +63,7 @@ public class JourneyMapOverlayPlugin implements IClientPlugin, JourneyMapInterfa
 		this.api = jmAPI;
 		SnitchMaster.jmInterface = this;
 
-		FMLCommonHandler.instance().bus().register(this);
+		MinecraftForge.EVENT_BUS.register(this);
 		ClientRegistry.registerKeyBinding(renderJourneyMapOverlay);
 
 		SnitchMaster.logger.info("[SnitchMaster] JourneyMap overlay initialized");

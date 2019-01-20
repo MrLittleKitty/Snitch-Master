@@ -11,6 +11,9 @@ import net.minecraft.client.gui.GuiScreen;
 
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 1/2/2017.
+ */
 public class SnitchListNameColumn implements TableColumn<SnitchList> {
 	private static Minecraft mc;
 

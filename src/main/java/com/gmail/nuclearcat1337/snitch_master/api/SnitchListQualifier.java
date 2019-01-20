@@ -5,6 +5,7 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import java.util.Collection;
 
 /**
+ * Created by Mr_Little_Kitty on 7/20/2016.
  * A conditional expression for a SnitchList to accept a Snitch.
  */
 public class SnitchListQualifier {

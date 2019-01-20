@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 1/2/2017.
+ */
 public class SnitchListsTable extends TableTopGui<SnitchList> {
 	private static final String SNITCH_LIST_COLUMNS_KEY = "snitch-list-table-columns";
 

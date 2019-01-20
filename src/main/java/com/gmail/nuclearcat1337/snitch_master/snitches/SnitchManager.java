@@ -15,6 +15,9 @@ import java.util.*;
 
 import org.apache.commons.io.FileUtils;
 
+/**
+ * Created by Mr_Little_Kitty on 3/10/2017.
+ */
 public class SnitchManager {
 	private static final Minecraft mc = Minecraft.getMinecraft();
 

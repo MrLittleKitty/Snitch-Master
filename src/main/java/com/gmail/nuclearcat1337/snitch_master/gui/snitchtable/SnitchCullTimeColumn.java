@@ -11,6 +11,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 1/1/2017.
+ */
 public class SnitchCullTimeColumn implements TableColumn<Snitch> {
 	private static final NumberFormat CULL_TIME_FORMAT = new DecimalFormat("#.000");
 	private static Minecraft mc;

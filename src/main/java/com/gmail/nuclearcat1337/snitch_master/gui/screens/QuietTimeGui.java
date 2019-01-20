@@ -9,6 +9,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
+/**
+ * Created by Mr_Little_Kitty on 2/22/2017.
+ */
 public class QuietTimeGui extends GuiScreen {
 	private static final int BUTTON_WIDTH = GuiConstants.MEDIUM_BUTTON_WIDTH;
 

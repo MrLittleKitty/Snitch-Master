@@ -11,6 +11,9 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.HoverEvent;
 
+/**
+ * Created by Mr_Little_Kitty on 12/30/2016.
+ */
 public class QuietTimeHandler implements IAlertRecipient {
 	private static final byte B_PLAYER_NAME = 1;
 	private static final byte B_ACTIVITY_TEXT = 2;

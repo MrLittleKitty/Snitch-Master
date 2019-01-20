@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * Created by Mr_Little_Kitty on 9/11/2016.
  * Manages the current world the player is in. Handles servers with multiple worlds and single player.
  */
 public class WorldInfoListener {
@@ -43,7 +44,6 @@ public class WorldInfoListener {
 
 		//IDK which one this classes uses and I cant be bothered to find out
 		MinecraftForge.EVENT_BUS.register(this);
-		FMLCommonHandler.instance().bus().register(this);
 	}
 
 	@SubscribeEvent

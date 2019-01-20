@@ -29,6 +29,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Created by Mr_Little_Kitty on 6/30/2016.
+ * Handles the parsing of Snitched from the /jalist command.
+ */
 public class ChatSnitchParser {
 	private static final Pattern snitchAlertPattern = Pattern.compile(
 		"\\s*\\*\\s*([^\\s]*)\\s\\b(entered snitch at|logged out in snitch at|logged in to snitch at)\\b\\s*([^\\s]*)\\s\\[([^\\s]*)\\s([-\\d]*)\\s([-\\d]*)\\s([-\\d]*)\\]");

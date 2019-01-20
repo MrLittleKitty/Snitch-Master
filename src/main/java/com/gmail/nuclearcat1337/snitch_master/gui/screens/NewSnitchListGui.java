@@ -15,6 +15,9 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
+/**
+ * Created by Mr_Little_Kitty on 9/18/2016.
+ */
 public class NewSnitchListGui extends GuiScreen {
 	private static final String CREATE_NEW_LIST_STRING = "Create New Snitch List";
 

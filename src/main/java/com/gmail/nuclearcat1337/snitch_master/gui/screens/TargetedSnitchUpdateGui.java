@@ -10,6 +10,9 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
+/**
+ * Created by Mr_Little_Kitty on 1/5/2017.
+ */
 public class TargetedSnitchUpdateGui extends GuiScreen {
 	private static final String START_BOX_TEXT = "Start Index";
 	private static final String STOP_BOX_TEXT = "Stop Index";

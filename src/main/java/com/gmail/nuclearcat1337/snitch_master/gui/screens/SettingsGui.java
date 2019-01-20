@@ -6,6 +6,9 @@ import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
+/**
+ * Created by Mr_Little_Kitty on 12/29/2016.
+ */
 public class SettingsGui extends GuiScreen {
 	private final GuiScreen backToScreen;
 	private final Settings settings;

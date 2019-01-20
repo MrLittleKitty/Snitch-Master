@@ -11,6 +11,9 @@ import net.minecraft.client.renderer.Tessellator;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 1/1/2017.
+ */
 public class TableColumnSelector<T> extends GuiListExtended {
 	private static final String CONTROLS_HEADER = "Controls";
 	private static final String NAME_HEADER = "Column Name";

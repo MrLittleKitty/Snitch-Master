@@ -10,6 +10,9 @@ import net.minecraft.client.renderer.Tessellator;
 
 import java.util.*;
 
+/**
+ * Created by Mr_Little_Kitty on 12/31/2016.
+ */
 public class TableGui<T> extends GuiListExtended {
 	private static final int SEPARATION_DISTANCE = GuiConstants.STANDARD_SEPARATION_DISTANCE * 2;
 

@@ -17,6 +17,10 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Created by Mr_Little_Kitty on 6/25/2016.
+ * The main class for the SnitchMaster mod.
+ */
 @Mod(modid = SnitchMaster.MODID, name = SnitchMaster.MODNAME, version = SnitchMaster.MODVERSION, guiFactory = "com.gmail.nuclearcat1337.snitch_master.gui.ConfigGuiFactory")
 public class SnitchMaster {
 	public static final String MODID = "snitchmaster";

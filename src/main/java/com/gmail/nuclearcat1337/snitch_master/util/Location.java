@@ -2,6 +2,9 @@ package com.gmail.nuclearcat1337.snitch_master.util;
 
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
 
+/**
+ * Created by Mr_Little_Kitty on 7/27/2016.
+ */
 public class Location implements ILocation {
 	private final int x;
 	private final int y;

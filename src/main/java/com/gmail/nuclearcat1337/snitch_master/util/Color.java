@@ -2,6 +2,9 @@ package com.gmail.nuclearcat1337.snitch_master.util;
 
 import org.apache.commons.lang3.SerializationException;
 
+/**
+ * Created by Mr_Little_Kitty on 7/3/2016.
+ */
 public class Color {
 	private int red, green, blue;
 
