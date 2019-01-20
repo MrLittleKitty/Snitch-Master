@@ -64,6 +64,8 @@ dependencies {
     server group: 'org.bukkit', name: 'craftbukkit', version: project.property('apiversion')
 
     compile group: "info.journeymap", name: "journeymap-api", version: "1.12-1.4", changing: true
+
+    testCompile "junit:junit:4.11"
 }
 
 processResources

@@ -61,7 +61,7 @@ If using IntelliJ IDEA (then do this after above):
 
 [Mr_Little_Kitty](https://github.com/MrLittleKitty) - Father of Snitch Master (Creator and wrote a lot of the code)
 
-[iykHvfIvfR](https://github.com/iykHvfIvfR) - Step-father of Snitch Master (Maintained and updated Snitch Master after I abandoned her to get a cigarette)
+[iykHvfIvfR](https://github.com/iykHvfIvfR) - Abusive Step-father of Snitch Master (Maintained and updated Snitch Master but also abused her codebase)
 
 [Gjum](https://github.com/Gjum) - Uncle of Snitch Master (Code, ideas, bug reports, and general help)
 

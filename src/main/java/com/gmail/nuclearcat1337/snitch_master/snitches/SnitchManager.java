@@ -61,7 +61,6 @@ public class SnitchManager {
 
 		//IDK which one this classes uses and I cant be bothered to find out
 		MinecraftForge.EVENT_BUS.register(this);
-		FMLCommonHandler.instance().bus().register(this);
 	}
 
 	@SubscribeEvent
