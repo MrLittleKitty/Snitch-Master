@@ -1,9 +1,8 @@
 package com.gmail.nuclearcat1337.snitch_master.snitches;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObject;
-import com.gmail.nuclearcat1337.snitch_master.util.Location;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 
 import java.util.*;
 
@@ -25,7 +24,7 @@ public class Snitch extends LocatableObject<Snitch> {
 	 */
 	public static final Double MAX_CULL_TIME = 672D;
 
-	private final ILocation location;
+	private final Location location;
 
 	HashSet<String> tags;
 
@@ -56,7 +55,7 @@ public class Snitch extends LocatableObject<Snitch> {
 	 *
 	 * @param location The location of this Snitch block.
 	 */
-	public Snitch(ILocation location) {
+	public Snitch(Location location) {
 		this.location = location;
 
 		this.tags = new HashSet<>();
@@ -70,7 +69,7 @@ public class Snitch extends LocatableObject<Snitch> {
 		description = null;
 	}
 
-	public Snitch(ILocation location, String initialTag) {
+	public Snitch(Location location, String initialTag) {
 		this(location);
 		if (initialTag != null) {
 			tags.add(initialTag);
@@ -86,7 +85,7 @@ public class Snitch extends LocatableObject<Snitch> {
 	 * @param ctGroup    The Citadel group name of the group this Snitch is reinforced under.
 	 * @param name The name of this Snitch.
 	 */
-	public Snitch(ILocation location, String tag, double culltime, String ctGroup, String name, String previousName, String snitchType) {
+	public Snitch(Location location, String tag, double culltime, String ctGroup, String name, String previousName, String snitchType) {
 		this(location, tag);
 		this.cullTime = culltime;
 		this.ctGroup = ctGroup == null ? DEFAULT_NAME : ctGroup;
@@ -120,7 +119,7 @@ public class Snitch extends LocatableObject<Snitch> {
 	}
 
 	@Override
-	public ILocation getLocation() {
+	public Location getLocation() {
 		return location;
 	}
 
@@ -197,7 +196,7 @@ public class Snitch extends LocatableObject<Snitch> {
 	 * Returns an arbitrary number meant to sort ILocation objects according to their location.
 	 */
 	@Override
-	public int compareTo(ILocation other) {
+	public int compareTo(Location other) {
 		int compare = location.getWorld().compareTo(other.getWorld());
 		if (compare != 0) {
 			return compare;

@@ -1,7 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.api;
 
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
-import com.gmail.nuclearcat1337.snitch_master.util.Location;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import net.minecraft.util.text.ITextComponent;
 
 /**
@@ -10,7 +9,7 @@ import net.minecraft.util.text.ITextComponent;
  */
 public class SnitchAlert {
 	private final String playerName;
-	private final ILocation point;
+	private final Location point;
 	private final String snitchName;
 	private final SnitchActivity activity;
 	private final String world;
@@ -29,7 +28,7 @@ public class SnitchAlert {
 		return playerName;
 	}
 
-	public ILocation getLocation() {
+	public Location getLocation() {
 		return point;
 	}
 

@@ -3,7 +3,7 @@ package com.gmail.nuclearcat1337.snitch_master.gui.screens;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.controls.TextBox;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import net.minecraft.client.gui.*;
@@ -93,7 +93,7 @@ public class EditSnitchScreen extends GuiScreen {
 
 		xPos += cullTimeBox.width + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-		ILocation loc = snitch.getLocation();
+        Location loc = snitch.getLocation();
 
 		String text;
 		if (!SnitchMaster.instance.getCurrentWorld().equalsIgnoreCase(loc.getWorld())) {

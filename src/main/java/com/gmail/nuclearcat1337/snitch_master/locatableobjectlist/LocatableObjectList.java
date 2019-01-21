@@ -83,7 +83,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
 		return remove(element.getLocation()) != null;
 	}
 
-	public T remove(ILocation location) {
+	public T remove(Location location) {
 		//Were only going to search the area in the arraylist that corresponds to the right world
 		IntPair pair = worldIndices.get(location.getWorld());
 		if (pair == null) {
@@ -138,8 +138,8 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
 
 	@Override
 	public boolean remove(Object o) {
-		if (o instanceof ILocation) {
-			T removedValue = remove((ILocation) o);
+		if (o instanceof Location) {
+			T removedValue = remove((Location) o);
 			return removedValue != null;
 		}
 		else if (o instanceof LocatableObject) {
@@ -190,7 +190,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
 	}
 
 	@Override
-	public boolean contains(ILocation location) {
+	public boolean contains(Location location) {
 		IntPair pair = worldIndices.get(location.getWorld());
 		if (pair == null) {
 			return false;
@@ -204,8 +204,8 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
 
 	@Override
 	public boolean contains(Object o) {
-		if (o instanceof ILocation) {
-			return contains((ILocation) o);
+		if (o instanceof Location) {
+			return contains((Location) o);
 		} else if (o instanceof LocatableObject) {
 			return contains(((LocatableObject) o).getLocation());
 		}
@@ -238,7 +238,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
 	}
 
 	@Override
-	public T get(ILocation location) {
+	public T get(Location location) {
 		//Were only going to search the area in the arraylist that corresponds to the right world
 		IntPair pair = worldIndices.get(location.getWorld());
 		if (pair == null) {
@@ -306,7 +306,7 @@ public class LocatableObjectList<T extends LocatableObject<T>> extends IReadOnly
 		return copy;
 	}
 
-	private static int binarySearch(ArrayList<? extends LocatableObject> list, int low, int high, ILocation location) {
+	private static int binarySearch(ArrayList<? extends LocatableObject> list, int low, int high, Location location) {
 		while (low <= high) {
 			int mid = (low + high) >>> 1;
 			LocatableObject midVal = list.get(mid);

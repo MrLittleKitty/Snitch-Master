@@ -8,7 +8,7 @@ import com.gmail.nuclearcat1337.snitch_master.api.SnitchAlert;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchTags;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
-import com.gmail.nuclearcat1337.snitch_master.util.Location;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -25,7 +25,6 @@ import com.google.gson.JsonObject;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

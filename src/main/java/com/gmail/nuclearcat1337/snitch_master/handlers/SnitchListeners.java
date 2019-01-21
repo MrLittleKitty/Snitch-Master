@@ -5,7 +5,7 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchTags;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
-import com.gmail.nuclearcat1337.snitch_master.util.Location;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;

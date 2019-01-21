@@ -14,6 +14,7 @@ buildscript {
     dependencies {
         classpath "de.undercouch:gradle-download-task:3.4.3"
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "io.franzbecker:gradle-lombok:1.14"
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -29,6 +30,7 @@ repositories {
     }
 }
 apply plugin: 'de.undercouch.download'
+apply plugin: 'io.franzbecker.gradle-lombok'
 
 version = "1.12.2-1.2.0"
 group= "com.gmail.nuclearcat1337.snitch_master" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -37,6 +39,11 @@ archivesBaseName = "SnitchMaster"
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
+}
+
+lombok { // optional: values below are the defaults
+    version = "1.16.20"
+    sha256 = "c5178b18caaa1a15e17b99ba5e4023d2de2ebc18b58cde0f5a04ca4b31c10e6d"
 }
 
 minecraft {

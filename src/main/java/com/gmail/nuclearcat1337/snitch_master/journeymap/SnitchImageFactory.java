@@ -2,7 +2,7 @@ package com.gmail.nuclearcat1337.snitch_master.journeymap;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.screens.EditSnitchScreen;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import journeymap.client.api.display.IOverlayListener;
@@ -35,7 +35,7 @@ public class SnitchImageFactory {
             MapImage image = new MapImage(createSnitchField((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue()));
             image.setRotation(0); //Bug in JourneyMap where rotation never gets set but is called anyway (null pointer)
 
-            ILocation loc = snitch.getLocation();
+            Location loc = snitch.getLocation();
             String displayID = loc.getX() + "," + loc.getY() + "," + loc.getZ() + "," + loc.getWorld();
 
             BlockPos nw = new BlockPos(snitch.getFieldMinX(), loc.getY(), snitch.getFieldMinZ());

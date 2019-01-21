@@ -3,7 +3,7 @@ package com.gmail.nuclearcat1337.snitch_master.gui.snitchtable;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import net.minecraft.client.Minecraft;
@@ -23,7 +23,7 @@ public class SnitchRemoveColumn implements TableColumn<Snitch> {
 
 	private final int buttonWidth;
 	private final SnitchManager manager;
-	public static final HashSet<ILocation> removedSnitches = new HashSet<>();
+	public static final HashSet<Location> removedSnitches = new HashSet<>();
 
 	public SnitchRemoveColumn(SnitchMaster snitchMaster) {
 		mc = Minecraft.getMinecraft();

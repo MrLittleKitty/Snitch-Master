@@ -10,11 +10,11 @@ public abstract class IReadOnlyLocatableObjectList<T extends LocatableObject<T>>
 
 	public abstract boolean isEmpty();
 
-	public abstract boolean contains(ILocation location);
+	public abstract boolean contains(Location location);
 
 	public abstract boolean contains(T element);
 
-	public abstract T get(ILocation location);
+	public abstract T get(Location location);
 
 	public abstract T get(int index);
 

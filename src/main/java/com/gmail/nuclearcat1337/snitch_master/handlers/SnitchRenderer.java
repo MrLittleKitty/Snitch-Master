@@ -2,7 +2,7 @@ package com.gmail.nuclearcat1337.snitch_master.handlers;
 
 import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchList;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
@@ -51,7 +51,7 @@ public class SnitchRenderer {
 				SnitchList renderList = manager.getRenderListForSnitch(snitch);
 				if (renderList != null) {
 					Color renderColor = renderList.getListColor();
-					ILocation location = snitch.getLocation();
+                    Location location = snitch.getLocation();
 					double distanceSquared = GeneralUtils.DistanceSquared(location.getX(), location.getZ(), (int) mc.player.posX, (int) mc.player.posZ);
 
 					if (distanceSquared <= BLOCK_RENDER_DISTANCE * BLOCK_RENDER_DISTANCE) {

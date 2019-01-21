@@ -2,7 +2,7 @@ package com.gmail.nuclearcat1337.snitch_master.gui.snitchtable;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.ILocation;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -47,7 +47,7 @@ public class SnitchDistanceColumn implements TableColumn<Snitch> {
 
 	@Override
 	public void draw(Snitch snitch, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY) {
-		ILocation loc = snitch.getLocation();
+        Location loc = snitch.getLocation();
 
 		String text;
 		if (!SnitchMaster.instance.getCurrentWorld().equalsIgnoreCase(loc.getWorld())) {
@@ -65,7 +65,7 @@ public class SnitchDistanceColumn implements TableColumn<Snitch> {
 
 	@Override
 	public int getDrawWidth(Snitch snitch) {
-		ILocation loc = snitch.getLocation();
+        Location loc = snitch.getLocation();
 
 		if (!SnitchMaster.instance.getCurrentWorld().equalsIgnoreCase(loc.getWorld())) {
 			return mc.fontRenderer.getStringWidth("NA");
@@ -88,8 +88,8 @@ public class SnitchDistanceColumn implements TableColumn<Snitch> {
 
 	@Override
 	public int compare(Snitch snitch, Snitch other) {
-		ILocation snitchLoc = snitch.getLocation();
-		ILocation otherLoc = other.getLocation();
+        Location snitchLoc = snitch.getLocation();
+        Location otherLoc = other.getLocation();
 		String world = SnitchMaster.instance.getCurrentWorld();
 		boolean b1 = snitchLoc.getWorld().equalsIgnoreCase(world);
 		boolean b2 = otherLoc.getWorld().equalsIgnoreCase(world);
