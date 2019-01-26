@@ -7,7 +7,6 @@ import com.gmail.nuclearcat1337.snitch_master.util.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.*;
@@ -129,7 +128,7 @@ public class SnitchManager {
 
 	public boolean doesListWithNameExist(String name) {
 		for (SnitchList list : snitchLists) {
-			if (list.getListName().equalsIgnoreCase(name)) {
+			if (list.getName().equalsIgnoreCase(name)) {
 				return true;
 			}
 		}
@@ -158,7 +157,7 @@ public class SnitchManager {
 		}
 
 		for (int i = 0; i < snitchLists.size(); i++) {
-			if (snitchLists.get(i).getListName().equalsIgnoreCase(name)) {
+			if (snitchLists.get(i).getName().equalsIgnoreCase(name)) {
 				SnitchList list = snitchLists.remove(i);
 
 				//Now we need to update the render priority of all the remaining snitch lists

@@ -42,7 +42,7 @@ public class SnitchListNameColumn implements TableColumn<SnitchList> {
 	@Override
 	public void clicked(SnitchList list, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex) {
 		if (!leftClick) {
-			mc.displayGuiScreen(new EditStringGui(parentScreen, list.getListName(), "Edit List Name", new EditNameAcceptor(list), 20));
+			mc.displayGuiScreen(new EditStringGui(parentScreen, list.getName(), "Edit List Name", new EditNameAcceptor(list), 20));
 		}
 	}
 
@@ -54,7 +54,7 @@ public class SnitchListNameColumn implements TableColumn<SnitchList> {
 	@Override
 	public void draw(SnitchList list, int xPos, int yPos, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY) {
 		int stringYPosition = yPos + ((slotHeight - mc.fontRenderer.FONT_HEIGHT) / 2);
-		String text = list.getListName();
+		String text = list.getName();
 		int stringWidth = mc.fontRenderer.getStringWidth(text);
 		int namePos = xPos + (columnWidth / 2) - (stringWidth / 2);
 		mc.fontRenderer.drawString(text, namePos, stringYPosition, 16777215);
@@ -62,7 +62,7 @@ public class SnitchListNameColumn implements TableColumn<SnitchList> {
 
 	@Override
 	public int getDrawWidth(SnitchList list) {
-		return mc.fontRenderer.getStringWidth(list.getListName());
+		return mc.fontRenderer.getStringWidth(list.getName());
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class SnitchListNameColumn implements TableColumn<SnitchList> {
 
 	@Override
 	public int compare(SnitchList list, SnitchList other) {
-		return list.getListName().compareTo(other.getListName());
+		return list.getName().compareTo(other.getName());
 	}
 
 	private class EditNameAcceptor implements Acceptor<String> {
@@ -93,7 +93,7 @@ public class SnitchListNameColumn implements TableColumn<SnitchList> {
 			//Note, if they don't change the name and just click OK then this will stop us from unnecessarily updating
 			boolean valid = !manager.doesListWithNameExist(item);
 			if (valid) {
-				list.setListName(item);
+				list.setName(item);
 				manager.saveSnitchLists();
 				return true;
 			}

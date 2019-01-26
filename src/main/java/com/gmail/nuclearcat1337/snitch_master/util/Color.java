@@ -2,6 +2,8 @@ package com.gmail.nuclearcat1337.snitch_master.util;
 
 import org.apache.commons.lang3.SerializationException;
 
+import java.util.Objects;
+
 /**
  * Created by Mr_Little_Kitty on 7/3/2016.
  */
@@ -56,4 +58,19 @@ public class Color {
 	public static boolean AreEqual(Color one, Color two) {
 		return one.red == two.red && one.green == two.green && one.blue == two.blue;
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Color color = (Color) o;
+        return red == color.red &&
+                green == color.green &&
+                blue == color.blue;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(red, green, blue);
+    }
 }

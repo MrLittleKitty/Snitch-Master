@@ -31,7 +31,7 @@ public class SnitchImageFactory {
         SnitchList renderList = SnitchMaster.instance.getManager().getRenderListForSnitch(snitch);
 
         if (renderList != null) {
-            com.gmail.nuclearcat1337.snitch_master.util.Color color = renderList.getListColor();
+            com.gmail.nuclearcat1337.snitch_master.util.Color color = renderList.getColor();
             MapImage image = new MapImage(createSnitchField((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue()));
             image.setRotation(0); //Bug in JourneyMap where rotation never gets set but is called anyway (null pointer)
 
@@ -43,7 +43,7 @@ public class SnitchImageFactory {
 
             ImageOverlay overlay = new ImageOverlay(SnitchMaster.MODID, displayID, nw, se, image);
 
-            overlay.setTitle(SNITCH_FORMAT_STRING.replace("{0}", snitch.getGroupName()).replace("{1}", snitch.getName()).replace("{2}", renderList.getListName()));
+            overlay.setTitle(SNITCH_FORMAT_STRING.replace("{0}", snitch.getGroupName()).replace("{1}", snitch.getName()).replace("{2}", renderList.getName()));
             overlay.setOverlayListener(new IOverlayListener() {
                 @Override
                 public void onActivate(UIState uiState) {

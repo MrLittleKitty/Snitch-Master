@@ -15,51 +15,51 @@ public class SnitchList {
 
 	private final SnitchManager manager;
 	private int renderPriority;
-	private String listName;
-	private Color listColor;
-	private SnitchListQualifier listQualifier;
+	private String name;
+	private Color color;
+	private SnitchListQualifier qualifier;
 	private boolean renderSnitches;
 
-	SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render) {
+	SnitchList(SnitchManager manager, SnitchListQualifier qualifier, boolean render) {
 		this.manager = manager;
-		listName = defaultName;
-		listColor = defaultColor;
-		this.listQualifier = listQualifier;
+		name = defaultName;
+		color = defaultColor;
+		this.qualifier = qualifier;
 		this.renderSnitches = render;
 	}
 
-	SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render, String name) {
+	SnitchList(SnitchManager manager, SnitchListQualifier qualifier, boolean render, String name) {
 		this.manager = manager;
-		this.listName = name;
-		listColor = defaultColor;
-		this.listQualifier = listQualifier;
+		this.name = name;
+		color = defaultColor;
+		this.qualifier = qualifier;
 		this.renderSnitches = render;
 	}
 
-	SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render, Color color) {
+	SnitchList(SnitchManager manager, SnitchListQualifier qualifier, boolean render, Color color) {
 		this.manager = manager;
-		listName = defaultName;
-		listColor = color;
-		this.listQualifier = listQualifier;
+		name = defaultName;
+		this.color = color;
+		this.qualifier = qualifier;
 		this.renderSnitches = render;
 	}
 
-	SnitchList(SnitchManager manager, SnitchListQualifier listQualifier, boolean render, String name, Color color) {
+	SnitchList(SnitchManager manager, SnitchListQualifier qualifier, boolean render, String name, Color color) {
 		this.manager = manager;
-		this.listName = name;
-		listColor = color;
-		this.listQualifier = listQualifier;
+		this.name = name;
+		this.color = color;
+		this.qualifier = qualifier;
 		this.renderSnitches = render;
 	}
 
-	public String getListName() {
-		return listName;
+	public String getName() {
+		return name;
 	}
 
-	public void setListName(String name) {
-		this.listName = name;
-		if (listName.length() > 20) {
-			listName = listName.substring(0, 19);
+	public void setName(String name) {
+		this.name = name;
+		if (this.name.length() > 20) {
+			this.name = this.name.substring(0, 19);
 		}
 		manager.journeyMapRedisplay(this);
 	}
@@ -80,12 +80,12 @@ public class SnitchList {
 		manager.changeListRenderPriority(this, false);
 	}
 
-	public Color getListColor() {
-		return listColor;
+	public Color getColor() {
+		return color;
 	}
 
-	public void setListColor(Color newColor) {
-		this.listColor = newColor;
+	public void setColor(Color newColor) {
+		this.color = newColor;
 		manager.journeyMapRedisplay(this);
 	}
 
@@ -99,12 +99,12 @@ public class SnitchList {
 	}
 
 	public SnitchListQualifier getQualifier() {
-		return listQualifier;
+		return qualifier;
 	}
 
 	public boolean updateQualifier(String newQualifier) {
 		if (SnitchListQualifier.isSyntaxValid(newQualifier)) {
-			this.listQualifier = new SnitchListQualifier(newQualifier);
+			this.qualifier = new SnitchListQualifier(newQualifier);
 			manager.requalifyList(this);
 			return true;
 		}
@@ -120,12 +120,12 @@ public class SnitchList {
 			return false;
 		}
 		SnitchList that = (SnitchList) o;
-		return listName.equals(that.listName);
+		return name.equals(that.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return listName.hashCode();
+		return name.hashCode();
 	}
 
 	static final int NUMBER_OF_CSV_PARAMS = 5;
@@ -133,8 +133,8 @@ public class SnitchList {
 
 	public static String ConvertSnitchListToCSV(SnitchList list) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(Scrub(list.getListName())).append(CSV_SEPARATOR);
-		builder.append(list.getListColor().serialize()).append(CSV_SEPARATOR);
+		builder.append(Scrub(list.getName())).append(CSV_SEPARATOR);
+		builder.append(list.getColor().serialize()).append(CSV_SEPARATOR);
 		builder.append(list.getRenderPriority()).append(CSV_SEPARATOR);
 		builder.append(list.shouldRenderSnitches()).append(CSV_SEPARATOR);
 		builder.append(Scrub(list.getQualifier().toString()));

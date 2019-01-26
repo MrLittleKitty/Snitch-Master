@@ -50,7 +50,7 @@ public class SnitchRenderer {
 			for (Snitch snitch : manager.getSnitches().getItemsForWorld(snitchMaster.getCurrentWorld())) {
 				SnitchList renderList = manager.getRenderListForSnitch(snitch);
 				if (renderList != null) {
-					Color renderColor = renderList.getListColor();
+					Color renderColor = renderList.getColor();
                     Location location = snitch.getLocation();
 					double distanceSquared = GeneralUtils.DistanceSquared(location.getX(), location.getZ(), (int) mc.player.posX, (int) mc.player.posZ);
 
@@ -63,7 +63,7 @@ public class SnitchRenderer {
 							if (GeneralUtils.DistanceSquared(location.getX(), location.getZ(), location.getY(), (int) mc.player.posX, (int) mc.player.posZ, (int) mc.player.posY) <= TEXT_RENDER_DISTANCE * TEXT_RENDER_DISTANCE) {
 								String[] text = new String[3];
 								text[0] = snitch.getName();
-								text[1] = String.format("[%s] %s", snitch.getGroupName(), WordUtils.capitalize(snitch.getType()));
+								text[1] = String.format("[%s] [%s]", snitch.getGroupName(), WordUtils.capitalize(snitch.getType()));
 								text[2] = String.format("[%d %d %d]", location.getX(), location.getY(), location.getZ());
 
 								RenderFloatingText(text, (float) location.getX() + 0.5f, location.getY() + 1.01f, location.getZ() + 0.5f, 0xFFFFFF, true, event.getPartialTicks());

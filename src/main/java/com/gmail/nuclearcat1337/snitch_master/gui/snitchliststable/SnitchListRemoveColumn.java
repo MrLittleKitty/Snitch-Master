@@ -49,21 +49,21 @@ public class SnitchListRemoveColumn implements TableColumn<SnitchList> {
 
 	@Override
 	public void clicked(SnitchList item, boolean leftClick, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex) {
-		if (!leftClick || removedSnitchLists.contains(item.getListName())) {
+		if (!leftClick || removedSnitchLists.contains(item.getName())) {
 			return;
 		}
 
 		if (buttons[0].mousePressed(mc, xPos, yPos)) {
-			manager.removeSnitchList(item.getListName());
+			manager.removeSnitchList(item.getName());
 
 			//Deleting a snitch list automatically triggers a save
-			removedSnitchLists.add(item.getListName());
+			removedSnitchLists.add(item.getName());
 		}
 	}
 
 	@Override
 	public void released(SnitchList list, int xPos, int yPos, GuiButton[] buttons, GuiScreen parentScreen, int slotIndex) {
-		if (removedSnitchLists.contains(list.getListName())) {
+		if (removedSnitchLists.contains(list.getName())) {
 			return;
 		}
 		buttons[0].mouseReleased(xPos, yPos);
@@ -71,7 +71,7 @@ public class SnitchListRemoveColumn implements TableColumn<SnitchList> {
 
 	@Override
 	public void draw(SnitchList list, int xPosition, int yPosition, int columnWidth, int slotHeight, GuiButton[] buttons, int slotIndex, int mouseX, int mouseY) {
-		if (removedSnitchLists.contains(list.getListName())) {
+		if (removedSnitchLists.contains(list.getName())) {
 			return;
 		}
 

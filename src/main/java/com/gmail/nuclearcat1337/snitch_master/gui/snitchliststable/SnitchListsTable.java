@@ -159,7 +159,7 @@ public class SnitchListsTable extends TableTopGui<SnitchList> {
 	private final TableButtonColumn.OnButtonClick<SnitchList> colorClick = new TableButtonColumn.OnButtonClick<SnitchList>() {
 		@Override
 		public void onClick(SnitchList list, GuiButton button, GuiScreen parentScreen) {
-			mc.displayGuiScreen(new EditColorGui(parentScreen, list.getListColor(), "Edit Color", new EditColorAcceptor(list)));
+			mc.displayGuiScreen(new EditColorGui(parentScreen, list.getColor(), "Edit Color", new EditColorAcceptor(list)));
 		}
 	};
 
@@ -170,7 +170,7 @@ public class SnitchListsTable extends TableTopGui<SnitchList> {
 			if (snitches.isEmpty()) {
 				button.displayString = "None";
 			} else {
-				mc.displayGuiScreen(new SnitchesTable(parentScreen, snitches, "Snitches for Snitch List: " + list.getListName(), snitchMaster));
+				mc.displayGuiScreen(new SnitchesTable(parentScreen, snitches, "Snitches for Snitch List: " + list.getName(), snitchMaster));
 			}
 		}
 	};
@@ -184,8 +184,8 @@ public class SnitchListsTable extends TableTopGui<SnitchList> {
 
 		@Override
 		public boolean accept(Color item) {
-			if (!Color.AreEqual(item, list.getListColor())) {
-				list.setListColor(item);
+			if (!Color.AreEqual(item, list.getColor())) {
+				list.setColor(item);
 				manager.saveSnitchLists();
 				return true;
 			}
