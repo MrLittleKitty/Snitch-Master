@@ -80,7 +80,8 @@ public class WorldInfoListener {
             } else if (provider instanceof WorldProviderHell) {
                 return "world_nether";
             } else {
-                return "world";
+//                return "world";
+                return "Civex III Final";
             }
         } else {
             return worldID;
