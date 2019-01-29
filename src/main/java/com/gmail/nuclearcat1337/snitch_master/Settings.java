@@ -1,100 +1,198 @@
 package com.gmail.nuclearcat1337.snitch_master;
 
+import com.gmail.nuclearcat1337.snitch_master.util.Pair;
+import com.gmail.nuclearcat1337.snitch_master.util.QuietTimeConfig;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.apache.commons.io.FileUtils;
+
 import java.io.*;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
 /**
  * Created by Mr_Little_Kitty on 7/9/2016.
  */
 public class Settings {
-	private static final String modSettingsFile = SnitchMaster.modDataFolder + "/Settings.txt";
+    private static final String SETTINGS_FILE = SnitchMaster.modDataFolder + "/Settings.txt";
 
-	public enum ChatSpamState {
-		ON, OFF, PAGENUMBERS;
-	}
+    public enum ChatSpamState {
+        ON, OFF, PAGENUMBERS;
+    }
 
-	public static final String CHAT_SPAM_KEY = "chat-spam";
-	public static final String RENDER_TEXT_KEY = "render-text";
-	public static final String MANUAL_MODE_KEY = "manual-mode";
+    private boolean globalRender = true;
+    private boolean renderText = true;
+    private boolean manualMode = false;
+    private ChatSpamState chatSpamState = ChatSpamState.ON;
+    private QuietTimeConfig quietTimeConfig = QuietTimeConfig.NORMAL;
 
-	private final File file;
-	private final ValueParser parser;
+    private List<Pair<String, Boolean>> snitchColumns = new ArrayList<>();
+    private List<Pair<String, Boolean>> snitchListColumns = new ArrayList<>();
 
-	private final HashMap<String, Object> values;
+    public Settings() {
+    }
 
-	public Settings(ValueParser parser) {
-		this.parser = parser;
-		values = new HashMap<>();
+    public void setGlobalRender(boolean globalRender) {
+        this.globalRender = globalRender;
+    }
 
-		file = new File(modSettingsFile);
-		if (file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    public void setRenderText(boolean renderText) {
+        this.renderText = renderText;
+    }
 
-	public void setValueIfNotSet(String key, Object value) {
-		if (!values.containsKey(key)) {
-			values.put(key, value);
-		}
-	}
+    public void setManualMode(boolean manualMode) {
+        this.manualMode = manualMode;
+    }
 
-	public boolean hasValue(String key) {
-		return values.containsKey(key);
-	}
+    public void setChatSpamState(ChatSpamState chatSpamState) {
+        this.chatSpamState = chatSpamState;
+    }
 
-	public void setValue(String key, Object value) {
-		values.put(key, value);
-	}
+    public void setQuietTimeConfig(QuietTimeConfig quietTimeConfig) {
+        this.quietTimeConfig = quietTimeConfig;
+    }
 
-	public Object getValue(String key) {
-		return values.get(key);
-	}
+    public void setSnitchColumns(List<Pair<String, Boolean>> snitchColumns) {
+        this.snitchColumns = snitchColumns;
+    }
 
-	public void loadSettings() {
-		if (file.exists()) {
-			try {
-				BufferedReader reader = new BufferedReader(new FileReader(file));
-				String line = null;
-				while ((line = reader.readLine()) != null) {
-					String[] tokens = line.split("=");
-					Object value = parser.parse(tokens[0], tokens[1]);
-					values.put(tokens[0], value);
-				}
-				reader.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    public void setSnitchListColumns(List<Pair<String, Boolean>> snitchListColumns) {
+        this.snitchListColumns = snitchListColumns;
+    }
 
-	public void saveSettings() {
-		BufferedWriter writer = null;
-		try {
-			if (!file.exists()) {
-				file.createNewFile();
-			}
+    public ChatSpamState getChatSpamState() {
+        return this.chatSpamState;
+    }
 
-			writer = new BufferedWriter(new FileWriter(file));
-			for (Map.Entry<String, Object> entry : values.entrySet()) {
-				writer.write(entry.getKey());
-				writer.write('=');
-				writer.write(entry.getValue().toString());
-				writer.write(System.lineSeparator());
-			}
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public boolean getRenderText() {
+        return this.renderText;
+    }
 
-	public interface ValueParser {
-		Object parse(String key, String value);
-	}
+    public boolean getManualMode() {
+        return this.manualMode;
+    }
+
+    public boolean getGlobalRender() {
+        return this.globalRender;
+    }
+
+    public QuietTimeConfig getQuietTimeConfig() {
+        return this.quietTimeConfig;
+    }
+
+    public List<Pair<String, Boolean>> getSnitchColumns() {
+        return snitchColumns;
+    }
+
+    public List<Pair<String, Boolean>> getSnitchListColumns() {
+        return snitchListColumns;
+    }
+
+    public void loadSettings() {
+        final File settingsFile = new File(SETTINGS_FILE);
+        if (settingsFile.exists()) {
+            final Gson gson = new Gson();
+            try (FileReader reader = new FileReader(settingsFile)) {
+                SerializedSettings settings = gson.fromJson(reader, SerializedSettings.class);
+                fromSerializedSettings(settings);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void saveSettings() {
+        final SerializedSettings settings = toSerializedSettings();
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        final String serialized = gson.toJson(settings);
+
+        final File settingsFile = new File(SETTINGS_FILE);
+        final File directory = settingsFile.getParentFile();
+        if (!directory.exists() || !directory.isDirectory()) {
+            directory.mkdir();
+        }
+        try {
+            FileUtils.write(settingsFile, serialized, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fromSerializedSettings(final SerializedSettings settings) {
+        if (settings != null) {
+            if (settings.globalRender != null) {
+                this.globalRender = settings.globalRender;
+            }
+            if (settings.renderText != null) {
+                this.renderText = settings.renderText;
+            }
+            if (settings.manualMode != null) {
+                this.manualMode = settings.manualMode;
+            }
+            if (settings.chatSpamState != null) {
+                this.chatSpamState = settings.chatSpamState;
+            }
+            if (settings.quietTimeConfig != null && settings.quietTimeConfig.literals != null &&
+                    settings.quietTimeConfig.instructions != null) {
+                this.quietTimeConfig = settings.quietTimeConfig;
+            }
+            if (settings.snitchColumns != null && settings.snitchColumnsRender != null) {
+                this.snitchColumns = loadList(settings.snitchColumns, settings.snitchColumnsRender);
+            }
+            if (settings.snitchListColumns != null && settings.snitchListColumnsRender != null) {
+                this.snitchListColumns = loadList(settings.snitchListColumns, settings.snitchListColumnsRender);
+            }
+        }
+    }
+
+    private SerializedSettings toSerializedSettings() {
+        final SerializedSettings settings = new SerializedSettings();
+        settings.globalRender = globalRender;
+        settings.renderText = renderText;
+        settings.manualMode = manualMode;
+        settings.chatSpamState = chatSpamState;
+        settings.quietTimeConfig = quietTimeConfig;
+
+        settings.snitchColumns = new String[snitchColumns.size()];
+        settings.snitchColumnsRender = new Boolean[snitchColumns.size()];
+        fillSaveArrays(snitchColumns, settings.snitchColumns, settings.snitchColumnsRender);
+
+        settings.snitchListColumns = new String[snitchListColumns.size()];
+        settings.snitchListColumnsRender = new Boolean[snitchListColumns.size()];
+        fillSaveArrays(snitchListColumns, settings.snitchListColumns, settings.snitchListColumnsRender);
+
+        return settings;
+    }
+
+    private List<Pair<String, Boolean>> loadList(final String[] names, final Boolean[] render) {
+        final List<Pair<String, Boolean>> list = new ArrayList<>();
+        for (int i = 0; i < names.length && i < render.length; i++) {
+            list.add(new Pair<String, Boolean>(names[i], render[i]));
+        }
+        return list;
+    }
+
+    private void fillSaveArrays(final List<Pair<String, Boolean>> list, final String[] names, final Boolean[] render) {
+        for (int i = 0; i < list.size(); i++) {
+            final Pair<String, Boolean> pair = list.get(i);
+            names[i] = pair.getOne();
+            render[i] = pair.getTwo();
+        }
+    }
+
+    private static class SerializedSettings {
+        private Boolean globalRender;
+        private Boolean renderText;
+        private Boolean manualMode;
+        private ChatSpamState chatSpamState;
+        private QuietTimeConfig quietTimeConfig;
+
+        private String[] snitchColumns;
+        private Boolean[] snitchColumnsRender;
+
+        private String[] snitchListColumns;
+        private Boolean[] snitchListColumnsRender;
+    }
 }

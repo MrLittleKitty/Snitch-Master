@@ -52,8 +52,8 @@ public class ChatSnitchParser {
 
     private static final String[] resetSequences = {"Unknown command", " is empty", "You do not own any snitches nearby!"};
 
-    private final SnitchMaster snitchMaster;
     private final SnitchManager manager;
+    private final Settings settings;
     private final List<IAlertRecipient> alertRecipients;
 
     private int jaListIndex = 1;
@@ -71,9 +71,9 @@ public class ChatSnitchParser {
     private Long nextTpsRunTime = null;
     private Long nextCommandRunTime = System.currentTimeMillis();
 
-    public ChatSnitchParser(SnitchMaster api) {
-        this.snitchMaster = api;
-        this.manager = snitchMaster.getManager();
+    public ChatSnitchParser(final SnitchManager manager, final Settings settings) {
+        this.manager = manager;
+        this.settings = settings;
         alertRecipients = new ArrayList<>();
         snitchesCopy = null;
         loadedSnitches = null;
@@ -124,7 +124,7 @@ public class ChatSnitchParser {
             }
 
             if (tryParseJalistMsg(message)) {
-                Settings.ChatSpamState state = (Settings.ChatSpamState) snitchMaster.getSettings().getValue(Settings.CHAT_SPAM_KEY);
+                Settings.ChatSpamState state = settings.getChatSpamState();
                 if (state == Settings.ChatSpamState.OFF || state == Settings.ChatSpamState.PAGENUMBERS)
                     event.setCanceled(true);
                 return;
@@ -573,7 +573,7 @@ public class ChatSnitchParser {
             SnitchMaster.SendMessageToPlayer("Finished targeted snitch update");
         } else {
             Minecraft.getMinecraft().player.sendChatMessage("/jalistlong " + jaListIndex);
-            ChatSpamState chatSpamSetting = (ChatSpamState) snitchMaster.getSettings().getValue(Settings.CHAT_SPAM_KEY);
+            ChatSpamState chatSpamSetting = settings.getChatSpamState();
             if (chatSpamSetting == Settings.ChatSpamState.PAGENUMBERS) {
                 SnitchMaster.SendMessageToPlayer("Parsed snitches from /jalist " + jaListIndex);
             }

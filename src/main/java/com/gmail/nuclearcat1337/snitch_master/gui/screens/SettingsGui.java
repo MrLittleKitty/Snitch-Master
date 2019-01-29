@@ -18,10 +18,10 @@ public class SettingsGui extends GuiScreen {
 	private GuiButton renderTextButton;
 	private GuiButton manualModeButton;
 
-	public SettingsGui(GuiScreen backToScreen) {
+	public SettingsGui(final GuiScreen backToScreen, final Settings settings) {
 		this.backToScreen = backToScreen;
 		//This is a hack so that this class can be used with the Forge "config" button
-		this.settings = SnitchMaster.instance.getSettings();
+		this.settings = settings;
 	}
 
 	public void initGui() {
@@ -87,31 +87,23 @@ public class SettingsGui extends GuiScreen {
 	}
 
 	private void nextManualModeState() {
-		Boolean state = (Boolean) settings.getValue(Settings.MANUAL_MODE_KEY);
-		state = state ? Boolean.FALSE : Boolean.TRUE; //Invert the state
-		settings.setValue(Settings.MANUAL_MODE_KEY, state);
+		settings.setManualMode(!settings.getManualMode());
 	}
 
 	private void updateManualModeButton() {
-		Boolean state = (Boolean) settings.getValue(Settings.MANUAL_MODE_KEY);
-		String text = state ? "Manual Mode On" : "Manual Mode Off";
-		manualModeButton.displayString = text;
+		manualModeButton.displayString = settings.getManualMode() ? "Manual Mode On" : "Manual Mode Off";
 	}
 
 	private void nextRenderTextState() {
-		Boolean state = (Boolean) settings.getValue(Settings.RENDER_TEXT_KEY);
-		state = state ? Boolean.FALSE : Boolean.TRUE; //Invert the state
-		settings.setValue(Settings.RENDER_TEXT_KEY, state);
+		settings.setRenderText(!settings.getRenderText());
 	}
 
 	private void updateRenderTextButton() {
-		Boolean state = (Boolean) settings.getValue(Settings.RENDER_TEXT_KEY);
-		String text = state ? "Render Text On" : "Render Text Off";
-		renderTextButton.displayString = text;
+		renderTextButton.displayString = settings.getRenderText() ? "Render Text On" : "Render Text Off";
 	}
 
 	private void nextChatSpamState() {
-		Settings.ChatSpamState chatSpamState = (Settings.ChatSpamState) settings.getValue(Settings.CHAT_SPAM_KEY);
+		Settings.ChatSpamState chatSpamState = settings.getChatSpamState();
 		if (chatSpamState == Settings.ChatSpamState.ON) {
 			chatSpamState = Settings.ChatSpamState.OFF;
 		} else if (chatSpamState == Settings.ChatSpamState.OFF) {
@@ -119,12 +111,12 @@ public class SettingsGui extends GuiScreen {
 		} else if (chatSpamState == Settings.ChatSpamState.PAGENUMBERS) {
 			chatSpamState = Settings.ChatSpamState.ON;
 		}
-		settings.setValue(Settings.CHAT_SPAM_KEY, chatSpamState);
+		settings.setChatSpamState(chatSpamState);
 	}
 
 	private void updateChatSpamButton() {
 		String jaListSpamText = "Updating Snitches Spam: ";
-		Settings.ChatSpamState chatSpamState = (Settings.ChatSpamState) settings.getValue(Settings.CHAT_SPAM_KEY);
+		final Settings.ChatSpamState chatSpamState = settings.getChatSpamState();
 		if (chatSpamState == Settings.ChatSpamState.ON) {
 			jaListSpamText += "On";
 		} else if (chatSpamState == Settings.ChatSpamState.OFF) {

@@ -33,7 +33,8 @@ public class KeyHandler {
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event) {
         if (snitchMasterMainGUI.isPressed()) {
-            Minecraft.getMinecraft().displayGuiScreen(new MainGui(snitchMaster));
+            Minecraft.getMinecraft().displayGuiScreen(new MainGui(snitchMaster.getManager(),
+                    snitchMaster.getChatSnitchParser(), snitchMaster.getSettings()));
         }
         if (toggleAllRender.isPressed()) {
             snitchMaster.getManager().toggleGlobalRender();

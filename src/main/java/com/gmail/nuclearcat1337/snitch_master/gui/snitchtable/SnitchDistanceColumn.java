@@ -4,6 +4,7 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.tables.TableColumn;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
+import com.gmail.nuclearcat1337.snitch_master.worldinfo.WorldProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -16,8 +17,11 @@ import java.util.List;
 public class SnitchDistanceColumn implements TableColumn<Snitch> {
 	private static Minecraft mc;
 
-	public SnitchDistanceColumn() {
+	private final WorldProvider worldProvider;
+
+	public SnitchDistanceColumn(final WorldProvider provider) {
 		mc = Minecraft.getMinecraft();
+		this.worldProvider = provider;
 	}
 
 	@Override
@@ -50,7 +54,7 @@ public class SnitchDistanceColumn implements TableColumn<Snitch> {
         Location loc = snitch.getLocation();
 
 		String text;
-		if (!SnitchMaster.instance.getCurrentWorld().equalsIgnoreCase(loc.getWorld())) {
+		if (!worldProvider.getCurrentWorld().equalsIgnoreCase(loc.getWorld())) {
 			text = "NA";
 		} else {
 			int distance = getDistanceFromPlayer(loc.getX(), loc.getY(), loc.getZ());
@@ -67,7 +71,7 @@ public class SnitchDistanceColumn implements TableColumn<Snitch> {
 	public int getDrawWidth(Snitch snitch) {
         Location loc = snitch.getLocation();
 
-		if (!SnitchMaster.instance.getCurrentWorld().equalsIgnoreCase(loc.getWorld())) {
+		if (!worldProvider.getCurrentWorld().equalsIgnoreCase(loc.getWorld())) {
 			return mc.fontRenderer.getStringWidth("NA");
 		}
 
@@ -90,7 +94,7 @@ public class SnitchDistanceColumn implements TableColumn<Snitch> {
 	public int compare(Snitch snitch, Snitch other) {
         Location snitchLoc = snitch.getLocation();
         Location otherLoc = other.getLocation();
-		String world = SnitchMaster.instance.getCurrentWorld();
+		String world = worldProvider.getCurrentWorld();
 		boolean b1 = snitchLoc.getWorld().equalsIgnoreCase(world);
 		boolean b2 = otherLoc.getWorld().equalsIgnoreCase(world);
 

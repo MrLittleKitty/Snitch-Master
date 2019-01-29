@@ -9,5 +9,7 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 public interface JourneyMapInterface {
 	void displaySnitch(Snitch snitch);
 
+	void displaySnitches(Iterable<Snitch> snitches);
+
 	void refresh(Iterable<Snitch> snitches);
 }

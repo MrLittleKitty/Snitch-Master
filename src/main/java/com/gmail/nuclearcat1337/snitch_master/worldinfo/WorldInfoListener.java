@@ -1,4 +1,4 @@
-package com.gmail.nuclearcat1337.snitch_master.handlers;
+package com.gmail.nuclearcat1337.snitch_master.worldinfo;
 
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import io.netty.buffer.ByteBuf;
@@ -27,7 +27,6 @@ import java.nio.charset.StandardCharsets;
  */
 public class WorldInfoListener {
     private final Minecraft mc = Minecraft.getMinecraft();
-    private final SnitchMaster snitchMaster;
 
     private static final int MIN_DELAY_MS = 1000;
 
@@ -37,7 +36,6 @@ public class WorldInfoListener {
     private static String worldID = "single_player";
 
     public WorldInfoListener(SnitchMaster snitchMaster) {
-        this.snitchMaster = snitchMaster;
 
         channel = NetworkRegistry.INSTANCE.newSimpleChannel("world_name");
         channel.registerMessage(WorldListener.class, WorldIDPacket.class, 0, Side.CLIENT);
@@ -71,7 +69,7 @@ public class WorldInfoListener {
      * Gets the name of the current world the player is.
      * Returns "single player" is the player is playing single player.
      */
-    public String getWorldID() {
+    public String getWorldName() {
         if (lastResponse < lastRequest) {
             //No WorldInfo response so just use vanilla world names
             WorldProvider provider = Minecraft.getMinecraft().world.provider;
