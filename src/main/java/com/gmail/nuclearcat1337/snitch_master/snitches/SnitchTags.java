@@ -7,5 +7,5 @@ public class SnitchTags {
 	public static String FROM_TEXT = "chat";
 	public static String FROM_JALIST = "jalist";
 	public static String FROM_MANUAL = "manual";
-	public static String IS_GONE = "gone";
+	public static String IS_REMOVED = "removed";
 }

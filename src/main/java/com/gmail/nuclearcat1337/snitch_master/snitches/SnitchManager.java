@@ -28,14 +28,14 @@ public class SnitchManager {
 
     public static final String GLOBAL_RENDER_KEY = "global-render";
 
-    private static final SnitchListQualifier friendly = new SnitchListQualifier(String.format("origin == '%s' || origin == '%s' && origin != '%s'", SnitchTags.FROM_JALIST, SnitchTags.FROM_TEXT, SnitchTags.IS_GONE));
-    private static final SnitchListQualifier neutral = new SnitchListQualifier(String.format("origin == '%s'", SnitchTags.FROM_MANUAL));
-    private static final SnitchListQualifier gone = new SnitchListQualifier(String.format("origin == '%s'", SnitchTags.IS_GONE));
+    private static final SnitchListQualifier FRIENDLY = new SnitchListQualifier(String.format("origin == '%s' || origin == '%s' && origin != '%s'", SnitchTags.FROM_JALIST, SnitchTags.FROM_TEXT, SnitchTags.IS_REMOVED));
+    private static final SnitchListQualifier NEUTRAL = new SnitchListQualifier(String.format("origin == '%s'", SnitchTags.FROM_MANUAL));
+    private static final SnitchListQualifier REMOVED = new SnitchListQualifier(String.format("origin == '%s'", SnitchTags.IS_REMOVED));
 
     private static SnitchList[] getDefaultSnitchLists(SnitchManager manager) {
-        return new SnitchList[]{new SnitchList(manager, SnitchManager.friendly, true, "Friendly", new Color(0, (int) (0.56D * 255D), 255)),
-                new SnitchList(manager, SnitchManager.neutral, true, "Neutral", new Color(238, 210, 2)), //"Safety Yellow"
-                new SnitchList(manager, SnitchManager.gone, true, "Gone", new Color(220, 20, 60)) //TODO---Finish implementing this feature
+        return new SnitchList[]{new SnitchList(manager, SnitchManager.FRIENDLY, true, "Friendly", new Color(0, (int) (0.56D * 255D), 255)),
+                new SnitchList(manager, SnitchManager.NEUTRAL, true, "Neutral", new Color(238, 210, 2)), //"Safety Yellow"
+                new SnitchList(manager, SnitchManager.REMOVED, true, "Removed", new Color(220, 20, 60)) //TODO---Finish implementing this feature
         };
     }
 
@@ -256,7 +256,7 @@ public class SnitchManager {
             contains.setName(snitch.getName());
 
             if (snitch.isTagged(SnitchTags.FROM_JALIST)) {
-                contains.tags.remove(SnitchTags.IS_GONE); //Remove it the dirty way cause this is the manager
+                contains.tags.remove(SnitchTags.IS_REMOVED); //Remove it the dirty way cause this is the manager
             }
 
             for (String str : snitch.getTags()) {

@@ -660,7 +660,7 @@ public class ChatSnitchParser {
         loadedSnitches = new HashSet<>();
 
         for (Snitch snitch : manager.getSnitches()) {
-            if (!snitch.isTagged(SnitchTags.IS_GONE) && snitch.isTagged(SnitchTags.FROM_JALIST)) {
+            if (!snitch.isTagged(SnitchTags.IS_REMOVED) && snitch.isTagged(SnitchTags.FROM_JALIST)) {
                 snitchesCopy.add(snitch);
             }
         }
@@ -690,7 +690,7 @@ public class ChatSnitchParser {
             if (!cancelled) {
                 snitchesCopy.removeAll(loadedSnitches);
                 for (Snitch snitch : snitchesCopy) {
-                    manager.addTag(snitch, SnitchTags.IS_GONE);
+                    manager.addTag(snitch, SnitchTags.IS_REMOVED);
                 }
                 SnitchMaster.SendMessageToPlayer(
                         snitchesCopy.size() + " snitches were missing since the last full update.");

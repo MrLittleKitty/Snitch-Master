@@ -54,7 +54,7 @@ public class QuietTimeGui extends GuiScreen {
 
         this.buttonList.add(new GuiButton(1, startingXPos, lowerYPos, BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Cancel"));
 
-        this.buttonList.add(new GuiButton(2, column2XPos, lowerYPos, BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Done"));
+        this.buttonList.add(new GuiButton(2, column2XPos, lowerYPos, BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Save"));
     }
 
     @Override

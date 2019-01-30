@@ -28,7 +28,8 @@ public class SettingsGui extends GuiScreen {
 		this.buttonList.clear();
 
 		int xPos = (this.width / 2) - (GuiConstants.LONG_BUTTON_WIDTH / 2);
-		int yPos = (this.height / 2) - (((GuiConstants.STANDARD_BUTTON_HEIGHT * 3) + (GuiConstants.STANDARD_SEPARATION_DISTANCE * 2)) / 2);
+        int yPos = (this.height / 2) - (GuiConstants.STANDARD_SEPARATION_DISTANCE / 2) - (GuiConstants.STANDARD_BUTTON_HEIGHT * 2)
+                - GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
 		//Set the drawXPos variable for drawing 2 half sized buttons
 		int drawXPos = xPos;
@@ -91,7 +92,7 @@ public class SettingsGui extends GuiScreen {
 	}
 
 	private void updateManualModeButton() {
-		manualModeButton.displayString = settings.getManualMode() ? "Manual Mode On" : "Manual Mode Off";
+		manualModeButton.displayString = settings.getManualMode() ? "Manual Mode: On" : "Manual Mode: Off";
 	}
 
 	private void nextRenderTextState() {
@@ -99,7 +100,7 @@ public class SettingsGui extends GuiScreen {
 	}
 
 	private void updateRenderTextButton() {
-		renderTextButton.displayString = settings.getRenderText() ? "Render Text On" : "Render Text Off";
+		renderTextButton.displayString = settings.getRenderText() ? "Render Text: On" : "Render Text: Off";
 	}
 
 	private void nextChatSpamState() {
