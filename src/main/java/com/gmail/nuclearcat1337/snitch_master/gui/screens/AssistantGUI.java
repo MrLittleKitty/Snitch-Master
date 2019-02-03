@@ -1,10 +1,18 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.screens;
 
+import com.gmail.nuclearcat1337.snitch_master.assistant.AssistantManager;
+import com.gmail.nuclearcat1337.snitch_master.assistant.AssistantMode;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
+import com.gmail.nuclearcat1337.snitch_master.gui.controls.ToggleButtons;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
+import com.gmail.nuclearcat1337.snitch_master.worldinfo.WorldProvider;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AssistantGUI {
@@ -19,6 +27,9 @@ public class AssistantGUI {
     private static final int ABOVE_ID = 13;
     private static final int BELOW_ID = 14;
 
+    private final AssistantManager manager;
+
+    private List<ToggleButtons> toggleControls;
     private GuiButton modeButton;
     private GuiButton updateButton;
     private GuiButton northButton;
@@ -31,11 +42,13 @@ public class AssistantGUI {
     private String text;
     private int textX;
     private int textY;
-    private Mode currentMode;
+
+    public AssistantGUI(final AssistantManager manager) {
+        this.manager = manager;
+        this.toggleControls = new ArrayList<>(2);
+    }
 
     public void init(final int topLeftX, final int topLeftY) {
-        currentMode = Mode.PLACEMENT;
-
         final int separationDistance = GuiConstants.STANDARD_SEPARATION_DISTANCE;
         final int buttonHeight = GuiConstants.STANDARD_BUTTON_HEIGHT;
         final int buttonWidth = GuiConstants.MEDIUM_BUTTON_WIDTH - 5;
@@ -85,6 +98,8 @@ public class AssistantGUI {
 
         belowButton = new GuiButton(BELOW_ID, x, y, aboveBelowButtonWidth, buttonHeight,
                 getButtonText(BELOW_ID));
+
+        updateToggle();
     }
 
     public void addButtons(final List<GuiButton> buttons) {
@@ -114,35 +129,95 @@ public class AssistantGUI {
     }
 
     public void actionPerformed(final GuiButton button) {
+        switch (button.id) {
+            case MODE_ID: {
+                manager.setMode(manager.getMode().getNextMode());
+                updateButtonText();
+                updateToggle();
+                break;
+            }
+            case UPDATE_ID: {
+                manager.updateBaseLocation();
+                break;
+            }
+            default: {
+                for (final ToggleButtons toggle : toggleControls) {
+                    if (toggle.actionPerformed(button)) {
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
 
+    private void updateToggle() {
+        toggleControls.clear();
+        switch (manager.getMode()) {
+            case PLACEMENT: {
+                final List<GuiButton> buttons = new ArrayList<>(6);
+                buttons.add(northButton);
+                buttons.add(southButton);
+                buttons.add(eastButton);
+                buttons.add(westButton);
+                buttons.add(aboveButton);
+                buttons.add(belowButton);
+                toggleControls.add(new ToggleButtons(buttons, 0));
+                break;
+            }
+            case COVERAGE: {
+                final List<GuiButton> directionButtons = new ArrayList<>(4);
+                directionButtons.add(northButton);
+                directionButtons.add(southButton);
+                directionButtons.add(eastButton);
+                directionButtons.add(westButton);
+                final List<GuiButton> aboveBelow = new ArrayList<>(2);
+                aboveBelow.add(aboveButton);
+                aboveBelow.add(belowButton);
+                toggleControls.add(new ToggleButtons(directionButtons, 0));
+                toggleControls.add(new ToggleButtons(aboveBelow, 1));
+                break;
+            }
+        }
+    }
+
+    private void updateButtonText() {
+        modeButton.displayString = getButtonText(MODE_ID);
+        updateButton.displayString = getButtonText(UPDATE_ID);
+        northButton.displayString = getButtonText(N_ID);
+        southButton.displayString = getButtonText(S_ID);
+        eastButton.displayString = getButtonText(E_ID);
+        westButton.displayString = getButtonText(W_ID);
+        aboveButton.displayString = getButtonText(ABOVE_ID);
+        belowButton.displayString = getButtonText(BELOW_ID);
     }
 
     private String getButtonText(final int id) {
         switch (id) {
             case MODE_ID:
-                return currentMode.getDisplayText();
+                return manager.getMode().getDisplayText();
             case UPDATE_ID:
                 return "Update";
             case N_ID:
-                if (currentMode == Mode.PLACEMENT) {
+                if (manager.getMode() == AssistantMode.PLACEMENT) {
                     return "N";
                 } else {
                     return "NW";
                 }
             case S_ID:
-                if (currentMode == Mode.PLACEMENT) {
+                if (manager.getMode() == AssistantMode.PLACEMENT) {
                     return "S";
                 } else {
                     return "SW";
                 }
             case E_ID:
-                if (currentMode == Mode.PLACEMENT) {
+                if (manager.getMode() == AssistantMode.PLACEMENT) {
                     return "E";
                 } else {
                     return "NE";
                 }
             case W_ID:
-                if (currentMode == Mode.PLACEMENT) {
+                if (manager.getMode() == AssistantMode.PLACEMENT) {
                     return "W";
                 } else {
                     return "SE";
@@ -153,20 +228,5 @@ public class AssistantGUI {
                 return "Below";
         }
         return "Undefined";
-    }
-
-    private enum Mode {
-        PLACEMENT("Placement"),
-        COVERAGE("Coverage");
-
-        private final String text;
-
-        private Mode(final String text) {
-            this.text = text;
-        }
-
-        public String getDisplayText() {
-            return this.text;
-        }
     }
 }

@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.journeymap;
 
+import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.gui.screens.EditSnitchScreen;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
@@ -82,7 +83,7 @@ class SnitchImageFactory {
      * Returns a BufferedImage object that is a square filled with the given color.
      */
     private static BufferedImage createSnitchField(float red, float green, float blue) {
-        int snitchLength = (Snitch.SNITCH_RADIUS * 2) + 1;
+        int snitchLength = (Settings.SNITCH_RADIUS * 2) + 1;
         // oversampling to make the image less blurry
         int blockPixels = 8;
         int imgLength = snitchLength * blockPixels;

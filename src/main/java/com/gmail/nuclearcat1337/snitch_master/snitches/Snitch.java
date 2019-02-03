@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.snitches;
 
+import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObject;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
@@ -16,8 +17,6 @@ public class Snitch extends LocatableObject<Snitch> {
     public static final String MAX_NAME_CHARACTERS = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
 
     public static final String MAX_CT_GROUP_NAME_CHARACTERS = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
-
-    public static final int SNITCH_RADIUS = 11;
 
     public static final String DEFAULT_NAME = "[Undefined]";
 
@@ -124,27 +123,27 @@ public class Snitch extends LocatableObject<Snitch> {
     }
 
     public int getFieldMinX() {
-        return location.getX() - SNITCH_RADIUS;
+        return location.getX() - Settings.SNITCH_RADIUS;
     }
 
     public int getFieldMinY() {
-        return location.getY() - SNITCH_RADIUS;
+        return location.getY() - Settings.SNITCH_RADIUS;
     }
 
     public int getFieldMinZ() {
-        return location.getZ() - SNITCH_RADIUS;
+        return location.getZ() - Settings.SNITCH_RADIUS;
     }
 
     public int getFieldMaxX() {
-        return location.getX() + SNITCH_RADIUS;
+        return location.getX() + Settings.SNITCH_RADIUS;
     }
 
     public int getFieldMaxY() {
-        return location.getY() + SNITCH_RADIUS;
+        return location.getY() + Settings.SNITCH_RADIUS;
     }
 
     public int getFieldMaxZ() {
-        return location.getZ() + SNITCH_RADIUS;
+        return location.getZ() + Settings.SNITCH_RADIUS;
     }
 
     public String getName() {

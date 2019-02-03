@@ -16,6 +16,7 @@ import java.util.Map;
  * Created by Mr_Little_Kitty on 7/9/2016.
  */
 public class Settings {
+    public static final int SNITCH_RADIUS = 11;
     private static final String SETTINGS_FILE = SnitchMaster.modDataFolder + "/Settings.txt";
 
     public enum ChatSpamState {

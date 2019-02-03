@@ -48,7 +48,7 @@ public class AssistantRenderer {
             final int boxRadius = block.getBoxRadius();
             if (boxRadius > 0) {
                 RenderUtils.renderBox(location.getX(), location.getY(), location.getZ(),
-                        Snitch.SNITCH_RADIUS, block.getColor(), 0.1D, 0.25D, event.getPartialTicks());
+                        Settings.SNITCH_RADIUS, block.getColor(), 0.1D, 0.25D, event.getPartialTicks());
             }
 
             GL11.glDisable(GL11.GL_DEPTH_TEST);

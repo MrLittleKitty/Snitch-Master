@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.assistant;
 
+import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
@@ -43,7 +44,7 @@ class FlashingAssistantBlock extends AssistantBlock {
 
     @Override
     public int getBoxRadius() {
-        return Snitch.SNITCH_RADIUS;
+        return Settings.SNITCH_RADIUS;
     }
 
     @Override

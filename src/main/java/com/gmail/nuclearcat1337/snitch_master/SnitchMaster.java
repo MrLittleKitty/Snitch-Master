@@ -53,7 +53,7 @@ public class SnitchMaster implements WorldProvider {
 
         settings = new Settings();
         manager = new SnitchManager(JourneyMapRelay.getInstance(), settings);
-        assistantManager = new AssistantManager();
+        assistantManager = new AssistantManager(manager, this);
 
         settings.loadSettings();
         settings.saveSettings(); //Save back the settings we just loaded or else save back the default settings

@@ -23,7 +23,7 @@ import org.apache.commons.lang3.text.WordUtils;
 public class SnitchRenderer {
     private static final int BLOCK_RENDER_DISTANCE = 60;
     private static final int BOX_RENDER_DISTANCE = 36;
-    private static final int TEXT_RENDER_DISTANCE = (int) ((double) ((Snitch.SNITCH_RADIUS) + 1) * Math.sqrt(2)) + 2;
+    private static final int TEXT_RENDER_DISTANCE = (int) ((double) ((Settings.SNITCH_RADIUS) + 1) * Math.sqrt(2)) + 2;
 
     private static final int BLOCK_RENDER_DISTANCE_SQUARED = BLOCK_RENDER_DISTANCE * BLOCK_RENDER_DISTANCE;
     private static final int BOX_RENDER_DISTANCE_SQUARED = BOX_RENDER_DISTANCE * BOX_RENDER_DISTANCE;
@@ -71,7 +71,7 @@ public class SnitchRenderer {
             //Render the outer box along the snitches capturing field
             if (distanceToPlayerXZ <= BOX_RENDER_DISTANCE_SQUARED) {
                 RenderUtils.renderBox(location.getX(), location.getY(), location.getZ(),
-                        Snitch.SNITCH_RADIUS, renderColor, 0.1D, 0.25D, event.getPartialTicks());
+                        Settings.SNITCH_RADIUS, renderColor, 0.1D, 0.25D, event.getPartialTicks());
             }
 
             if (renderText && GeneralUtils.distanceSquaredToPlayer(location.getX(), location.getZ(), location.getY())

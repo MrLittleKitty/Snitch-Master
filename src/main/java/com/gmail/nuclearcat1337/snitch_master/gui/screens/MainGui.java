@@ -42,7 +42,7 @@ public class MainGui extends GuiScreen {
         this.snitchParser = snitchParser;
         this.settings = settings;
         this.assistantManager = assistantManager;
-        assistantGUI = new AssistantGUI();
+        assistantGUI = new AssistantGUI(assistantManager);
     }
 
     public void initGui() {
@@ -127,6 +127,7 @@ public class MainGui extends GuiScreen {
                     assistantGUI.addButtons(this.buttonList);
                 } else {
                     assistantGUI.removeButtons(this.buttonList);
+                    assistantManager.deleteAssistant();
                 }
                 break;
             case DONE: //"Done"
