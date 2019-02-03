@@ -3,7 +3,9 @@ package com.gmail.nuclearcat1337.snitch_master.snitches;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObject;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
+import com.gmail.nuclearcat1337.snitch_master.util.GeneralUtils;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -54,7 +56,7 @@ public class Snitch extends LocatableObject<Snitch> {
      *
      * @param location The location of this Snitch block.
      */
-    public Snitch(Location location) {
+    public Snitch(final Location location) {
         this.location = location;
 
         this.tags = new HashSet<>();
@@ -67,7 +69,7 @@ public class Snitch extends LocatableObject<Snitch> {
         description = null;
     }
 
-    public Snitch(Location location, String initialTag) {
+    public Snitch(final Location location, final String initialTag) {
         this(location);
         if (initialTag != null) {
             tags.add(initialTag);
@@ -83,7 +85,8 @@ public class Snitch extends LocatableObject<Snitch> {
      * @param ctGroup  The Citadel group name of the group this Snitch is reinforced under.
      * @param name     The name of this Snitch.
      */
-    public Snitch(Location location, String tag, double culltime, String ctGroup, String name, String previousName, String snitchType) {
+    public Snitch(final Location location, final String tag, final double culltime, final String ctGroup,
+                  final String name, final String previousName, final String snitchType) {
         this(location, tag);
         this.cullTime = culltime;
         this.ctGroup = ctGroup == null ? DEFAULT_NAME : ctGroup;
@@ -95,7 +98,7 @@ public class Snitch extends LocatableObject<Snitch> {
         }
     }
 
-    void setCullTime(double cullTime) {
+    void setCullTime(final double cullTime) {
         this.cullTime = cullTime;
     }
 
@@ -103,7 +106,7 @@ public class Snitch extends LocatableObject<Snitch> {
         return cullTime;
     }
 
-    void setDescription(List<String> description) {
+    void setDescription(final List<String> description) {
         this.description = description;
     }
 
@@ -111,7 +114,7 @@ public class Snitch extends LocatableObject<Snitch> {
         return description;
     }
 
-    public boolean isPointInThisSnitch(int x, int y, int z) {
+    public boolean isPointInThisSnitch(final int x, final int y, final int z) {
         return x >= getFieldMinX() && x <= getFieldMaxX() && z >= getFieldMinZ() && z <= getFieldMaxZ() && y >= getFieldMinY() && y <= getFieldMaxY();
     }
 
@@ -148,7 +151,7 @@ public class Snitch extends LocatableObject<Snitch> {
         return name;
     }
 
-    void setName(String name) {
+    void setName(final String name) {
         this.name = name;
     }
 
@@ -164,15 +167,15 @@ public class Snitch extends LocatableObject<Snitch> {
         return tags;
     }
 
-    public boolean isTagged(String tag) {
+    public boolean isTagged(final String tag) {
         return tags.contains(tag);
     }
 
-    void setGroupName(String groupName) {
+    void setGroupName(final String groupName) {
         this.ctGroup = groupName;
     }
 
-    void setType(String type) {
+    void setType(final String type) {
         this.type = type;
     }
 
@@ -186,38 +189,14 @@ public class Snitch extends LocatableObject<Snitch> {
      */
     @Override
     public int compareTo(Location other) {
-        int compare = location.getWorld().compareTo(other.getWorld());
-        if (compare != 0) {
-            return compare;
-        }
-        if (location.getX() < other.getX()) {
-            return -1;
-        }
-        if (location.getX() > other.getX()) {
-            return 1;
-        }
-
-        if (location.getZ() < other.getZ()) {
-            return -1;
-        }
-        if (location.getZ() > other.getZ()) {
-            return 1;
-        }
-
-        if (location.getY() < other.getY()) {
-            return -1;
-        }
-        if (location.getY() > other.getY()) {
-            return 1;
-        }
-        return 0;
+        return GeneralUtils.compareLocations(location, other);
     }
 
     /**
      * Returns an arbitrary number which is the comparison of the two Snitch's locations.
      */
     @Override
-    public int compareTo(Snitch other) {
+    public int compareTo(@Nonnull final Snitch other) {
         return compareTo(other.getLocation());
     }
 

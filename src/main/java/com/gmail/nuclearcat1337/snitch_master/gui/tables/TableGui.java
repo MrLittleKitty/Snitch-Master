@@ -93,6 +93,7 @@ public class TableGui<T> extends GuiListExtended {
 		sortEntries(0, entries.size() - 1, sortColumn, sortAscending);
 	}
 
+	//This is just quicksort
 	private void sortEntries(int lowerIndex, int higherIndex, Comparator<T> comparator, boolean ascending) {
 		int i = lowerIndex;
 		int j = higherIndex;

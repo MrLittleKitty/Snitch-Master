@@ -100,10 +100,6 @@ public class SnitchesTable extends TableTopGui<Snitch> {
         return columns;
     }
 
-    private void saveSnitchColumns() {
-
-    }
-
     private final TableButtonColumn.OnButtonClick<Snitch> viewListsClick = new TableButtonColumn.OnButtonClick<Snitch>() {
         @Override
         public void onClick(Snitch item, GuiButton button, GuiScreen parent) {

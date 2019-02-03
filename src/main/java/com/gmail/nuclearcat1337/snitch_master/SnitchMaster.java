@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master;
 
+import com.gmail.nuclearcat1337.snitch_master.assistant.AssistantManager;
 import com.gmail.nuclearcat1337.snitch_master.handlers.*;
 import com.gmail.nuclearcat1337.snitch_master.journeymap.JourneyMapRelay;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
@@ -38,6 +39,7 @@ public class SnitchMaster implements WorldProvider {
 
     private Settings settings;
     private SnitchManager manager;
+    private AssistantManager assistantManager;
 
     private ChatSnitchParser chatSnitchParser;
     private WorldInfoListener worldInfoListener;
@@ -51,6 +53,7 @@ public class SnitchMaster implements WorldProvider {
 
         settings = new Settings();
         manager = new SnitchManager(JourneyMapRelay.getInstance(), settings);
+        assistantManager = new AssistantManager();
 
         settings.loadSettings();
         settings.saveSettings(); //Save back the settings we just loaded or else save back the default settings
@@ -66,6 +69,8 @@ public class SnitchMaster implements WorldProvider {
         new SnitchListeners(manager, settings, this, JourneyMapRelay.getInstance());
         new KeyHandler(this);
 
+        new AssistantRenderer(assistantManager, settings, this);
+
         chatSnitchParser.addAlertRecipient(new QuietTimeHandler(settings));
     }
 
@@ -75,6 +80,10 @@ public class SnitchMaster implements WorldProvider {
 
     public Settings getSettings() {
         return settings;
+    }
+
+    public AssistantManager getAssistantManager() {
+        return this.assistantManager;
     }
 
     /**

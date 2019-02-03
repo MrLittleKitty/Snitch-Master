@@ -2,6 +2,7 @@ package com.gmail.nuclearcat1337.snitch_master.gui.screens;
 
 import com.gmail.nuclearcat1337.snitch_master.Settings;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
+import com.gmail.nuclearcat1337.snitch_master.assistant.AssistantManager;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListRemoveColumn;
 import com.gmail.nuclearcat1337.snitch_master.gui.snitchliststable.SnitchListsTable;
@@ -28,20 +29,26 @@ public class MainGui extends GuiScreen {
     private final SnitchManager manager;
     private final ChatSnitchParser snitchParser;
     private final Settings settings;
+    private final AssistantManager assistantManager;
 
-    public MainGui(final SnitchManager manager, final ChatSnitchParser snitchParser, final Settings settings) {
+    private final AssistantGUI assistantGUI;
+
+    public MainGui(final SnitchManager manager, final ChatSnitchParser snitchParser, final Settings settings,
+                   final AssistantManager assistantManager) {
         SnitchListRemoveColumn.removedSnitchLists.clear();
         SnitchRemoveColumn.removedSnitches.clear();
 
         this.manager = manager;
         this.snitchParser = snitchParser;
         this.settings = settings;
+        this.assistantManager = assistantManager;
+        assistantGUI = new AssistantGUI();
     }
 
     public void initGui() {
         this.buttonList.clear();
 
-        String updateButtonMessage = snitchParser.isUpdatingSnitchList() ? "Cancel Update" : "Snitch Update";
+        final String updateButtonMessage = snitchParser.isUpdatingSnitchList() ? "Cancel Update" : "Snitch Update";
 
         int xPos = (this.width / 2) - (GuiConstants.MEDIUM_BUTTON_WIDTH) - (GuiConstants.STANDARD_SEPARATION_DISTANCE / 2);
         int yPos = (this.height / 2) - (GuiConstants.STANDARD_SEPARATION_DISTANCE / 2) - (GuiConstants.STANDARD_BUTTON_HEIGHT * 2)
@@ -75,9 +82,18 @@ public class MainGui extends GuiScreen {
         xPos = (this.width / 2) - (GuiConstants.LONG_BUTTON_WIDTH / 2);
 
         this.buttonList.add(new GuiButton(DONE, xPos, yPos, "Done"));
+
+        xPos = (this.width / 2) + (GuiConstants.LONG_BUTTON_WIDTH / 2) + (GuiConstants.STANDARD_SEPARATION_DISTANCE * 2);
+        yPos = (this.height / 2) - (GuiConstants.STANDARD_SEPARATION_DISTANCE / 2) - (GuiConstants.STANDARD_BUTTON_HEIGHT * 2)
+                - GuiConstants.STANDARD_SEPARATION_DISTANCE;
+
+        assistantGUI.init(xPos, yPos);
+        if (assistantManager.shouldRender()) {
+            assistantGUI.addButtons(this.buttonList);
+        }
     }
 
-    public void actionPerformed(GuiButton button) {
+    public void actionPerformed(final GuiButton button) {
         SnitchListRemoveColumn.removedSnitchLists.clear();
         SnitchRemoveColumn.removedSnitches.clear();
         switch (button.id) {
@@ -105,13 +121,30 @@ public class MainGui extends GuiScreen {
                 this.mc.displayGuiScreen(new SnitchesTable(this, manager.getSnitches(),
                         "All Snitches", manager, settings, JourneyMapRelay.getInstance()));
                 break;
-            case ASSISTANT:
-
+            case ASSISTANT: //"Assistant"
+                assistantManager.invertGlobalRender();
+                if (assistantManager.shouldRender()) {
+                    assistantGUI.addButtons(this.buttonList);
+                } else {
+                    assistantGUI.removeButtons(this.buttonList);
+                }
                 break;
             case DONE: //"Done"
                 this.mc.displayGuiScreen((GuiScreen) null);
                 this.mc.setIngameFocus();
                 break;
+
+            default:
+                assistantGUI.actionPerformed(button);
+                break;
+        }
+    }
+
+    @Override
+    public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        if (assistantManager.shouldRender()) {
+            assistantGUI.drawScreen(mouseX, mouseY, partialTicks);
         }
     }
 
