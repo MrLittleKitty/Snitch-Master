@@ -2,6 +2,7 @@ package com.gmail.nuclearcat1337.snitch_master.util;
 
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Created by Mr_Little_Kitty on 7/16/2016.

@@ -5,7 +5,9 @@ import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchListQualifier;
 import com.gmail.nuclearcat1337.snitch_master.journeymap.JourneyMapInterface;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.LocatableObjectList;
+import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
+import com.gmail.nuclearcat1337.snitch_master.util.GeneralUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -238,6 +240,26 @@ public class SnitchManager {
             }
         }
         journeyMapInterface.displaySnitch(snitch);
+    }
+
+
+    public List<Snitch> getIntersectingSnitches(final Location loc) {
+        final List<Snitch> value = new ArrayList<>();
+        for (final Snitch snitch : this.getSnitches().getItemsForWorld(loc.getWorld())) {
+            if (snitch.isPointInThisSnitch(loc.getX(), loc.getY(), loc.getZ())) {
+                value.add(snitch);
+            }
+        }
+        value.sort(new Comparator<Snitch>() {
+            @Override
+            public int compare(Snitch o1, Snitch o2) {
+                final Location loc1 = o1.getLocation();
+                final Location loc2 = o2.getLocation();
+                return Double.compare(GeneralUtils.distanceSquaredToPlayer(loc1.getX(), loc1.getY(), loc1.getZ()),
+                        GeneralUtils.distanceSquaredToPlayer(loc2.getX(), loc2.getY(), loc2.getZ()));
+            }
+        });
+        return value;
     }
 
     /**

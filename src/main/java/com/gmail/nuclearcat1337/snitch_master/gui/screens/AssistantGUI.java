@@ -1,16 +1,12 @@
 package com.gmail.nuclearcat1337.snitch_master.gui.screens;
 
+import com.gmail.nuclearcat1337.snitch_master.assistant.AssistantDirection;
 import com.gmail.nuclearcat1337.snitch_master.assistant.AssistantManager;
 import com.gmail.nuclearcat1337.snitch_master.assistant.AssistantMode;
 import com.gmail.nuclearcat1337.snitch_master.gui.GuiConstants;
 import com.gmail.nuclearcat1337.snitch_master.gui.controls.ToggleButtons;
-import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
-import com.gmail.nuclearcat1337.snitch_master.worldinfo.WorldProvider;
-import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,8 +137,10 @@ public class AssistantGUI {
                 break;
             }
             default: {
-                for (final ToggleButtons toggle : toggleControls) {
+                for (int i = 0; i < toggleControls.size(); i++) {
+                    final ToggleButtons toggle = toggleControls.get(i);
                     if (toggle.actionPerformed(button)) {
+                        manager.setOffset(i, getDirection(toggle.getSelected().id));
                         break;
                     }
                 }
@@ -179,6 +177,10 @@ public class AssistantGUI {
                 break;
             }
         }
+        for (int i = 0; i < toggleControls.size(); i++) {
+            final ToggleButtons toggle = toggleControls.get(i);
+            manager.setOffset(i, getDirection(toggle.getSelected().id));
+        }
     }
 
     private void updateButtonText() {
@@ -190,6 +192,40 @@ public class AssistantGUI {
         westButton.displayString = getButtonText(W_ID);
         aboveButton.displayString = getButtonText(ABOVE_ID);
         belowButton.displayString = getButtonText(BELOW_ID);
+    }
+
+    private AssistantDirection getDirection(final int id) {
+        switch (id) {
+            case N_ID:
+                if (manager.getMode() == AssistantMode.PLACEMENT) {
+                    return AssistantDirection.NORTH;
+                } else {
+                    return AssistantDirection.NORTHWEST;
+                }
+            case S_ID:
+                if (manager.getMode() == AssistantMode.PLACEMENT) {
+                    return AssistantDirection.SOUTH;
+                } else {
+                    return AssistantDirection.SOUTHWEST;
+                }
+            case E_ID:
+                if (manager.getMode() == AssistantMode.PLACEMENT) {
+                    return AssistantDirection.EAST;
+                } else {
+                    return AssistantDirection.NORTHEAST;
+                }
+            case W_ID:
+                if (manager.getMode() == AssistantMode.PLACEMENT) {
+                    return AssistantDirection.WEST;
+                } else {
+                    return AssistantDirection.SOUTHEAST;
+                }
+            case ABOVE_ID:
+                return AssistantDirection.ABOVE;
+            case BELOW_ID:
+                return AssistantDirection.BELOW;
+        }
+        return null;
     }
 
     private String getButtonText(final int id) {

@@ -10,17 +10,21 @@ import javax.annotation.Nonnull;
 
 class FlashingAssistantBlock extends AssistantBlock {
 
-    private final long flashPeriod;
+    private final long onFlash;
+    private final long offFlash;
     private final Color color;
 
     private Location location;
-    private long nextFlashTime;
+    private boolean on;
+    private long nextToggle;
 
-    public FlashingAssistantBlock(final Location location, final Color color, final long flashPeriod) {
+    public FlashingAssistantBlock(final Location location, final Color color, final long onFlash, final long offFlash) {
         this.location = location;
         this.color = color;
-        this.flashPeriod = flashPeriod;
-        this.nextFlashTime = 0;
+        this.onFlash = onFlash;
+        this.offFlash = offFlash;
+        this.on = false;
+        this.nextToggle = 0;
     }
 
     @Override
@@ -49,12 +53,15 @@ class FlashingAssistantBlock extends AssistantBlock {
 
     @Override
     public boolean shouldRender(final long currentTime) {
-        return currentTime >= nextFlashTime;
+        if (currentTime >= nextToggle) {
+            on = !on;
+            nextToggle = currentTime + (on ? onFlash : offFlash);
+        }
+        return on;
     }
 
     @Override
     public void wasRendered(final long currentTime) {
-        nextFlashTime = currentTime + this.flashPeriod;
     }
 
     @Override
