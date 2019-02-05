@@ -1,10 +1,10 @@
 package com.gmail.nuclearcat1337.snitch_master.assistant;
 
-import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
+import com.gmail.nuclearcat1337.snitch_master.util.GeneralUtils;
 import com.gmail.nuclearcat1337.snitch_master.worldinfo.WorldProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +42,7 @@ public class AssistantManager {
         this.mode = AssistantMode.PLACEMENT;
         this.offsets = new HashMap<>();
         this.offsets.put(0, AssistantDirection.NORTH);
-        this.offsets.put(1, AssistantDirection.BELOW);
+        this.offsets.put(1, AssistantDirection.BELOW_PLACEMENT);
     }
 
     public Iterable<AssistantBlock> getBlocksForWorld(final String world) {
@@ -66,8 +66,8 @@ public class AssistantManager {
     }
 
     public void updateBaseLocation() {
-        final BlockPos pos = Minecraft.getMinecraft().player.getPosition();
-        if (this.getMode() == AssistantMode.PLACEMENT) {
+        final Location pos = GeneralUtils.getPlayerLocation(worldProvider.getCurrentWorld());
+        if (mode == AssistantMode.PLACEMENT) {
             final List<Snitch> intersectingSnitches = snitchManager.getIntersectingSnitches(
                     new Location(pos.getX(), pos.getY(), pos.getZ(), worldProvider.getCurrentWorld()));
             if (intersectingSnitches != null && !intersectingSnitches.isEmpty()) {
@@ -78,10 +78,16 @@ public class AssistantManager {
                     iterable = Collections.singletonList(assistantBlock);
                 }
                 applyOffsets();
-            } else {
-                deleteAssistant();
             }
+        } else if (mode == AssistantMode.COVERAGE) {
+            this.baseLocation = new Location(pos.getX(), pos.getY(), pos.getZ(), worldProvider.getCurrentWorld());
+            if (assistantBlock == null) {
+                assistantBlock = new FlashingAssistantBlock(baseLocation, COLOR, FLASH_ON, FLASH_OFF);
+                iterable = Collections.singletonList(assistantBlock);
+            }
+            applyOffsets();
         }
+
     }
 
     public void setOffset(final int offsetPosition, final AssistantDirection offset) {
@@ -98,12 +104,13 @@ public class AssistantManager {
     }
 
     public void setMode(final AssistantMode mode) {
+        deleteAssistant();
         this.mode = mode;
         if (this.mode == AssistantMode.PLACEMENT) {
             setOffset(0, AssistantDirection.NORTH);
         } else if (this.mode == AssistantMode.COVERAGE) {
-            setOffset(0, AssistantDirection.NORTH);
-            setOffset(1, AssistantDirection.BELOW);
+            setOffset(0, AssistantDirection.NORTHWEST);
+            setOffset(1, AssistantDirection.BELOW_COVERAGE);
         }
     }
 

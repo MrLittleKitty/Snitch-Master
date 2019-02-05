@@ -8,12 +8,15 @@ public enum AssistantDirection {
     SOUTH(0, 0, ((Settings.SNITCH_RADIUS * 2) + 1)),
     EAST(((Settings.SNITCH_RADIUS * 2) + 1), 0, 0),
     WEST(-1 * ((Settings.SNITCH_RADIUS * 2) + 1), 0, 0),
-    NORTHEAST(((Settings.SNITCH_RADIUS * 2) + 1), 0, -1 * ((Settings.SNITCH_RADIUS * 2) + 1)),
-    SOUTHEAST(((Settings.SNITCH_RADIUS * 2) + 1), 0, ((Settings.SNITCH_RADIUS * 2) + 1)),
-    NORTHWEST(-1 * ((Settings.SNITCH_RADIUS * 2) + 1), 0, -1 * ((Settings.SNITCH_RADIUS * 2) + 1)),
-    SOUTHWEST(-1 * ((Settings.SNITCH_RADIUS * 2) + 1), 0, ((Settings.SNITCH_RADIUS * 2) + 1)),
-    ABOVE(0, ((Settings.SNITCH_RADIUS * 2) + 1), 0),
-    BELOW(0, -1 * ((Settings.SNITCH_RADIUS * 2) + 1), 0);
+    NORTHEAST(Settings.SNITCH_RADIUS, 0, -1 * Settings.SNITCH_RADIUS),
+    SOUTHEAST(Settings.SNITCH_RADIUS, 0, Settings.SNITCH_RADIUS),
+    NORTHWEST(-1 * Settings.SNITCH_RADIUS, 0, -1 * Settings.SNITCH_RADIUS),
+    SOUTHWEST(-1 * Settings.SNITCH_RADIUS, 0, Settings.SNITCH_RADIUS),
+    ABOVE_PLACEMENT(0, ((Settings.SNITCH_RADIUS * 2) + 1), 0),
+    BELOW_PLACEMENT(0, -1 * ((Settings.SNITCH_RADIUS * 2) + 1), 0),
+    ABOVE_COVERAGE(0, Settings.SNITCH_RADIUS, 0),
+    BELOW_COVERAGE(0, -1 * Settings.SNITCH_RADIUS, 0);
+
 
     private final int xOffset;
     private final int yOffset;

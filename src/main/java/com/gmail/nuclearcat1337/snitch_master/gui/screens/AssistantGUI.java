@@ -9,8 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.gmail.nuclearcat1337.snitch_master.assistant.AssistantDirection.*;
@@ -20,18 +18,20 @@ public class AssistantGUI {
     private static Minecraft mc = Minecraft.getMinecraft();
     private static final int MODE_ID = 7;
     private static final int UPDATE_ID = 8;
-    private static final int N_ID = 9;
-    private static final int S_ID = 10;
-    private static final int E_ID = 11;
-    private static final int W_ID = 12;
-    private static final int ABOVE_ID = 13;
-    private static final int BELOW_ID = 14;
+    private static final int CLEAR_ID = 9;
+    private static final int N_ID = 10;
+    private static final int S_ID = 11;
+    private static final int E_ID = 12;
+    private static final int W_ID = 13;
+    private static final int ABOVE_ID = 14;
+    private static final int BELOW_ID = 15;
 
     private final AssistantManager manager;
 
     private List<ToggleButtons> toggleControls;
     private GuiButton modeButton;
     private GuiButton updateButton;
+    private GuiButton clearButton;
     private GuiButton northButton;
     private GuiButton southButton;
     private GuiButton eastButton;
@@ -68,9 +68,17 @@ public class AssistantGUI {
 
         y = y + buttonHeight + separationDistance;
 
-        updateButton = new GuiButton(UPDATE_ID, x, y, buttonWidth, buttonHeight,
+        final int clearUpdateButtonWidth = (buttonWidth - separationDistance) / 2;
+
+        updateButton = new GuiButton(UPDATE_ID, x, y, clearUpdateButtonWidth, buttonHeight,
                 getButtonText(UPDATE_ID));
 
+        x = x + clearUpdateButtonWidth + separationDistance;
+
+        clearButton = new GuiButton(CLEAR_ID, x, y, clearUpdateButtonWidth, buttonHeight,
+                getButtonText(CLEAR_ID));
+
+        x = topLeftX;
         y = y + buttonHeight + separationDistance;
 
         final int directionButtonWidth = (buttonWidth - (separationDistance * 3)) / 4;
@@ -105,6 +113,7 @@ public class AssistantGUI {
     public void addButtons(final List<GuiButton> buttons) {
         buttons.add(modeButton);
         buttons.add(updateButton);
+        buttons.add(clearButton);
         buttons.add(aboveButton);
         buttons.add(belowButton);
         buttons.add(northButton);
@@ -116,6 +125,7 @@ public class AssistantGUI {
     public void removeButtons(final List<GuiButton> buttons) {
         buttons.remove(modeButton);
         buttons.remove(updateButton);
+        buttons.remove(clearButton);
         buttons.remove(aboveButton);
         buttons.remove(belowButton);
         buttons.remove(northButton);
@@ -138,6 +148,10 @@ public class AssistantGUI {
             }
             case UPDATE_ID: {
                 manager.updateBaseLocation();
+                break;
+            }
+            case CLEAR_ID: {
+                manager.deleteAssistant();
                 break;
             }
             default: {
@@ -192,6 +206,7 @@ public class AssistantGUI {
     private void updateButtonText() {
         modeButton.displayString = getButtonText(MODE_ID);
         updateButton.displayString = getButtonText(UPDATE_ID);
+        clearButton.displayString = getButtonText(CLEAR_ID);
         northButton.displayString = getButtonText(N_ID);
         southButton.displayString = getButtonText(S_ID);
         eastButton.displayString = getButtonText(E_ID);
@@ -227,9 +242,17 @@ public class AssistantGUI {
                     return SOUTHEAST;
                 }
             case ABOVE_ID:
-                return ABOVE;
+                if (manager.getMode() == AssistantMode.PLACEMENT) {
+                    return ABOVE_PLACEMENT;
+                } else {
+                    return ABOVE_COVERAGE;
+                }
             case BELOW_ID:
-                return BELOW;
+                if (manager.getMode() == AssistantMode.PLACEMENT) {
+                    return BELOW_PLACEMENT;
+                } else {
+                    return BELOW_COVERAGE;
+                }
         }
         return null;
     }
@@ -240,6 +263,8 @@ public class AssistantGUI {
                 return manager.getMode().getDisplayText();
             case UPDATE_ID:
                 return "Update";
+            case CLEAR_ID:
+                return "Clear";
             case N_ID:
                 if (manager.getMode() == AssistantMode.PLACEMENT) {
                     return "N";
@@ -286,9 +311,11 @@ public class AssistantGUI {
             case WEST:
             case SOUTHEAST:
                 return W_ID;
-            case ABOVE:
+            case ABOVE_PLACEMENT:
+            case ABOVE_COVERAGE:
                 return ABOVE_ID;
-            case BELOW:
+            case BELOW_PLACEMENT:
+            case BELOW_COVERAGE:
                 return BELOW_ID;
         }
         return -1;

@@ -19,13 +19,16 @@ public class GeneralUtils {
         return Math.pow(x2 - x1, 2) + Math.pow(z2 - z1, 2) + Math.pow(y2 - y1, 2);
     }
 
-
     public static double distanceSquaredToPlayer(final int x, final int y, final int z) {
         return GeneralUtils.distanceSquared(x, y, z, (int) mc.player.posX, (int) mc.player.posZ, (int) mc.player.posY);
     }
 
     public static double distanceSquaredToPlayer(final int x, final int z) {
         return GeneralUtils.distanceSquared(x, z, (int) mc.player.posX, (int) mc.player.posZ);
+    }
+
+    public static Location getPlayerLocation(final String world) {
+        return new Location((int) mc.player.posX, (int) mc.player.posY, (int) mc.player.posZ, world);
     }
 
     //Provides a consistent way to order locations
