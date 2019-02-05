@@ -14,8 +14,9 @@ import java.util.*;
 
 public class AssistantManager {
 
-    private static final Color COLOR = new Color(139, 0, 0);
-    private static final long FLASH_ON = 1500;
+    private static final Color COLOR = new Color(138, 43, 226);
+    //    private static final Color COLOR = new Color(139, 0, 0);
+    private static final long FLASH_ON = 900;
     private static final long FLASH_OFF = 500;
 
     private final EmptyIterable emptyIterable = new EmptyIterable();
@@ -32,12 +33,16 @@ public class AssistantManager {
     public AssistantManager(final SnitchManager snitchManager, final WorldProvider worldProvider) {
         this.snitchManager = snitchManager;
         this.worldProvider = worldProvider;
+
         this.assistantBlock = null;
         this.iterable = null;
         this.baseLocation = null;
         this.globalRender = false;
+
         this.mode = AssistantMode.PLACEMENT;
         this.offsets = new HashMap<>();
+        this.offsets.put(0, AssistantDirection.NORTH);
+        this.offsets.put(1, AssistantDirection.BELOW);
     }
 
     public Iterable<AssistantBlock> getBlocksForWorld(final String world) {
@@ -62,18 +67,20 @@ public class AssistantManager {
 
     public void updateBaseLocation() {
         final BlockPos pos = Minecraft.getMinecraft().player.getPosition();
-        final List<Snitch> intersectingSnitches = snitchManager.getIntersectingSnitches(
-                new Location(pos.getX(), pos.getY(), pos.getZ(), worldProvider.getCurrentWorld()));
-        if (intersectingSnitches != null && !intersectingSnitches.isEmpty()) {
-            final Snitch closest = intersectingSnitches.get(0);
-            this.baseLocation = closest.getLocation();
-            if (assistantBlock == null) {
-                assistantBlock = new FlashingAssistantBlock(baseLocation, COLOR, FLASH_ON, FLASH_OFF);
-                iterable = Collections.singletonList(assistantBlock);
+        if (this.getMode() == AssistantMode.PLACEMENT) {
+            final List<Snitch> intersectingSnitches = snitchManager.getIntersectingSnitches(
+                    new Location(pos.getX(), pos.getY(), pos.getZ(), worldProvider.getCurrentWorld()));
+            if (intersectingSnitches != null && !intersectingSnitches.isEmpty()) {
+                final Snitch closest = intersectingSnitches.get(0);
+                this.baseLocation = closest.getLocation();
+                if (assistantBlock == null) {
+                    assistantBlock = new FlashingAssistantBlock(baseLocation, COLOR, FLASH_ON, FLASH_OFF);
+                    iterable = Collections.singletonList(assistantBlock);
+                }
+                applyOffsets();
+            } else {
+                deleteAssistant();
             }
-            applyOffsets();
-        } else {
-            deleteAssistant();
         }
     }
 
@@ -82,12 +89,22 @@ public class AssistantManager {
         applyOffsets();
     }
 
+    public AssistantDirection getOffset(final int offsetPosition) {
+        return offsets.get(offsetPosition);
+    }
+
     public AssistantMode getMode() {
         return this.mode;
     }
 
     public void setMode(final AssistantMode mode) {
         this.mode = mode;
+        if (this.mode == AssistantMode.PLACEMENT) {
+            setOffset(0, AssistantDirection.NORTH);
+        } else if (this.mode == AssistantMode.COVERAGE) {
+            setOffset(0, AssistantDirection.NORTH);
+            setOffset(1, AssistantDirection.BELOW);
+        }
     }
 
     private void applyOffsets() {
@@ -95,13 +112,22 @@ public class AssistantManager {
             int x = baseLocation.getX();
             int y = baseLocation.getY();
             int z = baseLocation.getZ();
-            for (final AssistantDirection direction : offsets.values()) {
+            for (final AssistantDirection direction : getOffsets()) {
                 x += direction.getXOffset();
                 y += direction.getYOffset();
                 z += direction.getZOffset();
             }
             assistantBlock.setLocation(new Location(x, y, z, baseLocation.getWorld()));
         }
+    }
+
+    private Iterable<AssistantDirection> getOffsets() {
+        if (mode == AssistantMode.PLACEMENT) {
+            return Collections.singletonList(offsets.get(0));
+        } else if (mode == AssistantMode.COVERAGE) {
+            return offsets.values();
+        }
+        return Collections.emptyList();
     }
 
     private class EmptyIterable implements Iterable<AssistantBlock> {

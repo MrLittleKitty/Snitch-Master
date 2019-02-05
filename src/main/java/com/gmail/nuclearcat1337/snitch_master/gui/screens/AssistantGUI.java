@@ -9,7 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import static com.gmail.nuclearcat1337.snitch_master.assistant.AssistantDirection.*;
 
 public class AssistantGUI {
 
@@ -141,6 +145,7 @@ public class AssistantGUI {
                     final ToggleButtons toggle = toggleControls.get(i);
                     if (toggle.actionPerformed(button)) {
                         manager.setOffset(i, getDirection(toggle.getSelected().id));
+                        updateToggle();
                         break;
                     }
                 }
@@ -160,7 +165,9 @@ public class AssistantGUI {
                 buttons.add(westButton);
                 buttons.add(aboveButton);
                 buttons.add(belowButton);
-                toggleControls.add(new ToggleButtons(buttons, 0));
+
+                final int startingIndex = getIndex(buttons, manager.getOffset(0));
+                toggleControls.add(new ToggleButtons(buttons, startingIndex));
                 break;
             }
             case COVERAGE: {
@@ -172,14 +179,13 @@ public class AssistantGUI {
                 final List<GuiButton> aboveBelow = new ArrayList<>(2);
                 aboveBelow.add(aboveButton);
                 aboveBelow.add(belowButton);
-                toggleControls.add(new ToggleButtons(directionButtons, 0));
-                toggleControls.add(new ToggleButtons(aboveBelow, 1));
+
+                final int startingIndex = getIndex(directionButtons, manager.getOffset(0));
+                final int startingIndex2 = getIndex(aboveBelow, manager.getOffset(1));
+                toggleControls.add(new ToggleButtons(directionButtons, startingIndex));
+                toggleControls.add(new ToggleButtons(aboveBelow, startingIndex2));
                 break;
             }
-        }
-        for (int i = 0; i < toggleControls.size(); i++) {
-            final ToggleButtons toggle = toggleControls.get(i);
-            manager.setOffset(i, getDirection(toggle.getSelected().id));
         }
     }
 
@@ -198,32 +204,32 @@ public class AssistantGUI {
         switch (id) {
             case N_ID:
                 if (manager.getMode() == AssistantMode.PLACEMENT) {
-                    return AssistantDirection.NORTH;
+                    return NORTH;
                 } else {
-                    return AssistantDirection.NORTHWEST;
+                    return NORTHWEST;
                 }
             case S_ID:
                 if (manager.getMode() == AssistantMode.PLACEMENT) {
-                    return AssistantDirection.SOUTH;
+                    return SOUTH;
                 } else {
-                    return AssistantDirection.SOUTHWEST;
+                    return SOUTHWEST;
                 }
             case E_ID:
                 if (manager.getMode() == AssistantMode.PLACEMENT) {
-                    return AssistantDirection.EAST;
+                    return EAST;
                 } else {
-                    return AssistantDirection.NORTHEAST;
+                    return NORTHEAST;
                 }
             case W_ID:
                 if (manager.getMode() == AssistantMode.PLACEMENT) {
-                    return AssistantDirection.WEST;
+                    return WEST;
                 } else {
-                    return AssistantDirection.SOUTHEAST;
+                    return SOUTHEAST;
                 }
             case ABOVE_ID:
-                return AssistantDirection.ABOVE;
+                return ABOVE;
             case BELOW_ID:
-                return AssistantDirection.BELOW;
+                return BELOW;
         }
         return null;
     }
@@ -264,5 +270,36 @@ public class AssistantGUI {
                 return "Below";
         }
         return "Undefined";
+    }
+
+    private int mapDirectionToId(final AssistantDirection direction) {
+        switch (direction) {
+            case NORTH:
+            case NORTHWEST:
+                return N_ID;
+            case SOUTH:
+            case SOUTHWEST:
+                return S_ID;
+            case EAST:
+            case NORTHEAST:
+                return E_ID;
+            case WEST:
+            case SOUTHEAST:
+                return W_ID;
+            case ABOVE:
+                return ABOVE_ID;
+            case BELOW:
+                return BELOW_ID;
+        }
+        return -1;
+    }
+
+    private int getIndex(final List<GuiButton> buttons, final AssistantDirection direction) {
+        final int id = mapDirectionToId(direction);
+        for (int i = 0; i < buttons.size(); i++) {
+            if (buttons.get(i).id == id)
+                return i;
+        }
+        return -1;
     }
 }
