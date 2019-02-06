@@ -19,6 +19,11 @@ public class AssistantRenderer {
     private static final int RENDER_DISTANCE = 36;
     private static final int RENDER_DISTANCE_SQUARED = RENDER_DISTANCE * RENDER_DISTANCE;
 
+    private static final float MIN_TEXT_RENDER_SCALE = 0.0075f;
+    private static final float MAX_TEXT_RENDER_SCALE = 0.07f;
+
+    private static final float SCALE_STEP = (MAX_TEXT_RENDER_SCALE - MIN_TEXT_RENDER_SCALE) / RENDER_DISTANCE;
+
     private final AssistantManager manager;
     private final Settings settings; //TODO---Assistant render distance, global render control, etc.
     private final WorldProvider worldProvider;
@@ -51,6 +56,12 @@ public class AssistantRenderer {
                         Settings.SNITCH_RADIUS, block.getColor(), 0.1D, 0.25D, event.getPartialTicks());
             }
 
+
+            RenderUtils.renderFloatingText(getFloatingText(block), (float) location.getX() + 0.5f,
+                    location.getY() + 1.01f, location.getZ() + 0.5f, 0xFFFFFF,
+                    MIN_TEXT_RENDER_SCALE, SCALE_STEP, true, event.getPartialTicks());
+
+
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             //Render the small box around the actual snitch block
             RenderUtils.renderBox(location.getX(), location.getY(), location.getZ(), 0, block.getColor(),
@@ -59,5 +70,11 @@ public class AssistantRenderer {
 
             block.wasRendered(System.currentTimeMillis());
         }
+    }
+
+    private String[] getFloatingText(final AssistantBlock block) {
+        final Location location = block.getLocation();
+        return new String[]{manager.getMode().getDisplayText() + " Mode",
+                String.format("[%d %d %d]", location.getX(), location.getY(), location.getZ())};
     }
 }

@@ -108,6 +108,7 @@ public class AssistantGUI {
                 getButtonText(BELOW_ID));
 
         updateToggle();
+        updateDraw();
     }
 
     public void addButtons(final List<GuiButton> buttons) {
@@ -144,6 +145,7 @@ public class AssistantGUI {
                 manager.setMode(manager.getMode().getNextMode());
                 updateButtonText();
                 updateToggle();
+                updateDraw();
                 break;
             }
             case UPDATE_ID: {
@@ -166,6 +168,16 @@ public class AssistantGUI {
                 break;
             }
         }
+    }
+
+    private void updateDraw() {
+        final boolean drawDirections = manager.getMode() != AssistantMode.TEST;
+        northButton.visible = drawDirections;
+        southButton.visible = drawDirections;
+        eastButton.visible = drawDirections;
+        westButton.visible = drawDirections;
+        aboveButton.visible = drawDirections;
+        belowButton.visible = drawDirections;
     }
 
     private void updateToggle() {
@@ -262,6 +274,9 @@ public class AssistantGUI {
             case MODE_ID:
                 return manager.getMode().getDisplayText();
             case UPDATE_ID:
+                if (manager.getMode() == AssistantMode.TEST) {
+                    return "Place";
+                }
                 return "Update";
             case CLEAR_ID:
                 return "Clear";

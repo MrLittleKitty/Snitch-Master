@@ -30,7 +30,7 @@ repositories {
 }
 apply plugin: 'de.undercouch.download'
 
-version = "1.12.2-1.2.0"
+version = "1.12.2-1.2.1-FirstLight"
 group= "com.gmail.nuclearcat1337.snitch_master" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "SnitchMaster"
 

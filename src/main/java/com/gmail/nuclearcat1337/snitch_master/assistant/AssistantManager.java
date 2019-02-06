@@ -6,8 +6,7 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.util.Color;
 import com.gmail.nuclearcat1337.snitch_master.util.GeneralUtils;
 import com.gmail.nuclearcat1337.snitch_master.worldinfo.WorldProvider;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
+
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -15,8 +14,7 @@ import java.util.*;
 public class AssistantManager {
 
     private static final Color COLOR = new Color(138, 43, 226);
-    //    private static final Color COLOR = new Color(139, 0, 0);
-    private static final long FLASH_ON = 900;
+    private static final long FLASH_ON = 1100;
     private static final long FLASH_OFF = 500;
 
     private final EmptyIterable emptyIterable = new EmptyIterable();
@@ -72,22 +70,20 @@ public class AssistantManager {
                     new Location(pos.getX(), pos.getY(), pos.getZ(), worldProvider.getCurrentWorld()));
             if (intersectingSnitches != null && !intersectingSnitches.isEmpty()) {
                 final Snitch closest = intersectingSnitches.get(0);
-                this.baseLocation = closest.getLocation();
-                if (assistantBlock == null) {
-                    assistantBlock = new FlashingAssistantBlock(baseLocation, COLOR, FLASH_ON, FLASH_OFF);
-                    iterable = Collections.singletonList(assistantBlock);
-                }
-                applyOffsets();
+                setBaseLocation(closest.getLocation());
             }
-        } else if (mode == AssistantMode.COVERAGE) {
-            this.baseLocation = new Location(pos.getX(), pos.getY(), pos.getZ(), worldProvider.getCurrentWorld());
-            if (assistantBlock == null) {
-                assistantBlock = new FlashingAssistantBlock(baseLocation, COLOR, FLASH_ON, FLASH_OFF);
-                iterable = Collections.singletonList(assistantBlock);
-            }
-            applyOffsets();
+        } else if (mode == AssistantMode.COVERAGE || mode == AssistantMode.TEST) {
+            setBaseLocation(new Location(pos.getX(), pos.getY(), pos.getZ(), worldProvider.getCurrentWorld()));
         }
+    }
 
+    private void setBaseLocation(final Location location) {
+        this.baseLocation = location;
+        if (assistantBlock == null) {
+            assistantBlock = new FlashingAssistantBlock(baseLocation, COLOR, FLASH_ON, FLASH_OFF);
+            iterable = Collections.singletonList(assistantBlock);
+        }
+        applyOffsets();
     }
 
     public void setOffset(final int offsetPosition, final AssistantDirection offset) {
@@ -119,10 +115,12 @@ public class AssistantManager {
             int x = baseLocation.getX();
             int y = baseLocation.getY();
             int z = baseLocation.getZ();
-            for (final AssistantDirection direction : getOffsets()) {
-                x += direction.getXOffset();
-                y += direction.getYOffset();
-                z += direction.getZOffset();
+            if (mode == AssistantMode.PLACEMENT || mode == AssistantMode.COVERAGE) {
+                for (final AssistantDirection direction : getOffsets()) {
+                    x += direction.getXOffset();
+                    y += direction.getYOffset();
+                    z += direction.getZOffset();
+                }
             }
             assistantBlock.setLocation(new Location(x, y, z, baseLocation.getWorld()));
         }

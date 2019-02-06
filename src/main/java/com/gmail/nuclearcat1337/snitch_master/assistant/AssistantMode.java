@@ -2,7 +2,8 @@ package com.gmail.nuclearcat1337.snitch_master.assistant;
 
 public enum AssistantMode {
     PLACEMENT("Placement"),
-    COVERAGE("Coverage");
+    COVERAGE("Coverage"),
+    TEST("Test Block");
 
     private final String text;
 
