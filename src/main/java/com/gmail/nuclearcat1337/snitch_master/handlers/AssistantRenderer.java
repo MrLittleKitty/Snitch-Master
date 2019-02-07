@@ -53,14 +53,12 @@ public class AssistantRenderer {
             final int boxRadius = block.getBoxRadius();
             if (boxRadius > 0) {
                 RenderUtils.renderBox(location.getX(), location.getY(), location.getZ(),
-                        Settings.SNITCH_RADIUS, block.getColor(), 0.1D, 0.25D, event.getPartialTicks());
+                        Settings.SNITCH_RADIUS, block.getColor(), 0.29D, 0.25D, event.getPartialTicks());
             }
-
 
             RenderUtils.renderFloatingText(getFloatingText(block), (float) location.getX() + 0.5f,
                     location.getY() + 1.01f, location.getZ() + 0.5f, 0xFFFFFF,
                     MIN_TEXT_RENDER_SCALE, SCALE_STEP, true, event.getPartialTicks());
-
 
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             //Render the small box around the actual snitch block

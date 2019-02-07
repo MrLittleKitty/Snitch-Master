@@ -28,7 +28,9 @@ public class GeneralUtils {
     }
 
     public static Location getPlayerLocation(final String world) {
-        return new Location((int) mc.player.posX, (int) mc.player.posY, (int) mc.player.posZ, world);
+        final int x = (int) Math.floor(mc.player.posX);
+        final int z = (int) Math.floor(mc.player.posZ);
+        return new Location(x, (int) mc.player.posY, z, world);
     }
 
     //Provides a consistent way to order locations

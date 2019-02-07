@@ -13,7 +13,7 @@ import java.util.*;
 
 public class AssistantManager {
 
-    private static final Color COLOR = new Color(138, 43, 226);
+    private static final Color COLOR = new Color(148, 0, 211);
     private static final long FLASH_ON = 1100;
     private static final long FLASH_OFF = 500;
 
