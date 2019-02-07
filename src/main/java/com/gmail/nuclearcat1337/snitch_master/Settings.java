@@ -1,5 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master;
 
+import com.gmail.nuclearcat1337.snitch_master.util.ChatSpamState;
 import com.gmail.nuclearcat1337.snitch_master.util.Pair;
 import com.gmail.nuclearcat1337.snitch_master.util.QuietTimeConfig;
 import com.google.gson.Gson;
@@ -18,10 +19,6 @@ import java.util.Map;
 public class Settings {
     public static final int SNITCH_RADIUS = 11;
     private static final String SETTINGS_FILE = SnitchMaster.modDataFolder + "/Settings.txt";
-
-    public enum ChatSpamState {
-        ON, OFF, PAGENUMBERS;
-    }
 
     private boolean globalRender = true;
     private boolean renderText = true;

@@ -58,7 +58,7 @@ public class MainGui extends GuiScreen {
 
         xPos = xPos + GuiConstants.MEDIUM_BUTTON_WIDTH + GuiConstants.STANDARD_SEPARATION_DISTANCE;
 
-        this.buttonList.add(new GuiButton(LOAD_SNITCHES, xPos, yPos, GuiConstants.MEDIUM_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Load Snitches"));
+        //this.buttonList.add(new GuiButton(LOAD_SNITCHES, xPos, yPos, GuiConstants.MEDIUM_BUTTON_WIDTH, GuiConstants.STANDARD_BUTTON_HEIGHT, "Load Snitches"));
 
         yPos = yPos + GuiConstants.STANDARD_BUTTON_HEIGHT + GuiConstants.STANDARD_SEPARATION_DISTANCE;
         xPos = (this.width / 2) - (GuiConstants.MEDIUM_BUTTON_WIDTH) - (GuiConstants.STANDARD_SEPARATION_DISTANCE / 2);

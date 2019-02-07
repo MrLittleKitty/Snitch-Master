@@ -1,7 +1,6 @@
 package com.gmail.nuclearcat1337.snitch_master.handlers;
 
 import com.gmail.nuclearcat1337.snitch_master.Settings;
-import com.gmail.nuclearcat1337.snitch_master.Settings.ChatSpamState;
 import com.gmail.nuclearcat1337.snitch_master.SnitchMaster;
 import com.gmail.nuclearcat1337.snitch_master.api.IAlertRecipient;
 import com.gmail.nuclearcat1337.snitch_master.api.SnitchAlert;
@@ -9,6 +8,7 @@ import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchTags;
 import com.gmail.nuclearcat1337.snitch_master.snitches.Snitch;
 import com.gmail.nuclearcat1337.snitch_master.snitches.SnitchManager;
 import com.gmail.nuclearcat1337.snitch_master.locatableobjectlist.Location;
+import com.gmail.nuclearcat1337.snitch_master.util.ChatSpamState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -124,8 +124,8 @@ public class ChatSnitchParser {
             }
 
             if (tryParseJalistMsg(message)) {
-                Settings.ChatSpamState state = settings.getChatSpamState();
-                if (state == Settings.ChatSpamState.OFF || state == Settings.ChatSpamState.PAGENUMBERS)
+                ChatSpamState state = settings.getChatSpamState();
+                if (state == ChatSpamState.OFF || state == ChatSpamState.PAGE_NUMBERS)
                     event.setCanceled(true);
                 return;
             }
@@ -574,7 +574,7 @@ public class ChatSnitchParser {
         } else {
             Minecraft.getMinecraft().player.sendChatMessage("/jalistlong " + jaListIndex);
             ChatSpamState chatSpamSetting = settings.getChatSpamState();
-            if (chatSpamSetting == Settings.ChatSpamState.PAGENUMBERS) {
+            if (chatSpamSetting == ChatSpamState.PAGE_NUMBERS) {
                 SnitchMaster.SendMessageToPlayer("Parsed snitches from /jalist " + jaListIndex);
             }
             jaListIndex++;
