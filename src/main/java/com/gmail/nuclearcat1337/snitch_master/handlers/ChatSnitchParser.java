@@ -125,7 +125,7 @@ public class ChatSnitchParser {
 
             if (tryParseJalistMsg(message)) {
                 ChatSpamState state = settings.getChatSpamState();
-                if (state == ChatSpamState.OFF || state == ChatSpamState.PAGE_NUMBERS)
+                if (state == ChatSpamState.OFF || state == ChatSpamState.PAGENUMBERS)
                     event.setCanceled(true);
                 return;
             }
@@ -574,7 +574,7 @@ public class ChatSnitchParser {
         } else {
             Minecraft.getMinecraft().player.sendChatMessage("/jalistlong " + jaListIndex);
             ChatSpamState chatSpamSetting = settings.getChatSpamState();
-            if (chatSpamSetting == ChatSpamState.PAGE_NUMBERS) {
+            if (chatSpamSetting == ChatSpamState.PAGENUMBERS) {
                 SnitchMaster.SendMessageToPlayer("Parsed snitches from /jalist " + jaListIndex);
             }
             jaListIndex++;

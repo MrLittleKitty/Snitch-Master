@@ -3,7 +3,7 @@ package com.gmail.nuclearcat1337.snitch_master.util;
 public enum ChatSpamState {
     ON("On"),
     OFF("Off"),
-    PAGE_NUMBERS("Pg. #");
+    PAGENUMBERS("Pg. #");
 
     private final String displayText;
 
