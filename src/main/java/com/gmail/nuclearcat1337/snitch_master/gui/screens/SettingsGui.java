@@ -85,6 +85,11 @@ public class SettingsGui extends GuiScreen {
                 this.snitchTextButton.displayString = getButtonText(SNITCH_TEXT_ID);
                 settings.saveSettings();
                 break;
+            case SNITCH_RENDER_ID:
+                settings.setGlobalRender(!settings.getGlobalRender());
+                this.snitchRenderButton.displayString = getButtonText(SNITCH_RENDER_ID);
+                settings.saveSettings();
+                break;
             case MANUAL_MODE_ID: //Manual Mode
                 settings.setManualMode(!settings.getManualMode());
                 this.manualModeButton.displayString = getButtonText(MANUAL_MODE_ID);
